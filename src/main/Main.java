@@ -14,8 +14,6 @@ import com.json.parsers.JsonParserFactory;
 import misc.Splash;
 
 public class Main {
-	int n = 0;
-	Integer d = new Integer(300);
 	static Socket con;
 	static PrintWriter out;
 	static BufferedReader in;
