@@ -105,25 +105,14 @@ public class Card extends JPanel{
 	public Card(int ID) {
 	
 		String url = "http://128.199.235.83/icw/?q=icw/service/ic&ic_id=48";
-		InputStream is;
-		
+		InputStream is;	
 		Map m = null;
-		
-	//	m.get("status");
 		try {
 			is = new URL(url).openStream();
-			//JsonReader j = new JsonReader(new InputStreamReader(is)); 
-		//	j.setLenient(true);
 			Gson gs = new Gson();
-			Object s = gs.fromJson(new InputStreamReader(is), Object.class);
-			m = ((Map)s);
-			
-	//		Main.parser.parseJson(is, "UTF-8");
-		//	is.close();
+			m = (Map) gs.fromJson(new InputStreamReader(is), Object.class);
 		} catch (MalformedURLException e) {e.printStackTrace();
-		} catch (IOException e) {e.printStackTrace();
-		} //catch(JSONParsingException e){}
-		
+		} catch (IOException e) {e.printStackTrace();}	
 		if(m.get("data").equals("false")){
 			JOptionPane.showMessageDialog(null, "Invalid ID", "", JOptionPane.ERROR_MESSAGE);
 			return;

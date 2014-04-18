@@ -9,6 +9,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Battlefield extends JFrame {
 
@@ -34,7 +36,7 @@ public class Battlefield extends JFrame {
 	 * Create the frame.
 	 */
 	public Battlefield() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -56,5 +58,13 @@ public class Battlefield extends JFrame {
 		
 		JButton add = new JButton("Add to lane");
 		buttonPanel.add(add);
+		
+		JButton quitButton = new JButton("Quit");
+		quitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Battlefield.this.dispose();
+			}
+		});
+		buttonPanel.add(quitButton);
 	}
 }

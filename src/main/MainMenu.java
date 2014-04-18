@@ -1,4 +1,5 @@
 package main;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -37,6 +38,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.google.gson.Gson;
 import com.json.parsers.JSONParser;
 import com.json.parsers.JsonParserFactory;
 
@@ -47,7 +49,7 @@ public class MainMenu extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = -2295628688056385946L;
-	
+	Battlefield bf;
 	private Inw user;
 	ObjectOutputStream out = null;
 	ObjectInputStream in = null;
@@ -281,6 +283,16 @@ public class MainMenu extends JFrame {
 		ButtonPanel.add(verticalGlue_1);
 		
 		startButton = new JButton("Commence a new ICB");
+		startButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(bf!=null){
+					JOptionPane.showMessageDialog(null, "An instance of ICB is already running!", "",JOptionPane.DEFAULT_OPTION);
+					return;
+				}
+				bf = new Battlefield();
+				bf.setVisible(true);
+			}
+		});
 		startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		startButton.setEnabled(false);
 		ButtonPanel.add(startButton);
@@ -373,16 +385,17 @@ public class MainMenu extends JFrame {
 	//	m.get("status");
 		try {
 			is = new URL(url).openStream();
-	//		BufferedReader b = new BufferedReader(new InputStreamReader(is));
-			m = parser.parseJson(is, "UTF-8");
-			is.close();
-		} catch (MalformedURLException e) {e.printStackTrace();} catch (IOException e) {	e.printStackTrace();
-		}
+			Gson gs = new Gson();
+			m = (Map) gs.fromJson(new InputStreamReader(is), Object.class);
+		} catch (MalformedURLException e) {e.printStackTrace();
+		} catch (IOException e) {e.printStackTrace();}	
+		
+		//
 	//	Integer.parseInt(arg0) m.get("full_lp");
 	//	System.out.println(m.get("status"));
 	//	System.out.println(((Map) m.get("data")).get("firstname_en"));
 		System.out.println(m.toString());
-		if(m.get("status").equals("1")){
+		if(m.get("status").equals("1.0")){
 		
 			System.out.println(m.get("firstname_en"));
 			user = new Inw((String)((Map) m.get("data")).get("firstname_en"),(String) ((Map) m.get("data")).get("lastname_en"),Integer.parseInt((String) ((Map) m.get("data")).get("full_lp"))
@@ -421,7 +434,7 @@ public class MainMenu extends JFrame {
 
 		}
 		else{
-			JOptionPane.showConfirmDialog(null, "Incorrect username or password!", "",JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Incorrect username or password!", "",JOptionPane.DEFAULT_OPTION);
 			loginFailedAttempt++;
 			if(loginFailedAttempt==3){
 				Executors.newSingleThreadExecutor().execute(new Runnable(){

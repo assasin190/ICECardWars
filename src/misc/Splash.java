@@ -21,12 +21,14 @@ public class Splash extends JFrame {
 		frame.setLocationRelativeTo(null);
 		frame.setUndecorated(true);
 		frame.setVisible(true);
+		
 		try {
 			Thread.sleep(4000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		JFrame main = new JFrame();
 		main.setUndecorated(true);
 		main.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -52,5 +54,13 @@ public class Splash extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+	}
+	public void stopThread(){
+		contentPane.stillOn = false;
+	}
+	@Override
+	public void dispose(){
+		stopThread();
+		super.dispose();
 	}
 }

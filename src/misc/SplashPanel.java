@@ -20,7 +20,9 @@ public class SplashPanel extends JPanel{
 	int alpha;
 	boolean increasing;
 	Image i;
+	boolean stillOn;
 	public SplashPanel() {
+		stillOn = true;
 		alpha = 0;
 		increasing = true;
 		try {
@@ -30,19 +32,21 @@ public class SplashPanel extends JPanel{
 			e1.printStackTrace();
 		}
 		this.setVisible(true);
+		
 		Executor e = Executors.newSingleThreadExecutor();
 		e.execute(new Runnable(){
 			@Override
 			public void run() {
-				while(true){
+				while(stillOn){
 					SplashPanel.this.repaint();
+					System.out.println(alpha);
 					try {
 						Thread.sleep(3);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-		//			System.out.println(alpha);
+					System.out.println(alpha);
 					if(increasing){
 						alpha++;
 						if(alpha>254){
@@ -54,8 +58,8 @@ public class SplashPanel extends JPanel{
 				}
 			}	
 		});
-		
 	}
+	
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
