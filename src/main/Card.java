@@ -90,11 +90,6 @@ public class Card extends JPanel{
 			}
 		});
 	}
-	public Card(int ID) {
-	
-		String url = "http://128.199.235.83/icw/?q=icw/service/ic&ic_id="+ID;
-		InputStream is;	
-		Map m = null;
 	public Card(double test){
 		try {
 			picture = ImageIO.read(new File("null.jpg"));
@@ -105,7 +100,6 @@ public class Card extends JPanel{
 //		titleLabel.setText("test card: "+test);
 		initGUI();
 	}
-
 	public Card(int ID) {
 		@SuppressWarnings("rawtypes")
 		Map m2 = CardData.getCardData(ID);
@@ -115,16 +109,6 @@ public class Card extends JPanel{
 		type = Integer.parseInt((String) m2.get("type"));
 		sa_param = (String) m2.get("sa_param");
 		sa_code = Integer.parseInt((String) m2.get("sa_code"));
-		try {
-			picture = ImageIO.read(new URL("http://128.199.235.83/icw/"+m2.get("picture")));
-			picture = ImageIO.read(new URL("http://128.199.235.83/icw/"));
-		} catch (MalformedURLException e) {
-			
-			e.printStackTrace();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
 		picture = CardData.getCardImage(ID);
 		lck = Integer.parseInt((String) m2.get("lck"));
 		title = (String) m2.get("title");
