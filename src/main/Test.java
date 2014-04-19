@@ -6,8 +6,9 @@ import javax.swing.JFrame;
 
 public class Test extends JFrame {
 	public static void main(String [] args) {
-		new Test(new Card(1));
-		/*
+		
+		//new Test(new Card(1));
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -32,7 +33,7 @@ public class Test extends JFrame {
 				}
 			}
 		});
-		*/
+		
 	}
 	
 	public Test(Card card) {

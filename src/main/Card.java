@@ -110,7 +110,7 @@ public class Card extends JPanel{
 	}
 	*/
 	public Card(int ID) {
-		/*
+		
 		@SuppressWarnings("rawtypes")
 		Map m2 = CardData.getCardData(ID);
 		car = Double.parseDouble((String) m2.get("car"));
@@ -130,8 +130,9 @@ public class Card extends JPanel{
 		spell_code = Integer.parseInt((String) m2.get("spell_code"));
 		desc = null;
 		initGUI(); 
-		*/
 		
+		
+		/*
 		setSize(221, 324);
 		setBackground(Color.WHITE);
 		setLayout(null);
@@ -173,7 +174,7 @@ public class Card extends JPanel{
 		desc = null;
 		initGUI();
 		setVisible(true);
-		
+		*/
 		
 	}
 	private void initGUI() {
