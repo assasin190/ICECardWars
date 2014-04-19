@@ -12,6 +12,7 @@ import com.json.parsers.JSONParser;
 import com.json.parsers.JsonParserFactory;
 
 import misc.Splash;
+import misc.SplashPanel;
 
 public class Main {
 	static Socket con;
@@ -26,57 +27,28 @@ public class Main {
 	
 	
 	public static void main(String[] args) {
-		
+
+		MainMenu main = new MainMenu(con);
 		Splash frame = new Splash();
 		frame.setLocationRelativeTo(null);
 		frame.setUndecorated(true);
 		frame.setVisible(true);
+		Splash.setProgress("Connecting to server");
 		while(true){
-			
 	        try {
 	    		con = new Socket("128.199.235.83",80);
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-			//	e1.printStackTrace();
 				int a = JOptionPane.showConfirmDialog(null, "Could not connect to server\nTry again?", "",JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
 				if(a==JOptionPane.YES_OPTION)continue;
 				else System.exit(0);
 			};
-			
-			
-			/*
-			try {
-				URL u= new URL("www.wwweitjweoyjweioyew.com");
-			} catch (MalformedURLException e) {
-				//e.printStackTrace();
-				int a = JOptionPane.showConfirmDialog(null, "Could not connect to server\nTry again?", "",JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
-				if(a==JOptionPane.YES_OPTION)continue;
-				else System.exit(0);
-			}
-			*/
 	        break;
-	        
 		}
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	//	System.out.println("Connect success");
-		MainMenu main = new MainMenu(con);
-//	System.out.println("Connect success");
+		CardData.saveAllCardsToLocal();
 	//	main.setUndecorated(true);
 	//	main.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		Splash.setProgress("Starting game");
 		main.setVisible(true);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		frame.dispose();
 		
 	}

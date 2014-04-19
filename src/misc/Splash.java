@@ -3,16 +3,24 @@ package misc;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
+
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 
 public class Splash extends JFrame {
 
-	private SplashPanel contentPane;
-
+	private SplashPanel splashPane;
+	private JPanel contentPane;
+	public static JLabel progress;
 	/**
 	 * Launch the application.
 	 */
@@ -21,25 +29,6 @@ public class Splash extends JFrame {
 		frame.setLocationRelativeTo(null);
 		frame.setUndecorated(true);
 		frame.setVisible(true);
-		
-		try {
-			Thread.sleep(4000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		JFrame main = new JFrame();
-		main.setUndecorated(true);
-		main.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		main.setVisible(true);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		frame.dispose();
 	}
 
 	/**
@@ -47,20 +36,34 @@ public class Splash extends JFrame {
 	 */
 	
 	public Splash() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		initGUI();
+	}
+	private void initGUI() {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 300, 300);
-		contentPane = new SplashPanel();
-		contentPane.setBackground(Color.WHITE);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane = new JPanel();
+		splashPane = new SplashPanel();
+		splashPane.setBackground(Color.WHITE);
+		splashPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		splashPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		progress = new JLabel("");
+		ImageIcon icon = new ImageIcon("aloader.gif");
+		progress.setIcon(icon);
+	//	icon.setImageObserver(progress);
+		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+		getContentPane().add(splashPane);
+		getContentPane().add(progress);
 	}
 	public void stopThread(){
-		contentPane.stillOn = false;
+		splashPane.stillOn = false;
 	}
 	@Override
 	public void dispose(){
 		stopThread();
 		super.dispose();
+	}
+	public static void setProgress(String s){
+		progress.setText(s);
 	}
 }

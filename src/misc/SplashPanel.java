@@ -10,6 +10,8 @@ import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import javax.swing.JLabel;
 
 public class SplashPanel extends JPanel{
 
@@ -22,6 +24,9 @@ public class SplashPanel extends JPanel{
 	Image i;
 	boolean stillOn;
 	public SplashPanel() {
+		initGUI();
+	}
+	private void initGUI() {
 		stillOn = true;
 		alpha = 0;
 		increasing = true;
@@ -39,14 +44,12 @@ public class SplashPanel extends JPanel{
 			public void run() {
 				while(stillOn){
 					SplashPanel.this.repaint();
-					System.out.println(alpha);
 					try {
-						Thread.sleep(3);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					System.out.println(alpha);
+			//		System.out.println(alpha);
 					if(increasing){
 						alpha++;
 						if(alpha>254){
@@ -56,8 +59,11 @@ public class SplashPanel extends JPanel{
 					else alpha--;
 					if(alpha==0)increasing = !increasing;	
 				}
+				System.out.println("Splash executor stopped");
 			}	
 		});
+		setLayout(new BorderLayout(0, 0));
+	
 	}
 	
 	@Override
@@ -68,4 +74,5 @@ public class SplashPanel extends JPanel{
 		g.setColor(c);
 		g.fillRect(0, 0, 300, 300);
 	}
+
 }
