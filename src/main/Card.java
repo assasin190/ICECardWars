@@ -90,6 +90,10 @@ public class Card extends JPanel{
 			}
 		});
 	}
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 2cf678f4d6c08e51f6588b0a0148db17fa8bb847
 	public Card(double test){
 		try {
 			picture = ImageIO.read(new File("null.jpg"));
