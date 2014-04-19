@@ -11,6 +11,9 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import misc.Splash;
+import misc.SplashPanel;
+
 import com.google.gson.Gson;
 
 public abstract class CardData {
@@ -98,7 +101,7 @@ public abstract class CardData {
 				e.printStackTrace();
 			}
 	//		System.out.println(b);
-			System.out.println("RETRIEVING DATA FROM WEB: "+data);
+			Splash.setProgress("RETRIEVING DATA FROM WEB: "+data);
 			all_image.add(b);
 			all_card.add(data);
 			count++;
