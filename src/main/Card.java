@@ -1,10 +1,17 @@
 package main;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +69,8 @@ public class Card extends JPanel{
 	private JPanel panel;
 	
 	public static void main(String[] args){
-		//TEST METHOD
+		
+		/*
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -87,7 +95,9 @@ public class Card extends JPanel{
 				}
 			}
 		});
+		*/
 	}
+	/*
 	public Card(double test){
 		try {
 			picture = ImageIO.read(new File("null.jpg"));
@@ -98,7 +108,9 @@ public class Card extends JPanel{
 //		titleLabel.setText("test card: "+test);
 		initGUI();
 	}
+	*/
 	public Card(int ID) {
+		/*
 		@SuppressWarnings("rawtypes")
 		Map m2 = CardData.getCardData(ID);
 		car = Double.parseDouble((String) m2.get("car"));
@@ -117,12 +129,61 @@ public class Card extends JPanel{
 		sa_mc = Integer.parseInt((String) m2.get("sa_mc"));
 		spell_code = Integer.parseInt((String) m2.get("spell_code"));
 		desc = null;
+		initGUI(); 
+		*/
+		
+		setSize(221, 324);
+		setBackground(Color.WHITE);
+		setLayout(null);
+		Gson gs;
+		InputStream is;	
+		String url ="http://128.199.235.83/icw/?q=icw/service/ic&ic_id=1";
+		Object o = null;
+		try {
+			is = new URL(url).openStream();
+			gs = new Gson();
+			o = gs.fromJson(new InputStreamReader(is), Object.class);
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		} 
+		Map temp = (Map)o;
+		Map m2 = (Map)temp.get("data");
+		BufferedImage b = null;
+		try {
+			b = ImageIO.read(new URL("http://128.199.235.83/icw/"+m2.get("picture")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		car = Double.parseDouble((String) m2.get("car"));
+		lp = Integer.parseInt((String) m2.get("lp"));
+		spell_param = (String) m2.get("spell_param");
+		type = Integer.parseInt((String) m2.get("type"));
+		sa_param = (String) m2.get("sa_param");
+		sa_code = Integer.parseInt((String) m2.get("sa_code"));
+		picture = b;
+		lck = Integer.parseInt((String) m2.get("lck"));
+		title = (String) m2.get("title");
+		atk = Integer.parseInt((String) m2.get("atk"));
+		mc = Integer.parseInt((String) m2.get("mc"));
+		rr = Integer.parseInt((String) m2.get("rr"));
+		ic_id = Integer.parseInt((String) m2.get("ic_id"));
+		sa_mc = Integer.parseInt((String) m2.get("sa_mc"));
+		spell_code = Integer.parseInt((String) m2.get("spell_code"));
+		desc = null;
 		initGUI();
+		setVisible(true);
+		
+		
 	}
 	private void initGUI() {
+		addListeners();
+		repaint();
+		/*
 		setBackground(Color.WHITE);
-		setBorder(new LineBorder(Color.BLACK, 1));
+		//setBorder(new LineBorder(Color.BLACK, 1));
 		setLayout(null);
+		
 		if(picture==null)
 			try {
 				picture = ImageIO.read(new File("null.jpg"));
@@ -133,60 +194,62 @@ public class Card extends JPanel{
 		pictureIcon = new JLabel(new ImageIcon(picture));
 		pictureIcon.setBounds(12, 63, 176, 58);
 		add(pictureIcon);
-		
-		lck_l = new JLabel("LCK:");
+
+		lck_l = new JLabel("LCK: ");
 		lck_l.setBounds(12, 192, 56, 16);
 		add(lck_l);
-		
+
 		lckLabel = new JLabel(""+lck);
 		lckLabel.setBounds(80, 192, 56, 16);
 		add(lckLabel);
-		
+
 		car_l = new JLabel("CAR:");
 		car_l.setBounds(12, 221, 56, 16);
 		add(car_l);
-		
+
 		carLabel = new JLabel(""+car);
 		carLabel.setBounds(80, 221, 56, 16);
 		add(carLabel);
-		
+
 		descLabel = new JLabel("SA desc"+desc);
 		descLabel.setBounds(12, 221, 176, 66);
 		add(descLabel);
-		
+
 		titleLabel = new JLabel(""+title);
 		titleLabel.setBounds(12, 13, 56, 16);
+		titleLabel.setLocation(this.getWidth()/32, getHeight()/32);
 		add(titleLabel);
-		
+
 		mc_l = new JLabel("MC:");
 		mc_l.setBounds(99, 13, 31, 16);
 		add(mc_l);
-		
+
 		mcLabel = new JLabel(""+mc);
 		mcLabel.setBounds(132, 13, 56, 16);
 		add(mcLabel);
-		
+
 		rrLabel = new JLabel(rr(rr));
 		rrLabel.setBounds(12, 34, 90, 16);
 		add(rrLabel);
-		
+
 		atk_l = new JLabel("ATK:");
 		atk_l.setBounds(12, 134, 56, 16);
 		add(atk_l);
-		
+
 		atkLabel = new JLabel(""+atk);
 		atkLabel.setBounds(80, 134, 56, 16);
 		add(atkLabel);
-		
+
 		lp_l = new JLabel("LP:");
 		lp_l.setBounds(12, 163, 56, 16);
 		add(lp_l);
-		
+
 		lpLabel = new JLabel(""+lp);
 		lpLabel.setBounds(80, 163, 56, 16);
 		add(lpLabel);
-		
+
 		addListeners();
+		*/
 	}
 	public void addListeners(){
 		addMouseListener(new MouseAdapter() {
@@ -220,5 +283,106 @@ public class Card extends JPanel{
 	@Override
 	public String toString(){
 		return "ic_id="+ic_id+", title="+title+ ", type="+type+ ", mc="+mc+ ", atk="+atk+ ", lp="+lp+ ", lck="+lck+ ", car="+car+ ", sa_code="+sa_code+ ", sa_mc="+sa_mc+ ", sa_param="+sa_param+ ", rr="+rr+ ", spell_code="+spell_code+ ", spell_param="+spell_param+ ", picture="+picture.toString(); 
+	}
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		setBackground(Color.WHITE);
+		setLayout(null);
+		/*
+		setBorder(new LineBorder(Color.BLACK, 1));
+		if(picture==null)
+			try {
+				picture = ImageIO.read(new File("null.jpg"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		pictureIcon = new JLabel(new ImageIcon(picture));
+		pictureIcon.setBounds(12, 63, 176, 58);
+		add(pictureIcon);
+		*/
+		
+		g.drawImage(picture, getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
+	
+		if(lck_l != null) remove(lck_l);
+		lck_l = new JLabel("LCK: " + lck);
+		lck_l.setBounds(getWidth()/32, 24*getHeight()/32, (int)lck_l.getPreferredSize().getWidth(), 10);
+		add(lck_l);
+		
+		/*
+		if(lckLabel != null) remove(lck_l);
+		lckLabel = new JLabel(""+lck);
+		lckLabel.setBounds(80, 192, 56, 16);
+		add(lckLabel);
+		*/
+		
+
+		if(car_l != null) remove(car_l);
+		car_l = new JLabel("CAR: " + car);
+		car_l.setBounds(getWidth()/32, 26*getHeight()/32, (int)car_l.getPreferredSize().getWidth(), 10);
+		add(car_l);
+		
+		/*
+		if(carLabel != null) remove(carLabel);
+		carLabel = new JLabel(""+car);
+		carLabel.setBounds(80, 221, 56, 16);
+		add(carLabel);
+		*/
+		
+
+		if(descLabel != null) remove(descLabel);
+		descLabel = new JLabel("SA desc: "+desc);
+		descLabel.setBounds(getWidth()/32, 28*getHeight()/32, (int)descLabel.getPreferredSize().getWidth(), 10);
+		add(descLabel);
+		
+		if(titleLabel != null) remove(titleLabel);
+		titleLabel = new JLabel(""+title);
+		titleLabel.setLocation(getWidth()/32, getHeight()/32);
+		titleLabel.setBounds(getWidth()/32, getHeight()/32, getWidth()/32 + (int)titleLabel.getPreferredSize().getWidth(), getHeight()/32 + (int)titleLabel.getPreferredSize().getHeight());
+		add(titleLabel);
+
+		
+		if(mc_l != null) remove(mc_l);
+		mc_l = new JLabel("MC: "+mc);
+		mc_l.setBounds(getWidth() - getWidth()/32 - (int)mc_l.getPreferredSize().getWidth(), getHeight()/32, getWidth() - getWidth()/32 , getHeight()/32 + (int)mc_l.getPreferredSize().getHeight());
+		add(mc_l);
+
+		/*
+		mcLabel = new JLabel(""+mc);
+		mcLabel.setBounds(132, 13, 56, 16);
+		add(mcLabel);
+		*/
+		
+		
+		if(rrLabel != null) remove(rrLabel);
+		rrLabel = new JLabel(rr(rr));
+		rrLabel.setBounds(getWidth()/32, 4*getHeight()/32, (int)rrLabel.getPreferredSize().getWidth(), 10);
+		add(rrLabel);
+		
+		
+		if(atk_l != null) remove(atk_l);
+		atk_l = new JLabel("ATK: " + atk);
+		atk_l.setBounds(getWidth()/32, 20*getHeight()/32, (int)atk_l.getPreferredSize().getWidth(), 10);
+		add(atk_l);
+		
+		/*
+		if(atkLabel != null) remove(atkLabel);
+		atkLabel = new JLabel(""+atk);
+		atkLabel.setBounds(80, 134, 56, 16);
+		add(atkLabel);
+		*/
+		
+		if(lp_l != null) remove(lp_l);
+		lp_l = new JLabel("LP: " + lp);
+		lp_l.setBounds(getWidth()/32, 22*getHeight()/32, (int)lp_l.getPreferredSize().getWidth(), 10);
+		add(lp_l);
+		
+		/*
+		if(lpLabel != null) remove(lpLabel);
+		lpLabel = new JLabel(""+lp);
+		lpLabel.setBounds(80, 163, 56, 16);
+		add(lpLabel);
+		*/
+
 	}
 }
