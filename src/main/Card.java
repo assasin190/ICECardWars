@@ -63,14 +63,8 @@ public class Card extends JPanel{
 	private JLabel pictureIcon;
 	private JPanel panel;
 	
-	/*
-//	{"status":1,"data":
-	{"ic_id":"1","title":"Slime","type":"1","mc":"1","atk":"1","lp":"3","lck":"0","car":"0","sa_code":"2","sa_mc":"1","sa_param":"ATK,1","rr":"1","spell_code":"0","spell_param":"-","picture":"sites\/all\/modules\/icw\/pict\/card\/slime.jpg"}}
-
-
-
-	 */
 	public static void main(String[] args){
+		//TEST METHOD
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -96,15 +90,7 @@ public class Card extends JPanel{
 			}
 		});
 	}
-<<<<<<< HEAD
-	public Card(int ID) {
-	
-		String url = "http://128.199.235.83/icw/?q=icw/service/ic&ic_id="+ID;
-		InputStream is;	
-		Map m = null;
-=======
 	public Card(double test){
->>>>>>> 8a2d55dc93f40eca0e0099c24888a768c3d38195
 		try {
 			picture = ImageIO.read(new File("null.jpg"));
 		} catch (IOException e) {
@@ -124,20 +110,7 @@ public class Card extends JPanel{
 		type = Integer.parseInt((String) m2.get("type"));
 		sa_param = (String) m2.get("sa_param");
 		sa_code = Integer.parseInt((String) m2.get("sa_code"));
-<<<<<<< HEAD
-		try {
-			picture = ImageIO.read(new URL("http://128.199.235.83/icw/"+m2.get("picture")));
-			picture = ImageIO.read(new URL("http://128.199.235.83/icw/"));
-		} catch (MalformedURLException e) {
-			
-			e.printStackTrace();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
-=======
 		picture = CardData.getCardImage(ID);
->>>>>>> 8a2d55dc93f40eca0e0099c24888a768c3d38195
 		lck = Integer.parseInt((String) m2.get("lck"));
 		title = (String) m2.get("title");
 		atk = Integer.parseInt((String) m2.get("atk"));

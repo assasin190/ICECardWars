@@ -20,7 +20,7 @@ public class Splash extends JFrame {
 
 	private SplashPanel splashPane;
 	private JPanel contentPane;
-	public static JLabel progress;
+	public static JLabel progress = new JLabel("");
 	/**
 	 * Launch the application.
 	 */
@@ -47,7 +47,7 @@ public class Splash extends JFrame {
 		splashPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		splashPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		progress = new JLabel("");
+	//	progress = new JLabel("");
 		ImageIcon icon = new ImageIcon("aloader.gif");
 		progress.setIcon(icon);
 	//	icon.setImageObserver(progress);
