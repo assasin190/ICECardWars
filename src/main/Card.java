@@ -104,7 +104,7 @@ public class Card extends JPanel{
 	}
 	public Card(int ID) {
 	
-		String url = "http://128.199.235.83/icw/?q=icw/service/ic&ic_id=48";
+		String url = "http://128.199.235.83/icw/?q=icw/service/ic&ic_id="+ID;
 		InputStream is;	
 		Map m = null;
 		try {
@@ -128,6 +128,7 @@ public class Card extends JPanel{
 		sa_code = Integer.parseInt((String) m2.get("sa_code"));
 		try {
 			picture = ImageIO.read(new URL("http://128.199.235.83/icw/"+m2.get("picture")));
+			picture = ImageIO.read(new URL("http://128.199.235.83/icw/"));
 		} catch (MalformedURLException e) {
 			
 			e.printStackTrace();
