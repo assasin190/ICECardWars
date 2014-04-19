@@ -63,14 +63,8 @@ public class Card extends JPanel{
 	private JLabel pictureIcon;
 	private JPanel panel;
 	
-	/*
-//	{"status":1,"data":
-	{"ic_id":"1","title":"Slime","type":"1","mc":"1","atk":"1","lp":"3","lck":"0","car":"0","sa_code":"2","sa_mc":"1","sa_param":"ATK,1","rr":"1","spell_code":"0","spell_param":"-","picture":"sites\/all\/modules\/icw\/pict\/card\/slime.jpg"}}
-
-
-
-	 */
 	public static void main(String[] args){
+		//TEST METHOD
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
