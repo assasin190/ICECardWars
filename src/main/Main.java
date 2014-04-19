@@ -26,20 +26,18 @@ public class Main {
 	
 	
 	public static void main(String[] args) {
+<<<<<<< HEAD
 		CardData.saveAllCardsToLocal();
 		MainMenu main = new MainMenu(con);
+=======
+		
+>>>>>>> 69e65d8be58865dad87f4d6e80b03e201389281f
 		Splash frame = new Splash();
 		frame.setLocationRelativeTo(null);
 		frame.setUndecorated(true);
+		frame.setVisible(true);
 		while(true){
-			frame.setVisible(true);	
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
-			frame.setVisible(false);
+			
 	        try {
 	    		con = new Socket("128.199.235.83",80);
 			} catch (IOException e1) {
@@ -49,9 +47,30 @@ public class Main {
 				if(a==JOptionPane.YES_OPTION)continue;
 				else System.exit(0);
 			};
+			
+			
+			/*
+			try {
+				URL u= new URL("www.wwweitjweoyjweioyew.com");
+			} catch (MalformedURLException e) {
+				//e.printStackTrace();
+				int a = JOptionPane.showConfirmDialog(null, "Could not connect to server\nTry again?", "",JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+				if(a==JOptionPane.YES_OPTION)continue;
+				else System.exit(0);
+			}
+			*/
 	        break;
+	        
 		}
-		frame.dispose();
+
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	//	System.out.println("Connect success");
+		MainMenu main = new MainMenu(con);
 //	System.out.println("Connect success");
 	//	main.setUndecorated(true);
 	//	main.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -63,7 +82,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-
+		frame.dispose();
 		
 	}
 	public static void setSelectedCard(Card c){
