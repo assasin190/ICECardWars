@@ -90,11 +90,7 @@ public class Card extends JPanel{
 			}
 		});
 	}
-	public Card(int ID) {
 	
-		String url = "http://128.199.235.83/icw/?q=icw/service/ic&ic_id="+ID;
-		InputStream is;	
-		Map m = null;
 	public Card(double test){
 		try {
 			picture = ImageIO.read(new File("null.jpg"));
