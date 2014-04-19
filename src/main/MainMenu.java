@@ -283,40 +283,54 @@ public class MainMenu extends JFrame {
 	}
 	@SuppressWarnings("rawtypes")
 	public void sendLogin(){
-		if(login){
-			logoutAction();
-			return;
-		}
-		loginButton.setEnabled(false);
-		String url = "http://128.199.235.83/icw/?q=icw/service/login&user="
-		+usernameField.getText()+"&pass="+pw.getText();
-		InputStream is;
-		Map m = null;
-		while(true){
-			try {
-				is = new URL(url).openStream();
-				Gson gs = new Gson();
-				m = (Map) gs.fromJson(new InputStreamReader(is), Object.class);
-			} catch (MalformedURLException e) {e.printStackTrace();
-			} catch (IOException e) {
-				int a = JOptionPane.showConfirmDialog(null, "Could not connect to server\nTry again?", "",JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
-				if(a==JOptionPane.YES_OPTION)	//TRY LOGIN AGAIN
-					continue;
-				else{	//CANCEL LOGIN
-					loginButton.setEnabled(true);
+		Executors.newSingleThreadExecutor().execute(new Runnable(){
+			@Override
+			public void run() {
+				if(login){
+					logoutAction();
 					return;
 				}
-			}	
-			break;
-		}
-		loginButton.setEnabled(true);
-		System.out.println(m.toString());
-		if(m.get("status").equals(1.0)){
-			Map m2 = (Map)m.get("data");
-			user = new Inw((String)m2.get("firstname_en"),(String) m2.get("lastname_en"),Integer.parseInt((String) m2.get("full_lp"))
-					,Integer.parseInt((String) m2.get("full_mp")),Integer.parseInt((String) m2.get("max_deck_size")),null);
-			loginAction(true);
-		}else loginAction(false);
+				loginButton.setEnabled(false);
+				loginButton.setIcon(new ImageIcon("aloader.gif"));
+				loginButton.setText("Logging in...");
+				String url = "http://128.199.235.83/icw/?q=icw/service/login&user="
+				+usernameField.getText()+"&pass="+pw.getText();
+				InputStream is;
+				Map m = null;
+				while(true){
+					try {
+						is = new URL(url).openStream();
+						Gson gs = new Gson();
+						m = (Map) gs.fromJson(new InputStreamReader(is), Object.class);
+					} catch (MalformedURLException e) {e.printStackTrace();
+					} catch (IOException e) {
+						int a = JOptionPane.showConfirmDialog(null, "Could not connect to server\nTry again?", "",JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+						if(a==JOptionPane.YES_OPTION)	//TRY LOGIN AGAIN
+							continue;
+						else{	//CANCEL LOGIN
+							loginButton.setEnabled(true);
+							loginButton.setText("Login");
+							loginButton.setIcon(null);
+							return;
+						}
+					}	
+					break;
+				}
+				loginButton.setEnabled(true);
+				loginButton.setText("Login");
+				loginButton.setIcon(null);
+				System.out.println(m.toString());
+				if(m.get("status").equals(1.0)){
+					Map m2 = (Map)m.get("data");
+					user = new Inw((String)m2.get("firstname_en"),(String) m2.get("lastname_en"),Integer.parseInt((String) m2.get("full_lp"))
+							,Integer.parseInt((String) m2.get("full_mp")),Integer.parseInt((String) m2.get("max_deck_size")),null);
+					loginAction(true);
+				}else loginAction(false);
+				System.out.println("Login executor closing...");
+			}
+
+		});
+		
 	}
 	public void loginAction(boolean b){
 		if(b){
