@@ -1,47 +1,30 @@
 package main;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
-
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.JButton;
-
-import java.awt.Font;
-
-import javax.swing.SwingConstants;
-
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import com.json.exceptions.JSONParsingException;
-import com.json.parsers.JSONParser;
-import com.json.parsers.JsonParserFactory;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JComboBox;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
+
+import org.apache.commons.lang3.SerializationUtils;
+
+import com.google.gson.Gson;
 
 public class Card extends JPanel{
 	int ic_id;
@@ -52,7 +35,7 @@ public class Card extends JPanel{
 	int atk;
 	int lp;
 	int lck;
-	int car;
+	double car;
 	int sa_code;
 	int sa_mc;
 	String sa_param;
@@ -78,6 +61,7 @@ public class Card extends JPanel{
 	private JLabel mcLabel;
 	private JLabel mc_l;
 	private JLabel pictureIcon;
+	private JPanel panel;
 	
 	/*
 //	{"status":1,"data":
@@ -90,51 +74,49 @@ public class Card extends JPanel{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					CardData.saveAllCardsToLocal();
+					//			Object[] o = CardData.allCardData();
 					JFrame frame = new JFrame();
-					Card c = new Card(48);
-			//		Card c2 = new Card(2000);
-					frame.getContentPane().add(c);
+
 					frame.setSize(700, 700);
 					frame.setVisible(true);
-				} catch (Exception e) {
+					frame.setLayout(new GridLayout(10,10));
+					for(int i = 1;i<CardData.getNumberOfCards();i++){
+						frame.add(new Card(i));
+					}
+					Card c = new Card(6);
+					Card c1 = new Card(6);
+					c.atk = 100000;
+					System.out.println(c);
+					System.out.println(c1);
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-	public Card(int ID) {
-	
-		String url = "http://128.199.235.83/icw/?q=icw/service/ic&ic_id=48";
-		InputStream is;	
-		Map m = null;
+	public Card(double test){
 		try {
-			is = new URL(url).openStream();
-			Gson gs = new Gson();
-			m = (Map) gs.fromJson(new InputStreamReader(is), Object.class);
-		} catch (MalformedURLException e) {e.printStackTrace();
-		} catch (IOException e) {e.printStackTrace();}	
-		if(m.get("data").equals("false")){
-			JOptionPane.showMessageDialog(null, "Invalid ID", "", JOptionPane.ERROR_MESSAGE);
-			return;
+			picture = ImageIO.read(new File("null.jpg"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		System.out.println(m.toString());
-		Map m2 = ((Map) m.get("data"));
+//		titleLabel.setText("test card: "+test);
+		initGUI();
+	}
 
-		car = Integer.parseInt((String) m2.get("car"));
+	public Card(int ID) {
+		@SuppressWarnings("rawtypes")
+		Map m2 = CardData.getCardData(ID);
+		car = Double.parseDouble((String) m2.get("car"));
 		lp = Integer.parseInt((String) m2.get("lp"));
 		spell_param = (String) m2.get("spell_param");
 		type = Integer.parseInt((String) m2.get("type"));
 		sa_param = (String) m2.get("sa_param");
 		sa_code = Integer.parseInt((String) m2.get("sa_code"));
-		try {
-			picture = ImageIO.read(new URL("http://128.199.235.83/icw/"+m2.get("picture")));
-		} catch (MalformedURLException e) {
-			
-			e.printStackTrace();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
+		picture = CardData.getCardImage(ID);
 		lck = Integer.parseInt((String) m2.get("lck"));
 		title = (String) m2.get("title");
 		atk = Integer.parseInt((String) m2.get("atk"));
@@ -144,51 +126,19 @@ public class Card extends JPanel{
 		sa_mc = Integer.parseInt((String) m2.get("sa_mc"));
 		spell_code = Integer.parseInt((String) m2.get("spell_code"));
 		desc = null;
-		
-		
-		System.out.println("sa_param: "+sa_param);
-		
-		addListeners();
-		createGUI();
+		initGUI();
 	}
-	/**
-	 * @wbp.parser.constructor
-	 */
-	public Card(double test){
-		try {
-			picture = ImageIO.read(new File("null.jpg"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-//		titleLabel.setText("test card: "+test);
-		addListeners();
-		createGUI();
-
-	}
-	public void addListeners(){
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				setBorder(new LineBorder(Color.MAGENTA, 5));
-				Main.setSelectedCard(Card.this);
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				if(Main.getSelectedCard()==Card.this)return;
-				setBorder(new LineBorder(Color.GREEN, 2));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				if(Main.getSelectedCard()==Card.this)return;
-				setBorder(new LineBorder(Color.BLACK, 1));
-			}
-		});
-	}
-	public void createGUI(){
+	private void initGUI() {
 		setBackground(Color.WHITE);
 		setBorder(new LineBorder(Color.BLACK, 1));
 		setLayout(null);
+		if(picture==null)
+			try {
+				picture = ImageIO.read(new File("null.jpg"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		pictureIcon = new JLabel(new ImageIcon(picture));
 		pictureIcon.setBounds(12, 63, 176, 58);
 		add(pictureIcon);
@@ -244,6 +194,27 @@ public class Card extends JPanel{
 		lpLabel = new JLabel(""+lp);
 		lpLabel.setBounds(80, 163, 56, 16);
 		add(lpLabel);
+		
+		addListeners();
+	}
+	public void addListeners(){
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				setBorder(new LineBorder(Color.MAGENTA, 5));
+				Main.setSelectedCard(Card.this);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if(Main.getSelectedCard()==Card.this)return;
+				setBorder(new LineBorder(Color.GREEN, 2));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if(Main.getSelectedCard()==Card.this)return;
+				setBorder(new LineBorder(Color.BLACK, 1));
+			}
+		});
 	}
 	public void deselect(){
 		setBorder(new LineBorder(Color.BLACK, 1));
@@ -254,5 +225,9 @@ public class Card extends JPanel{
 			sb.append("\u2605");
 		}
 		return sb.toString();
+	}
+	@Override
+	public String toString(){
+		return "ic_id="+ic_id+", title="+title+ ", type="+type+ ", mc="+mc+ ", atk="+atk+ ", lp="+lp+ ", lck="+lck+ ", car="+car+ ", sa_code="+sa_code+ ", sa_mc="+sa_mc+ ", sa_param="+sa_param+ ", rr="+rr+ ", spell_code="+spell_code+ ", spell_param="+spell_param+ ", picture="+picture.toString(); 
 	}
 }

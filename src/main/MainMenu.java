@@ -283,6 +283,7 @@ public class MainMenu extends JFrame {
 		ButtonPanel.add(verticalGlue_1);
 		
 		startButton = new JButton("Commence a new ICB");
+	//	startButton.setIcon(null);
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(bf!=null){

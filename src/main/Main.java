@@ -26,6 +26,7 @@ public class Main {
 	
 	
 	public static void main(String[] args) {
+		CardData.saveAllCardsToLocal();
 		MainMenu main = new MainMenu(con);
 		Splash frame = new Splash();
 		frame.setLocationRelativeTo(null);
