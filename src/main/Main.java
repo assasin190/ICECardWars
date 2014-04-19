@@ -44,7 +44,7 @@ public class Main {
 			};
 	        break;
 		}
-		CardData.saveAllCardsToLocal();
+	//	CardData.saveAllCardsToLocal();
 	//	main.setUndecorated(true);
 	//	main.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		Splash.setProgress("Starting game");

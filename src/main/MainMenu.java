@@ -84,62 +84,8 @@ public class MainMenu extends JFrame {
 	private Component rigidArea;
 	private Component verticalGlue;
 	private Component verticalGlue_1;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-
-		/*
-		Splash frame = new Splash();
-		frame.setLocationRelativeTo(null);
-		frame.setUndecorated(true);
-		frame.setVisible(true);
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		MainMenu main = new MainMenu(null);
-		main.setUndecorated(true);
-	//	main.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		main.setVisible(true);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		frame.dispose();
-		/*
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		*/
-	}
-
-	/**
-	 * Create the frame.
-	 */
+	
 	public MainMenu(Socket con) {
-		
-		/*
-		this.con = con;
-		try {
-			out = new ObjectOutputStream(con.getOutputStream());
-		//	con.get
-	        in = new ObjectInputStream(con.getInputStream());
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	//	chatArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
-		*/
 		
 		chatArea = new JTextArea();
 		chatArea.setEditable(false);
@@ -147,42 +93,6 @@ public class MainMenu extends JFrame {
 		
 		playerList = new JTextArea();
 		
-/*
-
-		Executors.newSingleThreadExecutor().execute(new Runnable(){
-			@Override
-			public void run(){
-				Object o;
-				try {
-					try {
-						while ((o = in.readObject()) != null) {
-							if(o instanceof String){
-								chatArea.append(o+"\n");
-							}
-							else if(o instanceof String[]){
-								playerList.setText("");
-								for(String s : (String[])o){
-									playerList.append(s+"\n");
-								}
-								
-							}
-							else {
-								if(!login)loginAction((boolean)o);
-								else if(login)logoutAction();
-							}
-						}
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					}
-				} catch (SocketException e) {
-		//			System.err.println("Client #"+id+" reports connection reset");
-				} catch (IOException e) {
-					e.printStackTrace();
-				} 
-			}
-		});
-		
-		*/
 		login = false;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -371,38 +281,49 @@ public class MainMenu extends JFrame {
 		playerListScr = new JScrollPane(playerList);
 		playerListPanel.add(playerListScr);
 		ChatPanel.add(chatAreaScr, BorderLayout.CENTER);
+
 	}
+	@SuppressWarnings("rawtypes")
 	public void sendLogin(){
 		if(login){
 			logoutAction();
 			return;
 		}
-		JsonParserFactory factory=JsonParserFactory.getInstance();
-		JSONParser parser=factory.newJsonParser();
+		loginButton.setText("Logging in...");
+		loginButton.setIcon(new ImageIcon("aloader.gif"));
+		loginButton.setEnabled(false);
 		String url = "http://128.199.235.83/icw/?q=icw/service/login&user="
 		+usernameField.getText()+"&pass="+pw.getText();
 		InputStream is;
 		Map m = null;
-	//	m.get("status");
-		try {
-			is = new URL(url).openStream();
-			Gson gs = new Gson();
-			m = (Map) gs.fromJson(new InputStreamReader(is), Object.class);
-		} catch (MalformedURLException e) {e.printStackTrace();
-		} catch (IOException e) {e.printStackTrace();}	
-		
-		//
-	//	Integer.parseInt(arg0) m.get("full_lp");
-	//	System.out.println(m.get("status"));
-	//	System.out.println(((Map) m.get("data")).get("firstname_en"));
+		while(true){
+			try {
+				
+				is = new URL(url).openStream();
+				Gson gs = new Gson();
+				m = (Map) gs.fromJson(new InputStreamReader(is), Object.class);
+			} catch (MalformedURLException e) {e.printStackTrace();
+			} catch (IOException e) {
+				int a = JOptionPane.showConfirmDialog(null, "Could not connect to server\nTry again?", "",JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+				if(a==JOptionPane.YES_OPTION)	//TRY LOGIN AGAIN
+					continue;
+				else{	//CANCEL LOGIN
+					loginButton.setText("Login");
+					loginButton.setIcon(null);
+					loginButton.setEnabled(true);
+					return;
+				}
+			}	
+			break;
+		}
+		loginButton.setText("Login");
+		loginButton.setIcon(null);
+		loginButton.setEnabled(true);
 		System.out.println(m.toString());
-		if(m.get("status").equals("1.0")){
-		
-			System.out.println(m.get("firstname_en"));
-			user = new Inw((String)((Map) m.get("data")).get("firstname_en"),(String) ((Map) m.get("data")).get("lastname_en"),Integer.parseInt((String) ((Map) m.get("data")).get("full_lp"))
-					,Integer.parseInt((String) ((Map) m.get("data")).get("full_mp")),Integer.parseInt((String) ((Map) m.get("data")).get("max_deck_size")),null);
-			
-	//		System.out.println(user.toString());
+		if(m.get("status").equals(1.0)){
+			Map m2 = (Map)m.get("data");
+			user = new Inw((String)m2.get("firstname_en"),(String) m2.get("lastname_en"),Integer.parseInt((String) m2.get("full_lp"))
+					,Integer.parseInt((String) m2.get("full_mp")),Integer.parseInt((String) m2.get("max_deck_size")),null);
 			loginAction(true);
 		}else loginAction(false);
 	}
@@ -449,9 +370,7 @@ public class MainMenu extends JFrame {
 							welcome.setText("You need to wait "+temp+" seconds before trying again");
 							try {
 								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+							} catch (InterruptedException e) {e.printStackTrace();
 							}
 							temp--;
 						}
