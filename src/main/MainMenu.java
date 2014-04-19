@@ -39,8 +39,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.google.gson.Gson;
-import com.json.parsers.JSONParser;
-import com.json.parsers.JsonParserFactory;
 
 
 public class MainMenu extends JFrame {
@@ -289,8 +287,6 @@ public class MainMenu extends JFrame {
 			logoutAction();
 			return;
 		}
-		loginButton.setText("Logging in...");
-		loginButton.setIcon(new ImageIcon("aloader.gif"));
 		loginButton.setEnabled(false);
 		String url = "http://128.199.235.83/icw/?q=icw/service/login&user="
 		+usernameField.getText()+"&pass="+pw.getText();
@@ -298,7 +294,6 @@ public class MainMenu extends JFrame {
 		Map m = null;
 		while(true){
 			try {
-				
 				is = new URL(url).openStream();
 				Gson gs = new Gson();
 				m = (Map) gs.fromJson(new InputStreamReader(is), Object.class);
@@ -308,16 +303,12 @@ public class MainMenu extends JFrame {
 				if(a==JOptionPane.YES_OPTION)	//TRY LOGIN AGAIN
 					continue;
 				else{	//CANCEL LOGIN
-					loginButton.setText("Login");
-					loginButton.setIcon(null);
 					loginButton.setEnabled(true);
 					return;
 				}
 			}	
 			break;
 		}
-		loginButton.setText("Login");
-		loginButton.setIcon(null);
 		loginButton.setEnabled(true);
 		System.out.println(m.toString());
 		if(m.get("status").equals(1.0)){
@@ -331,20 +322,13 @@ public class MainMenu extends JFrame {
 		if(b){
 			usernameLabel.setVisible(false);
 			passwordLabel.setVisible(false);
-			//			sendButton.setEnabled(true);
-			//			chatInput.setEnabled(true);
 			usernameField.setVisible(false);
 			pw.setVisible(false);
-	//		signupButton.setVisible(false);
 			loginButton.setText("Log Out");
-			
-
-	//		System.out.println(user.fname + " " + user.lname);
 			welcome.setText("Welcome "+user.fname+" "+user.lname+"! ");
 			try {
 				welcome.setIcon(new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/100003770583869/picture"))));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			login = true;
@@ -352,8 +336,6 @@ public class MainMenu extends JFrame {
 			//TODO: case for continue button
 			continueButton.setEnabled(true);
 			arrangeDeck.setEnabled(true);
-			//		chatArea.append("You are now logged in!\n");
-
 		}
 		else{
 			JOptionPane.showMessageDialog(null, "Incorrect username or password!", "",JOptionPane.DEFAULT_OPTION);
@@ -387,20 +369,15 @@ public class MainMenu extends JFrame {
 	public void logoutAction(){
 		usernameLabel.setVisible(true);
 		passwordLabel.setVisible(true);
-	//	sendButton.setEnabled(false);
-	//	chatInput.setEnabled(false);
 		usernameField.setVisible(true);
 		pw.setVisible(true);
-	//	signupButton.setVisible(true);
 		loginButton.setText("Log In");
 		welcome.setText("");
 		usernameField.setText("");
 		pw.setText("");
 		startButton.setEnabled(false);
-		//TODO: case for continue button
 		continueButton.setEnabled(false);
 		arrangeDeck.setEnabled(false);
-//		chatArea.append("You have logged out\n");
 		login = false;
 		welcome.setIcon(null);
 		user = null;
@@ -414,7 +391,6 @@ public class MainMenu extends JFrame {
 			JOptionPane.showMessageDialog(null, "Problem writing object", "Error!", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
-	//	out.println(chatInput.getText());
 		chatInput.setText("");
 	}
 	class EnterHandler extends KeyAdapter{

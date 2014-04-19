@@ -2,17 +2,11 @@ package main;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.net.Socket;
-import java.net.URL;
 
 import javax.swing.JOptionPane;
 
-import com.json.parsers.JSONParser;
-import com.json.parsers.JsonParserFactory;
-
 import misc.Splash;
-import misc.SplashPanel;
 
 public class Main {
 	static Socket con;
@@ -21,9 +15,6 @@ public class Main {
 	private static boolean scSW = true;	//Selected card switch
 	private static Card sc1 = null;	//Selected card 1
 	private static Card sc2 = null;	//Selected card 2
-	
-	static JsonParserFactory factory=JsonParserFactory.getInstance();
-	static JSONParser parser=factory.newJsonParser();
 	
 	
 	public static void main(String[] args) {

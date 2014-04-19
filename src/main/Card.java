@@ -22,8 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import org.apache.commons.lang3.SerializationUtils;
-
 import com.google.gson.Gson;
 
 public class Card extends JPanel{
