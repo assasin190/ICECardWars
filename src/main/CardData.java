@@ -15,12 +15,13 @@ import misc.Splash;
 import misc.SplashPanel;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 public abstract class CardData {
 	
 	//MAKE TO MAP
 	@SuppressWarnings("rawtypes")
-	private static ArrayList<Map> all_card = new ArrayList<Map>();
+	private static ArrayList<JsonObject> all_card = new ArrayList<JsonObject>();
 	private static ArrayList<BufferedImage> all_image =new ArrayList<BufferedImage>();
 	public static void main(String[] args){
 		CardData.saveAllCardsToLocal();
@@ -31,10 +32,10 @@ public abstract class CardData {
 	}
 	*/
 	@SuppressWarnings("rawtypes")
-	public static Map getCardData(int ID){
+	public static JsonObject getCardData(int ID){
 		try{
 			return all_card.get(ID);
-		}catch(ArrayIndexOutOfBoundsException e){
+		}catch(IndexOutOfBoundsException e){
 			System.err.println("Card doesn't exist in local save");
 		}
 		return null;
@@ -42,7 +43,7 @@ public abstract class CardData {
 	public static BufferedImage getCardImage(int ID){
 		try{
 			return all_image.get(ID);
-		}catch(ArrayIndexOutOfBoundsException e){
+		}catch(IndexOutOfBoundsException e){
 			System.err.println("Card doesn't exist in local save");
 		}
 		return null;
@@ -55,7 +56,6 @@ public abstract class CardData {
 		return all_card;
 	}
 	*/
-	@SuppressWarnings({ "rawtypes" })
 	public static void saveAllCardsToLocal(){
 		all_card.clear();
 		all_image.clear();
@@ -66,11 +66,11 @@ public abstract class CardData {
 		InputStream is;	
 		while(true){
 			String url ="http://128.199.235.83/icw/?q=icw/service/ic&ic_id="+count;
-			Object o = null;
+			JsonObject job = null;
 			try {
 				is = new URL(url).openStream();
 				gs = new Gson();
-				o = gs.fromJson(new InputStreamReader(is), Object.class);
+				job = gs.fromJson(new InputStreamReader(is), JsonObject.class);
 			} catch (MalformedURLException e) {e.printStackTrace();
 			} catch (IOException e) {
 				System.err.println("problem with the connection (retrieving JSON map)... retrying");
@@ -81,14 +81,15 @@ public abstract class CardData {
 				}
 				continue;
 			}	
-			Map temp = (Map)o;
-			if(temp.get("data").equals(false)){
+			if(job.get("data").toString().equals("false")){
 				break;
 			}
-			Map data = (Map)temp.get("data");
+			JsonObject data = job.getAsJsonObject("data");
+	//		System.out.println("DATA: "+data);
 			BufferedImage b = null;
 			try {
-				b = ImageIO.read(new URL("http://128.199.235.83/icw/"+data.get("picture")));
+		//		System.out.println("http://128.199.235.83/icw/"+data.get("picture"));
+				b = ImageIO.read(new URL("http://128.199.235.83/icw/"+data.get("picture").getAsString()));
 			} catch (MalformedURLException e) {
 				System.err.println("problem with the connection (retrieving picture)... retrying");
 				try {
@@ -100,7 +101,7 @@ public abstract class CardData {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-	//		System.out.println(b);
+			System.out.println(data);
 			Splash.setProgress("RETRIEVING DATA FROM WEB: "+data);
 			all_image.add(b);
 			all_card.add(data);

@@ -1,35 +1,32 @@
 package main;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 public class Card extends JPanel{
 	int ic_id;
@@ -55,47 +52,46 @@ public class Card extends JPanel{
 	private JLabel titleLabel;
 	private JLabel rrLabel;
 	private JLabel descLabel;
-	private JLabel lpLabel;
-	private JLabel atkLabel;
-	private JLabel carLabel;
 	private JLabel car_l;
-	private JLabel lckLabel;
 	private JLabel lck_l;
 	private JLabel lp_l;
 	private JLabel atk_l;
-	private JLabel mcLabel;
 	private JLabel mc_l;
-	private JLabel pictureIcon;
-	private JPanel panel;
-	
 	public static void main(String[] args){
-		
-		/*
-		EventQueue.invokeLater(new Runnable() {
+
+		EventQueue.invokeLater(new Runnable() {		//TEST GETTING DECK
 			public void run() {
 				try {
 					CardData.saveAllCardsToLocal();
-					//			Object[] o = CardData.allCardData();
 					JFrame frame = new JFrame();
-
 					frame.setSize(700, 700);
 					frame.setVisible(true);
-					frame.setLayout(new GridLayout(10,10));
-					for(int i = 1;i<CardData.getNumberOfCards();i++){
-						frame.add(new Card(i));
+					frame.setLayout(new GridLayout(4,5));
+					Gson gs;
+					InputStream is;	
+					String url ="http://128.199.235.83/icw/?q=icw/service/get_deck&user=595";	//INTERT YOUR ID HERE
+					JsonObject job = null;
+					try {
+						is = new URL(url).openStream();
+						gs = new Gson();
+						job = gs.fromJson(new InputStreamReader(is), JsonObject.class);
+						System.out.println(job);
+					} catch (MalformedURLException e) {e.printStackTrace();
+					} catch (IOException e) {}
+					Type listType = new TypeToken<List<Integer>>() {}.getType();
+					List<Integer> deck = new Gson().fromJson(job.get("data"), listType);
+					System.out.println(deck.toString());
+					for(int a:deck){
+						frame.add(new Card(a));
 					}
-					Card c = new Card(6);
-					Card c1 = new Card(6);
-					c.atk = 100000;
-					System.out.println(c);
-					System.out.println(c1);
+					
 				}
 				catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-		*/
+		
 	}
 	/*
 	public Card(double test){
@@ -112,22 +108,22 @@ public class Card extends JPanel{
 	public Card(int ID) {
 		
 		@SuppressWarnings("rawtypes")
-		Map m2 = CardData.getCardData(ID);
-		car = Double.parseDouble((String) m2.get("car"));
-		lp = Integer.parseInt((String) m2.get("lp"));
-		spell_param = (String) m2.get("spell_param");
-		type = Integer.parseInt((String) m2.get("type"));
-		sa_param = (String) m2.get("sa_param");
-		sa_code = Integer.parseInt((String) m2.get("sa_code"));
+		JsonObject m2 = CardData.getCardData(ID);
+		car = m2.get("car").getAsDouble();
+		lp = m2.get("lp").getAsInt();
+		spell_param = m2.get("spell_param").getAsString();
+		type = m2.get("type").getAsInt();
+		sa_param = m2.get("sa_param").getAsString();
+		sa_code = m2.get("sa_code").getAsInt();
 		picture = CardData.getCardImage(ID);
-		lck = Integer.parseInt((String) m2.get("lck"));
-		title = (String) m2.get("title");
-		atk = Integer.parseInt((String) m2.get("atk"));
-		mc = Integer.parseInt((String) m2.get("mc"));
-		rr = Integer.parseInt((String) m2.get("rr"));
-		ic_id = Integer.parseInt((String) m2.get("ic_id"));
-		sa_mc = Integer.parseInt((String) m2.get("sa_mc"));
-		spell_code = Integer.parseInt((String) m2.get("spell_code"));
+		lck = m2.get("lck").getAsInt();
+		title = m2.get("title").getAsString();
+		atk = m2.get("atk").getAsInt();
+		mc = m2.get("mc").getAsInt();
+		rr = m2.get("rr").getAsInt();
+		ic_id = m2.get("ic_id").getAsInt();
+		sa_mc = m2.get("sa_mc").getAsInt();
+		spell_code = m2.get("spell_code").getAsInt();
 		desc = null;
 		initGUI(); 
 		
@@ -179,7 +175,7 @@ public class Card extends JPanel{
 	}
 	private void initGUI() {
 		addListeners();
-		repaint();
+	//	repaint();
 		/*
 		setBackground(Color.WHITE);
 		//setBorder(new LineBorder(Color.BLACK, 1));

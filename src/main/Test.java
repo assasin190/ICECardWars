@@ -18,8 +18,8 @@ public class Test extends JFrame {
 
 					frame.setSize(700, 700);
 					frame.setVisible(true);
-					frame.setLayout(new GridLayout(10,10));
-					for(int i = 1;i<CardData.getNumberOfCards();i++){
+					frame.setLayout(new GridLayout(2,2));
+					for(int i = 1;i<4;i++){
 						frame.add(new Card(i));
 					}
 					Card c = new Card(6);

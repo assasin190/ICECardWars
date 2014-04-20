@@ -74,7 +74,7 @@ public class PanelAdd extends JFrame {
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(onePanel.getComponentCount()==4)return;
-				onePanel.add(new Card(Math.random()));
+				onePanel.add(new Card((int)(Math.random()*60)));
 				onePanel.paintAll(onePanel.getGraphics());
 			}
 
@@ -119,7 +119,7 @@ public class PanelAdd extends JFrame {
 		addButton2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(twoPanel.getComponentCount()==4)return;
-				twoPanel.add(new Card(Math.random()));
+				twoPanel.add(new Card((int)(Math.random()*60)));
 				twoPanel.paintAll(twoPanel.getGraphics());
 			}
 		});
