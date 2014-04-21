@@ -29,7 +29,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 public class Card extends JPanel{
-	int ic_id;//
+	int ic_id;
 	String title;
 	int type;
 	int mc;
