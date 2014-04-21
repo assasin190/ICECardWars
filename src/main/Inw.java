@@ -13,14 +13,16 @@ public class Inw extends JPanel{
 	int LP;
 	int MP;
 	int maxDeck;
+	String fb_id;
 	Image profile;
 	
-	public Inw(String fname,String lname,int LP,int MP,int maxDeck,Image profile){
+	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,Image profile){
 		this.fname = fname;
 		this.lname = lname;
 		this.LP = LP;
 		this.MP = MP;
 		this.maxDeck = maxDeck;
+		this.fb_id = fb_id;
 		this.profile = profile;
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
