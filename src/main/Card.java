@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -58,7 +60,7 @@ public class Card extends JPanel{
 	private JLabel atk_l;
 	private JLabel mc_l;
 	public static void main(String[] args){
-
+		
 		EventQueue.invokeLater(new Runnable() {		//TEST GETTING DECK
 			public void run() {
 				try {
@@ -84,7 +86,6 @@ public class Card extends JPanel{
 					for(int a:deck){
 						frame.add(new Card(a));
 					}
-					
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -93,7 +94,7 @@ public class Card extends JPanel{
 		});
 		
 	}
-	/*
+	
 	public Card(double test){
 		try {
 			picture = ImageIO.read(new File("null.jpg"));
@@ -103,8 +104,9 @@ public class Card extends JPanel{
 		}
 //		titleLabel.setText("test card: "+test);
 		initGUI();
+		
 	}
-	*/
+	
 	public Card(int ID) {
 		
 		@SuppressWarnings("rawtypes")

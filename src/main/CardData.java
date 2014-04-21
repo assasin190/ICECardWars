@@ -40,6 +40,7 @@ public abstract class CardData {
 		}
 		return null;
 	}
+	 
 	public static BufferedImage getCardImage(int ID){
 		try{
 			return all_image.get(ID);

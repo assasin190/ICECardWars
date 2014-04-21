@@ -34,6 +34,7 @@ public class Test extends JFrame {
 			}
 		});
 		
+		
 	}
 	
 	public Test(Card card) {
