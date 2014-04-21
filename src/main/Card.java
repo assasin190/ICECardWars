@@ -78,7 +78,7 @@ public class Card extends JPanel{
 						is = new URL(url).openStream();
 						gs = new Gson();
 						job = gs.fromJson(new InputStreamReader(is), JsonObject.class);
-						System.out.println(job);
+			//			System.out.println(job);
 					} catch (MalformedURLException e) {e.printStackTrace();
 					} catch (IOException e) {}
 					Type listType = new TypeToken<List<Integer>>() {}.getType();
@@ -149,7 +149,7 @@ public class Card extends JPanel{
 		}else if(type==2){	//DESCRIPTION FOR SPELL
 			desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
 		}
-		System.out.println("DESC:"+desc);
+	//	System.out.println("DESC:"+desc);
 		initGUI(); 
 		
 		

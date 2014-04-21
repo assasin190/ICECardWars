@@ -1,5 +1,9 @@
 package main;
+import javax.swing.*;
 
-public class SetDeck {
-
+public class SetDeck extends JFrame{
+	JPanel left;
+	JPanel right;
+	
+	
 }
