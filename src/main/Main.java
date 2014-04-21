@@ -35,13 +35,12 @@ public class Main {
 			};
 	        break;
 		}
-//		CardData.saveAllCardsToLocal();
+		CardData.saveAllCardsToLocal();
 	//	main.setUndecorated(true);
 	//	main.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		Splash.setProgress("Starting game");
 		main.setVisible(true);
 		frame.dispose();
-		
 	}
 	public static void setSelectedCard(Card c){
 		if(scSW){

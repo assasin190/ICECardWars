@@ -41,7 +41,8 @@ public class Card extends JPanel{
 	int sa_code;
 	int sa_mc;
 	String sa_param;
-	int sa_value;
+	String param_type = "";
+	int param_value = 0;
 	int rr;
 	//for spell
 	int spell_code;
@@ -69,7 +70,7 @@ public class Card extends JPanel{
 					frame.setLayout(new GridLayout(4,5));
 					Gson gs;
 					InputStream is;	
-					String url ="http://128.199.235.83/icw/?q=icw/service/get_deck&user=595";	//INTERT YOUR ID HERE
+					String url ="http://128.199.235.83/icw/?q=icw/service/get_deck&user=603";	//INTERT YOUR ID HERE
 					JsonObject job = null;
 					try {
 						is = new URL(url).openStream();
@@ -107,13 +108,29 @@ public class Card extends JPanel{
 	*/
 	public Card(int ID) {
 		
-		@SuppressWarnings("rawtypes")
 		JsonObject m2 = CardData.getCardData(ID);
 		car = m2.get("car").getAsDouble();
 		lp = m2.get("lp").getAsInt();
 		spell_param = m2.get("spell_param").getAsString();
-		type = m2.get("type").getAsInt();
 		sa_param = m2.get("sa_param").getAsString();
+		type = m2.get("type").getAsInt();
+		if(type==1){
+			if(!sa_param.equals("")){
+				if(sa_param.contains(",")){
+					param_type = sa_param.substring(0,sa_param.indexOf(','));
+					param_value = Integer.parseInt(sa_param.substring(sa_param.indexOf(',')+1,sa_param.length()));
+				}else
+					param_value = Integer.parseInt(sa_param);
+			}
+		}else if(type==2){
+			if(!spell_param.equals("")){
+				if(spell_param.contains(",")){
+					param_type = spell_param.substring(0,spell_param.indexOf(','));
+					param_value = Integer.parseInt(spell_param.substring(spell_param.indexOf(',')+1,spell_param.length()));
+				}else
+					param_value = Integer.parseInt(spell_param);
+			}
+		}
 		sa_code = m2.get("sa_code").getAsInt();
 		picture = CardData.getCardImage(ID);
 		lck = m2.get("lck").getAsInt();
@@ -125,6 +142,12 @@ public class Card extends JPanel{
 		sa_mc = m2.get("sa_mc").getAsInt();
 		spell_code = m2.get("spell_code").getAsInt();
 		desc = null;
+		if(type==1){	// DESCRIPTION FOR MONSTER
+			desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
+		}else if(type==2){	//DESCRIPTION FOR SPELL
+			desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
+		}
+		System.out.println("DESC:"+desc);
 		initGUI(); 
 		
 		
