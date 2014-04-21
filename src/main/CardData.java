@@ -49,13 +49,11 @@ public abstract class CardData {
 		}
 		return null;
 	}
-<<<<<<< HEAD
-	 
-=======
+
 	public static boolean chance(double chance){
 		return (Math.random()<chance);
 	}
->>>>>>> 84089e1ffab555d731be0e48121800a63b1613c0
+	
 	public static BufferedImage getCardImage(int ID){
 		try{
 			return all_image.get(ID);
