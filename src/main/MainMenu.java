@@ -358,7 +358,7 @@ public class MainMenu extends JFrame {
 					public void run() {
 						usernameField.setEnabled(false);
 						pw.setEnabled(false);
-						loginButton.setEnabled(false);
+				//		loginButton.setEnabled(false);
 						int temp = 60;
 						while(temp>0){
 							welcome.setText("You need to wait "+temp+" seconds before trying again");
@@ -367,6 +367,7 @@ public class MainMenu extends JFrame {
 							} catch (InterruptedException e) {e.printStackTrace();
 							}
 							temp--;
+							loginButton.setEnabled(false);
 						}
 						usernameField.setEnabled(true);
 						pw.setEnabled(true);

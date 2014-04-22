@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import misc.Splash;
 import misc.SplashPanel;
@@ -28,7 +29,7 @@ public abstract class CardData {
 	private static ArrayList<String> sa_code = new ArrayList<String>();
 	private static ArrayList<String> spell_code = new ArrayList<String>();
 	private static ArrayList<JsonObject> all_card = new ArrayList<JsonObject>();
-	private static ArrayList<BufferedImage> all_image =new ArrayList<BufferedImage>();
+	private static ArrayList<ImageIcon> all_image =new ArrayList<ImageIcon>();
 	public static void main(String[] args){
 		CardData.saveAllCardsToLocal();
 	//	while(true){
@@ -54,7 +55,7 @@ public abstract class CardData {
 		return (Math.random()<chance);
 	}
 	
-	public static BufferedImage getCardImage(int ID){
+	public static ImageIcon getCardImage(int ID){
 		try{
 			return all_image.get(ID);
 		}catch(IndexOutOfBoundsException e){
@@ -103,10 +104,10 @@ public abstract class CardData {
 			}
 			JsonObject data = job.getAsJsonObject("data");
 	//		System.out.println("DATA: "+data);
-			BufferedImage b = null;
+			ImageIcon b = null;
 			try {
-		//		System.out.println("http://128.199.235.83/icw/"+data.get("picture"));
-				b = ImageIO.read(new URL("http://128.199.235.83/icw/"+data.get("picture").getAsString()));
+		//		System.out.println("http://128.199.235.83/icw/"+data.get("picture"))
+				b = new ImageIcon(ImageIO.read(new URL("http://128.199.235.83/icw/"+data.get("picture").getAsString())));
 			} catch (MalformedURLException e) {
 				System.err.println("problem with the connection (retrieving picture)... retrying");
 				try {
