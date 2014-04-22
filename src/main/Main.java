@@ -32,7 +32,7 @@ public class Main {
 				int a = JOptionPane.showConfirmDialog(null, "Could not connect to server\nTry again?", "",JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
 				if(a==JOptionPane.YES_OPTION)continue;
 				else System.exit(0);
-			};
+			}; 
 	        break;
 		}
 	//	CardData.saveAllCardsToLocal();
