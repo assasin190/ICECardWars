@@ -1,8 +1,10 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureRecognizer;
@@ -62,7 +64,7 @@ public class Card extends JPanel{
 	String spell_param;
 	ImageIcon picture;
 	String desc;
-	
+
 	private JLabel titleLabel;
 	private JLabel rrLabel;
 	private JLabel descLabel;
@@ -83,7 +85,7 @@ public class Card extends JPanel{
 					frame.setSize(700, 700);
 					frame.setVisible(true);
 					frame.setLayout(new GridLayout(4,5));
-					
+
 					Gson gs;
 					InputStream is;	
 					String url ="http://128.199.235.83/icw/?q=icw/service/get_deck&user=603";	//INTERT YOUR ID HERE
@@ -100,7 +102,7 @@ public class Card extends JPanel{
 					for(int a:deck){
 						frame.add(new Card(a));
 					}
-					
+
 					frame.add(new Card(1,true));
 				}
 				catch (Exception e) {
@@ -108,14 +110,17 @@ public class Card extends JPanel{
 				}
 			}
 		});
-		
+
 	}
 	@Override
 	public void addNotify() {
 		System.out.println("CARD: addNotify");
 		super.addNotify();
+		Container con = this.getParent();
+		if(con instanceof CardHolder){
+			
+		}
 		if (dgr == null) {
-
 			dragGestureHandler = new DragGestureHandler(this);
 			dgr = DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(
 					this,
@@ -127,6 +132,10 @@ public class Card extends JPanel{
 	@Override
 	public void removeNotify() {
 		System.out.println("CARD: removeNotify");
+		Container con = this.getParent();
+		if(con instanceof CardHolder){
+			((CardHolder) con).c = null;
+		}
 		if (dgr != null) {
 			dgr.removeDragGestureListener(dragGestureHandler);
 			dragGestureHandler = null;
@@ -193,9 +202,9 @@ public class Card extends JPanel{
 		spell_code = m2.get("spell_code").getAsInt();
 		desc = "";
 	}
-	
+
 	public Card(int ID) {
-		
+
 		JsonObject m2 = CardData.getCardData(ID);
 		car = m2.get("car").getAsDouble();
 		lp = m2.get("lp").getAsInt();
@@ -235,10 +244,10 @@ public class Card extends JPanel{
 		}else if(type==2){	//DESCRIPTION FOR SPELL
 			desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
 		}
-	//	System.out.println("DESC:"+desc);
+		//	System.out.println("DESC:"+desc);
 		initGUI(); 
-		
-		
+
+
 		/*
 		setSize(221, 324);
 		setBackground(Color.WHITE);
@@ -281,17 +290,17 @@ public class Card extends JPanel{
 		desc = null;
 		initGUI();
 		setVisible(true);
-		*/
-		
+		 */
+
 	}
 	private void initGUI() {
 		addListeners();
-	//	repaint();
+		//	repaint();
 		/*
 		setBackground(Color.WHITE);
 		//setBorder(new LineBorder(Color.BLACK, 1));
 		setLayout(null);
-		
+
 		if(picture==null)
 			try {
 				picture = ImageIO.read(new File("null.jpg"));
@@ -357,7 +366,7 @@ public class Card extends JPanel{
 		add(lpLabel);
 
 		addListeners();
-		*/
+		 */
 	}
 	public void addListeners(){
 		addMouseListener(new MouseAdapter() {
@@ -408,48 +417,48 @@ public class Card extends JPanel{
 		pictureIcon = new JLabel(new ImageIcon(picture));
 		pictureIcon.setBounds(12, 63, 176, 58);
 		add(pictureIcon);
-		*/
-		
+		 */
+
 		g.drawImage(picture.getImage(), getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
-	
+
 		if(lck_l != null) remove(lck_l);
 		lck_l = new JLabel("LCK: " + lck);
 		lck_l.setBounds(getWidth()/32, 24*getHeight()/32, (int)lck_l.getPreferredSize().getWidth(), 10);
 		add(lck_l);
-		
+
 		/*
 		if(lckLabel != null) remove(lck_l);
 		lckLabel = new JLabel(""+lck);
 		lckLabel.setBounds(80, 192, 56, 16);
 		add(lckLabel);
-		*/
-		
+		 */
+
 
 		if(car_l != null) remove(car_l);
 		car_l = new JLabel("CAR: " + car);
 		car_l.setBounds(getWidth()/32, 26*getHeight()/32, (int)car_l.getPreferredSize().getWidth(), 10);
 		add(car_l);
-		
+
 		/*
 		if(carLabel != null) remove(carLabel);
 		carLabel = new JLabel(""+car);
 		carLabel.setBounds(80, 221, 56, 16);
 		add(carLabel);
-		*/
-		
+		 */
+
 
 		if(descLabel != null) remove(descLabel);
 		descLabel = new JLabel("SA desc: "+desc);
 		descLabel.setBounds(getWidth()/32, 28*getHeight()/32, (int)descLabel.getPreferredSize().getWidth(), 10);
 		add(descLabel);
-		
+
 		if(titleLabel != null) remove(titleLabel);
 		titleLabel = new JLabel(""+title);
 		titleLabel.setLocation(getWidth()/32, getHeight()/32);
 		titleLabel.setBounds(getWidth()/32, getHeight()/32, getWidth()/32 + (int)titleLabel.getPreferredSize().getWidth(), getHeight()/32 + (int)titleLabel.getPreferredSize().getHeight());
 		add(titleLabel);
 
-		
+
 		if(mc_l != null) remove(mc_l);
 		mc_l = new JLabel("MC: "+mc);
 		mc_l.setBounds(getWidth() - getWidth()/32 - (int)mc_l.getPreferredSize().getWidth(), getHeight()/32, getWidth() - getWidth()/32 , getHeight()/32 + (int)mc_l.getPreferredSize().getHeight());
@@ -459,38 +468,45 @@ public class Card extends JPanel{
 		mcLabel = new JLabel(""+mc);
 		mcLabel.setBounds(132, 13, 56, 16);
 		add(mcLabel);
-		*/
-		
-		
+		 */
+
+
 		if(rrLabel != null) remove(rrLabel);
 		rrLabel = new JLabel(rr(rr));
 		rrLabel.setBounds(getWidth()/32, 4*getHeight()/32, (int)rrLabel.getPreferredSize().getWidth(), 10);
 		add(rrLabel);
-		
-		
+
+
 		if(atk_l != null) remove(atk_l);
 		atk_l = new JLabel("ATK: " + atk);
 		atk_l.setBounds(getWidth()/32, 20*getHeight()/32, (int)atk_l.getPreferredSize().getWidth(), 10);
 		add(atk_l);
-		
+
 		/*
 		if(atkLabel != null) remove(atkLabel);
 		atkLabel = new JLabel(""+atk);
 		atkLabel.setBounds(80, 134, 56, 16);
 		add(atkLabel);
-		*/
-		
+		 */
+
 		if(lp_l != null) remove(lp_l);
 		lp_l = new JLabel("LP: " + lp);
 		lp_l.setBounds(getWidth()/32, 22*getHeight()/32, (int)lp_l.getPreferredSize().getWidth(), 10);
 		add(lp_l);
-		
+
 		/*
 		if(lpLabel != null) remove(lpLabel);
 		lpLabel = new JLabel(""+lp);
 		lpLabel.setBounds(80, 163, 56, 16);
 		add(lpLabel);
-		*/
-
+		 */
+	}
+	public BufferedImage createImage(JPanel panel) {
+	    int w = panel.getWidth();
+	    int h = panel.getHeight();
+	    BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+	    Graphics2D g = bi.createGraphics();
+	    panel.paint(g);
+	    return bi;
 	}
 }

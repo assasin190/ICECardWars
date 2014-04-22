@@ -1,7 +1,14 @@
 package main;
 
+import java.awt.AlphaComposite;
 import java.awt.EventQueue;
+import java.awt.Graphics2D;
+import java.awt.HeadlessException;
+import java.awt.Point;
+import java.awt.Toolkit;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -11,7 +18,15 @@ import java.awt.BorderLayout;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.Color;
+
 import javax.swing.border.BevelBorder;
+
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class CardHolder extends JPanel{
 
@@ -21,7 +36,8 @@ public class CardHolder extends JPanel{
 	public static int DUMPSTER = 3;
 	DropHandler dropHandler;
 	DropTarget dropTarget;
-	Card c;
+	public Card c;
+	protected BufferedImage screenshot;
 
 	public static void main(String[] args){
 		EventQueue.invokeLater(new Runnable() {
@@ -42,6 +58,8 @@ public class CardHolder extends JPanel{
 		initGUI();
 	}
 	private void initGUI() {
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
 		dropHandler = new DropHandler();
 		dropTarget = new DropTarget(this, DnDConstants.ACTION_MOVE, dropHandler, true);
 	//	setTransferHandler(null);
@@ -58,4 +76,5 @@ public class CardHolder extends JPanel{
 		this.add(c);
 		this.c = c;
 	}
+	
 }
