@@ -63,50 +63,54 @@ public class DropHandler implements DropTargetListener {
 			try {
 				Object data = transferable.getTransferData(PanelDataFlavor.SHARED_INSTANCE);
 				if (data instanceof Card) {
-					Card panel = (Card) data;
+					Card card = (Card) data;
 					DropTargetContext dtc = dtde.getDropTargetContext();
-					Component component = dtc.getComponent();
-					if (component instanceof JComponent) {
-						Container parent = panel.getParent();
-	//					System.out.println("parent: "+parent);
-						if (parent != null) {
-				//			System.out.println(((CardHolder)parent).c);
-							parent.remove(panel);
-							
-							if(parent instanceof CardHolder){
-								System.out.println("removeCard");
-								((CardHolder) parent).c = null;
+					Component destination = dtc.getComponent();
+					if (destination instanceof JComponent) {
+						Container original = card.getParent();
+						if(destination instanceof CardHolder){
+							if(((CardHolder) destination).isEmpty()){
+								//TODO: CHECK CARD TYPE AND SPELL CODE
+								if(original instanceof CardHolder){
+									System.out.println("dtc: removeCard");
+									((CardHolder) original).removeCard();
+								}
+								System.out.println("dtc: addCard");
+								CardHolder cc = ((CardHolder) destination);
+								cc.addCard(card);
+								success = true;
+								dtde.acceptDrop(DnDConstants.ACTION_MOVE);
+								card.invalidate();
+								card.repaint();
 							}
-							
-						}
-						((JComponent)component).add(panel);
-						
-						if(component instanceof CardHolder){
-							System.out.println("addCard");
-							((CardHolder) component).c = (Card) data;
-						}
-						
-						success = true;
-						dtde.acceptDrop(DnDConstants.ACTION_MOVE);
-						//TODO: 
-						panel.invalidate();
-						panel.repaint();
+							else{
+								success = false;
+								System.out.println("DROP REJECTED");
+								dtde.rejectDrop();
+							}
+		//				((JComponent)destination).add(card);				
+						}	//TODO: ADD CASE FOR NON CARDHOLDER
+
 					} else {
 						success = false;
+						System.out.println("DROP REJECTED");
 						dtde.rejectDrop();
 					}
 				} else {
 					success = false;
+					System.out.println("DROP REJECTED");
 					dtde.rejectDrop();
 				}
 
 			} catch (Exception exp) {
 				success = false;
+				System.out.println("DROP REJECTED");
 				dtde.rejectDrop();
 				exp.printStackTrace();
 			}
 		} else {
 			success = false;
+			System.out.println("DROP REJECTED");
 			dtde.rejectDrop();
 		}
 		dtde.dropComplete(success);

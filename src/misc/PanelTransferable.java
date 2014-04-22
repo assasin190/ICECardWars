@@ -13,8 +13,8 @@ public class PanelTransferable implements Transferable {
     private DataFlavor[] flavors = new DataFlavor[]{PanelDataFlavor.SHARED_INSTANCE};
     private Card card;
 
-    public PanelTransferable(Card panel) {
-        this.card = panel;
+    public PanelTransferable(Card card) {
+        this.card = card;
     }
 
     @Override

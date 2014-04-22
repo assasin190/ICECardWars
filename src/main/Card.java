@@ -112,10 +112,6 @@ public class Card extends JPanel{
 	public void addNotify() {
 		System.out.println("CARD: addNotify");
 		super.addNotify();
-		Container con = this.getParent();
-		if(con instanceof CardHolder){
-
-		}
 		if (dgr == null) {
 			dragGestureHandler = new DragGestureHandler(this);
 			dgr = DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(
@@ -128,10 +124,6 @@ public class Card extends JPanel{
 	@Override
 	public void removeNotify() {
 		System.out.println("CARD: removeNotify");
-		Container con = this.getParent();
-		if(con instanceof CardHolder){
-			((CardHolder) con).c = null;
-		}
 		if (dgr != null) {
 			dgr.removeDragGestureListener(dragGestureHandler);
 			dragGestureHandler = null;

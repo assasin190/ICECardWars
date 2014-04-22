@@ -20,7 +20,6 @@ public class DragGestureHandler implements DragGestureListener, DragSourceListen
 
     public DragGestureHandler(Card child) {
         this.child = child;
-
     }
 
     public Card getCard() {

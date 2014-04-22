@@ -1,32 +1,18 @@
 package main;
 
-import java.awt.AlphaComposite;
-import java.awt.EventQueue;
-import java.awt.Graphics2D;
-import java.awt.HeadlessException;
-import java.awt.Point;
-import java.awt.Toolkit;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import misc.DropHandler;
-
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.EventQueue;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
-import java.awt.Color;
+import java.awt.image.BufferedImage;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-import java.awt.Cursor;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import misc.DropHandler;
 
 public class CardHolder extends JPanel{
 
@@ -36,7 +22,6 @@ public class CardHolder extends JPanel{
 	public static int DUMPSTER = 3;
 	DropHandler dropHandler;
 	DropTarget dropTarget;
-	public Card c;
 	protected BufferedImage screenshot;
 
 	public static void main(String[] args){
@@ -71,10 +56,19 @@ public class CardHolder extends JPanel{
 	public CardHolder(int type) {
 		setLayout(new BorderLayout(0, 0));
 	}
-	
-	public void addCard(Card c){
-		this.add(c);
-		this.c = c;
+	public boolean isEmpty(){
+		return this.getComponentCount()==0;
+
 	}
-	
+	public void addCard(Card c){
+		if(!isEmpty())System.err.println("Attempt to add card into nonempty CardHolder");
+		this.add(c);
+	}
+	public void removeCard(){
+		if(isEmpty())System.err.println("Attempt to remove card from empty CardHolder");
+		this.remove(0);
+	}
+	public Card getCard(){
+		return (Card)this.getComponent(0);
+	}
 }

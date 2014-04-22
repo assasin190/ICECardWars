@@ -81,7 +81,6 @@ public class MainMenu extends JFrame {
 	private Component rigidArea;
 	private Component verticalGlue;
 	private Component verticalGlue_1;
-	
 	public MainMenu(Socket con) {
 		
 		chatArea = new JTextArea();
@@ -282,6 +281,7 @@ public class MainMenu extends JFrame {
 	}
 	public void sendLogin(){
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
 				if(login){
@@ -317,11 +317,20 @@ public class MainMenu extends JFrame {
 				loginButton.setEnabled(true);
 				loginButton.setText("Login");
 				loginButton.setIcon(null);
+				
 				System.out.println(job.toString());
+				System.out.println("ENDU"+usernameField.getText()+":pass="+pw.getText());
 				if(job.get("status").getAsInt()==1){
+					welcome.setIcon(new ImageIcon("aloader.gif"));
 					JsonObject j = job.getAsJsonObject("data");
+					ImageIcon ic = null;
+					try {
+						ic = new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+j.get("fb_id").getAsString()+"/picture")));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 					user = new Inw(j.get("firstname_en").getAsString(),j.get("lastname_en").getAsString(),j.get("full_lp").getAsInt()
-							,j.get("full_mp").getAsInt(),j.get("max_deck_size").getAsInt(), j.get("fb_id").getAsString(),null);
+							,j.get("full_mp").getAsInt(),j.get("max_deck_size").getAsInt(), j.get("fb_id").getAsString(),ic,Integer.parseInt(usernameField.getText()),Integer.parseInt(pw.getText()));
 					loginAction(true);
 				}else loginAction(false);
 				System.out.println("Login executor closing...");
@@ -338,11 +347,8 @@ public class MainMenu extends JFrame {
 			pw.setVisible(false);
 			loginButton.setText("Log Out");
 			welcome.setText("Welcome "+user.fname+" "+user.lname+"! ");
-			try {
-				welcome.setIcon(new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+user.fb_id+"/picture"))));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			welcome.setIcon(user.profile);
+//
 			login = true;
 			startButton.setEnabled(true);
 			//TODO: case for continue button

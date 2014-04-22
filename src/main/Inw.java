@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Image;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -14,9 +15,10 @@ public class Inw extends JPanel{
 	int MP;
 	int maxDeck;
 	String fb_id;
-	Image profile;
-	
-	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,Image profile){
+	ImageIcon profile;
+	private int user_ID;
+	private int user_pw;
+	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,ImageIcon profile,int user_ID,int user_PW){
 		this.fname = fname;
 		this.lname = lname;
 		this.LP = LP;
@@ -24,13 +26,18 @@ public class Inw extends JPanel{
 		this.maxDeck = maxDeck;
 		this.fb_id = fb_id;
 		this.profile = profile;
+		this.user_ID = user_ID;
+		this.user_pw = user_PW;
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		
-		JLabel profile_l = new JLabel("");
-		add(profile_l);
 		
 	}
 	public String toString(){
-		return "FIRSTNAME: "+fname+",LASTNAME: "+lname+",LP: "+LP+",MP: "+MP+",MAXDECK: "+maxDeck+",IMAGE: "+profile.toString(); 
+		return "FIRSTNAME: "+fname+",LASTNAME: "+lname+",LP: "+LP+",MP: "+MP+",MAXDECK: "+",IMAGE: "+profile.toString(); 
+	}
+	public int getID(){
+		return user_ID;
+	}
+	public int getPW(){
+		return user_pw;
 	}
 }
