@@ -82,6 +82,7 @@ public class Main extends JFrame {
 				DnDConstants.ACTION_COPY, new DragGestureListImp());
 
 		new MyDropTargetListImp(direita);
+		new MyDropTargetListImp(esquerda);
 	}
 
 	class TransferableAnimal implements Transferable {

@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureRecognizer;
+import java.awt.dnd.DragSource;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -11,18 +14,26 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
+
+import misc.DragGestureHandler;
+import misc.Splash;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -49,7 +60,7 @@ public class Card extends JPanel{
 	//for spell
 	int spell_code;
 	String spell_param;
-	BufferedImage picture;
+	ImageIcon picture;
 	String desc;
 	
 	private JLabel titleLabel;
@@ -60,8 +71,10 @@ public class Card extends JPanel{
 	private JLabel lp_l;
 	private JLabel atk_l;
 	private JLabel mc_l;
+	private DragGestureRecognizer dgr;
+	private DragGestureHandler dragGestureHandler;
 	public static void main(String[] args){
-		
+
 		EventQueue.invokeLater(new Runnable() {		//TEST GETTING DECK
 			public void run() {
 				try {
@@ -70,6 +83,7 @@ public class Card extends JPanel{
 					frame.setSize(700, 700);
 					frame.setVisible(true);
 					frame.setLayout(new GridLayout(4,5));
+					
 					Gson gs;
 					InputStream is;	
 					String url ="http://128.199.235.83/icw/?q=icw/service/get_deck&user=603";	//INTERT YOUR ID HERE
@@ -78,7 +92,6 @@ public class Card extends JPanel{
 						is = new URL(url).openStream();
 						gs = new Gson();
 						job = gs.fromJson(new InputStreamReader(is), JsonObject.class);
-			//			System.out.println(job);
 					} catch (MalformedURLException e) {e.printStackTrace();
 					} catch (IOException e) {}
 					Type listType = new TypeToken<List<Integer>>() {}.getType();
@@ -87,6 +100,8 @@ public class Card extends JPanel{
 					for(int a:deck){
 						frame.add(new Card(a));
 					}
+					
+					frame.add(new Card(1,true));
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -95,17 +110,88 @@ public class Card extends JPanel{
 		});
 		
 	}
-	
-	public Card(double test){
-		try {
-			picture = ImageIO.read(new File("null.jpg"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	@Override
+	public void addNotify() {
+		System.out.println("CARD: addNotify");
+		super.addNotify();
+		if (dgr == null) {
+
+			dragGestureHandler = new DragGestureHandler(this);
+			dgr = DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(
+					this,
+					DnDConstants.ACTION_MOVE,
+					dragGestureHandler);
 		}
-//		titleLabel.setText("test card: "+test);
-		initGUI();
-		
+	}
+
+	@Override
+	public void removeNotify() {
+		System.out.println("CARD: removeNotify");
+		if (dgr != null) {
+			dgr.removeDragGestureListener(dragGestureHandler);
+			dragGestureHandler = null;
+		}
+		dgr = null;
+		super.removeNotify();
+	}
+	public Card(int ID,boolean notused){	//TEMPORARY CONSTRUCTOR THAT ACCESS THE WEB DIRECTLY FOR CARD'S INFO
+		JsonObject data = null;
+		ImageIcon b = null;
+		while(true){
+			String url ="http://128.199.235.83/icw/?q=icw/service/ic&ic_id="+ID;
+			JsonObject job = null;
+			try {
+				InputStream is = new URL(url).openStream();
+				Gson gs = new Gson();
+				job = gs.fromJson(new InputStreamReader(is), JsonObject.class);
+			} catch (MalformedURLException e) {e.printStackTrace();
+			} catch (IOException e) {
+				System.err.println("problem with the connection (retrieving JSON map)... retrying");
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				continue;
+			}	
+			if(job.get("data").toString().equals("false")){
+				break;
+			}
+			data = job.getAsJsonObject("data");
+			b = null;
+			try {
+				b = new ImageIcon(ImageIO.read(new URL("http://128.199.235.83/icw/"+data.get("picture").getAsString())));
+			} catch (MalformedURLException e) {
+				System.err.println("problem with the connection (retrieving picture)... retrying");
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				continue;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println(data);
+			break;
+		}
+		JsonObject m2 = data;
+		car = m2.get("car").getAsDouble();
+		lp = m2.get("lp").getAsInt();
+		spell_param = m2.get("spell_param").getAsString();
+		sa_param = m2.get("sa_param").getAsString();
+		type = m2.get("type").getAsInt();
+		sa_code = m2.get("sa_code").getAsInt();
+		picture = b;
+		lck = m2.get("lck").getAsInt();
+		title = m2.get("title").getAsString();
+		atk = m2.get("atk").getAsInt();
+		mc = m2.get("mc").getAsInt();
+		rr = m2.get("rr").getAsInt();
+		ic_id = m2.get("ic_id").getAsInt();
+		sa_mc = m2.get("sa_mc").getAsInt();
+		spell_code = m2.get("spell_code").getAsInt();
+		desc = "";
 	}
 	
 	public Card(int ID) {
@@ -324,7 +410,7 @@ public class Card extends JPanel{
 		add(pictureIcon);
 		*/
 		
-		g.drawImage(picture, getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
+		g.drawImage(picture.getImage(), getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
 	
 		if(lck_l != null) remove(lck_l);
 		lck_l = new JLabel("LCK: " + lck);
