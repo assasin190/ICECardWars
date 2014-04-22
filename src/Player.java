@@ -1,9 +1,13 @@
+import java.net.MalformedURLException;
+import java.net.URL;
+
 
 public class Player {
 
 	//Information
 	String firstName;
 	String lastName;
+	String facebookID;
 	
 	//Battlefield attributes
 	int DeckCount;
@@ -19,7 +23,7 @@ public class Player {
 	}
 	
 	public static void main(String [] args) {
-		
+	
 	}
 	
 }
