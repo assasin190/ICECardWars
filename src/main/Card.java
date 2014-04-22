@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureRecognizer;
+import java.awt.dnd.DragSource;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -21,10 +24,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
+
+import misc.DragGestureHandler;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -51,7 +57,7 @@ public class Card extends JPanel{
 	//for spell
 	int spell_code;
 	String spell_param;
-	BufferedImage picture;
+	ImageIcon picture;
 	String desc;
 
 	private JLabel titleLabel;
@@ -62,8 +68,10 @@ public class Card extends JPanel{
 	private JLabel lp_l;
 	private JLabel atk_l;
 	private JLabel mc_l;
+	private DragGestureHandler dragGestureHandler;
+	private DragGestureRecognizer dgr;
 	public static void main(String[] args){
-		
+
 		EventQueue.invokeLater(new Runnable() {		//TEST GETTING DECK
 			public void run() {
 				try {
@@ -72,10 +80,6 @@ public class Card extends JPanel{
 					frame.setSize(700, 700);
 					frame.setVisible(true);
 					frame.setLayout(new GridLayout(4,5));
-<<<<<<< HEAD
-
-=======
->>>>>>> ab17f3e57f604664151b40a77c1b6388c75d5d3a
 					Gson gs;
 					InputStream is;	
 					String url ="http://128.199.235.83/icw/?q=icw/service/get_deck&user=603";	//INTERT YOUR ID HERE
@@ -93,11 +97,9 @@ public class Card extends JPanel{
 					for(int a:deck){
 						frame.add(new Card(a));
 					}
-<<<<<<< HEAD
+
 
 					frame.add(new Card(1,true));
-=======
->>>>>>> ab17f3e57f604664151b40a77c1b6388c75d5d3a
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -106,14 +108,13 @@ public class Card extends JPanel{
 		});
 
 	}
-<<<<<<< HEAD
 	@Override
 	public void addNotify() {
 		System.out.println("CARD: addNotify");
 		super.addNotify();
 		Container con = this.getParent();
 		if(con instanceof CardHolder){
-			
+
 		}
 		if (dgr == null) {
 			dragGestureHandler = new DragGestureHandler(this);
@@ -178,21 +179,8 @@ public class Card extends JPanel{
 			}
 			System.out.println(data);
 			break;
-=======
-	
-	public Card(double test){
-		try {
-			picture = ImageIO.read(new File("null.jpg"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
->>>>>>> ab17f3e57f604664151b40a77c1b6388c75d5d3a
 		}
-//		titleLabel.setText("test card: "+test);
-		initGUI();
-		
 	}
-
 	public Card(int ID) {
 
 		JsonObject m2 = CardData.getCardData(ID);
@@ -234,11 +222,8 @@ public class Card extends JPanel{
 		}else if(type==2){	//DESCRIPTION FOR SPELL
 			desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
 		}
-<<<<<<< HEAD
 		//	System.out.println("DESC:"+desc);
-=======
 		System.out.println("DESC:"+desc);
->>>>>>> ab17f3e57f604664151b40a77c1b6388c75d5d3a
 		initGUI(); 
 
 
@@ -415,13 +400,7 @@ public class Card extends JPanel{
 		 */
 
 		g.drawImage(picture.getImage(), getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
-
-=======
-		*/
-		
-		g.drawImage(picture, getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
-	
->>>>>>> ab17f3e57f604664151b40a77c1b6388c75d5d3a
+		g.drawImage(picture.getImage(), getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
 		if(lck_l != null) remove(lck_l);
 		lck_l = new JLabel("LCK: " + lck);
 		lck_l.setBounds(getWidth()/32, 24*getHeight()/32, (int)lck_l.getPreferredSize().getWidth(), 10);
@@ -503,11 +482,11 @@ public class Card extends JPanel{
 		 */
 	}
 	public BufferedImage createImage(JPanel panel) {
-	    int w = panel.getWidth();
-	    int h = panel.getHeight();
-	    BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-	    Graphics2D g = bi.createGraphics();
-	    panel.paint(g);
-	    return bi;
+		int w = panel.getWidth();
+		int h = panel.getHeight();
+		BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = bi.createGraphics();
+		panel.paint(g);
+		return bi;
 	}
 }
