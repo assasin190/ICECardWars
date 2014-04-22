@@ -180,6 +180,22 @@ public class Card extends JPanel{
 			System.out.println(data);
 			break;
 		}
+		car = data.get("car").getAsDouble();
+		lp = data.get("lp").getAsInt();
+		spell_param = data.get("spell_param").getAsString();
+		sa_param = data.get("sa_param").getAsString();
+		type = data.get("type").getAsInt();
+		sa_code = data.get("sa_code").getAsInt();
+		picture = b;
+		lck = data.get("lck").getAsInt();
+		title = data.get("title").getAsString();
+		atk = data.get("atk").getAsInt();
+		mc = data.get("mc").getAsInt();
+		rr = data.get("rr").getAsInt();
+		ic_id = data.get("ic_id").getAsInt();
+		sa_mc = data.get("sa_mc").getAsInt();
+		spell_code = data.get("spell_code").getAsInt();
+		desc = "null";
 	}
 	public Card(int ID) {
 
