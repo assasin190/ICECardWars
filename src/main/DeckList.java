@@ -68,15 +68,15 @@ public class DeckList extends JPanel {
 		int startx = 0;
         int starty = 0;
         int track = 0;
-       this.setLayout(new GridLayout(7,40));
+      // this.setLayout(new GridLayout(7,40));
 
 		for(int i = 0;i<40;i++){
-			BufferedImage temp = deck.get(track).picture;
+			ImageIcon a = deck.get(track).picture;
 			
-			ImageIcon a = new ImageIcon( deck.get(track).picture);
+			
 			
 			JLabel pic = new JLabel(a);
-		     
+		     pic.setSize(10, 10);
 			JLabel star = new JLabel("cost: "+deck.get(track).mc);
 			pic.setBounds(startx, starty, star.getPreferredSize().width, star.getPreferredSize().height);
 			

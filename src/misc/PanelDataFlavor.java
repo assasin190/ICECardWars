@@ -2,8 +2,8 @@ package misc;
 
 import java.awt.datatransfer.DataFlavor;
 
+import javax.swing.JPanel;
 
-import main.Card;
 
 public class PanelDataFlavor extends DataFlavor {
 
@@ -11,7 +11,7 @@ public class PanelDataFlavor extends DataFlavor {
 
 	public PanelDataFlavor() {
 
-		super(Card.class, null);
+		super(JPanel.class, null);
 
 	}
 

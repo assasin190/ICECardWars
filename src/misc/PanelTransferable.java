@@ -5,16 +5,16 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
+import javax.swing.JPanel;
 
-import main.Card;
 
 public class PanelTransferable implements Transferable {
 
     private DataFlavor[] flavors = new DataFlavor[]{PanelDataFlavor.SHARED_INSTANCE};
-    private Card card;
+    private JPanel panel;
 
-    public PanelTransferable(Card card) {
-        this.card = card;
+    public PanelTransferable(JPanel panel) {
+        this.panel = panel;
     }
 
     @Override
@@ -44,9 +44,9 @@ public class PanelTransferable implements Transferable {
 
     }
 
-    public Card getPanel() {
+    public JPanel getPanel() {
 
-        return card;
+        return panel;
 
     }
 

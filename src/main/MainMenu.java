@@ -4,11 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,6 +40,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import javax.swing.UIManager;
 
 
 public class MainMenu extends JFrame {
@@ -93,11 +96,24 @@ public class MainMenu extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(0, 0,screen.width,screen.height - 30);
-		contentPane = new JPanel();
+		contentPane = new JPanel(){
+			@Override
+			public void paintComponent(Graphics g){
+				super.paintComponent(g);
+				try {
+					g.drawImage(ImageIO.read(new File("null.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+		contentPane.setBackground(UIManager.getColor("Button.background"));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JPanel loginPanel = new JPanel();
+		loginPanel.setOpaque(false);
 		loginPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		contentPane.add(loginPanel, BorderLayout.NORTH);
 		loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.X_AXIS));
@@ -182,6 +198,7 @@ public class MainMenu extends JFrame {
 		setContentPane(contentPane);
 		
 		ButtonPanel = new JPanel();
+		ButtonPanel.setOpaque(false);
 		contentPane.add(ButtonPanel, BorderLayout.CENTER);
 		ButtonPanel.setLayout(new BoxLayout(ButtonPanel, BoxLayout.Y_AXIS));
 		

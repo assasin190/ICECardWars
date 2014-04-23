@@ -71,9 +71,10 @@ public class DropHandler implements DropTargetListener {
 						if(destination instanceof CardHolder){
 							if(((CardHolder) destination).isEmpty()){
 								//TODO: CHECK CARD TYPE AND SPELL CODE
-								if(original instanceof CardHolder){
-									System.out.println("dtc: removeCard");
+								if(original instanceof CardHolder){			// Cardholer to cardholder
 									((CardHolder) original).removeCard();
+								}else if(original instanceof Container){	// container to cardholder
+									original.remove(card);
 								}
 								System.out.println("dtc: addCard");
 								CardHolder cc = ((CardHolder) destination);
@@ -83,13 +84,28 @@ public class DropHandler implements DropTargetListener {
 								card.invalidate();
 								card.repaint();
 							}
-							else{
+							else{		//destination cardholder is not empty
 								success = false;
 								System.out.println("DROP REJECTED");
 								dtde.rejectDrop();
 							}
 		//				((JComponent)destination).add(card);				
-						}	//TODO: ADD CASE FOR NON CARDHOLDER
+						}else if(destination instanceof Container){
+							if(original instanceof CardHolder){			// Cardholer to container
+								((CardHolder) original).removeCard();
+							}else if(original instanceof Container){	// container to container
+								original.remove(card);
+							}
+							((JComponent)destination).add(card);
+							success = true;
+							dtde.acceptDrop(DnDConstants.ACTION_MOVE);
+							card.invalidate();
+							card.repaint();
+						}else{
+							success = false;
+							System.out.println("DROP REJECTED");
+							dtde.rejectDrop();
+						}
 
 					} else {
 						success = false;

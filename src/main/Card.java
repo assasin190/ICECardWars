@@ -82,7 +82,7 @@ public class Card extends JPanel{
 					frame.setLayout(new GridLayout(4,5));
 					Gson gs;
 					InputStream is;	
-					String url ="http://128.199.235.83/icw/?q=icw/service/get_deck&user=603";	//INTERT YOUR ID HERE
+					String url ="http://128.199.235.83/icw/?q=icw/service/get_deck&user=595";	//INTERT YOUR ID HERE
 					JsonObject job = null;
 					try {
 						is = new URL(url).openStream();
@@ -93,7 +93,7 @@ public class Card extends JPanel{
 					} catch (IOException e) {}
 					Type listType = new TypeToken<List<Integer>>() {}.getType();
 					List<Integer> deck = new Gson().fromJson(job.get("data"), listType);
-					System.out.println(deck.toString());
+				//	System.out.println(deck.toString());
 					for(int a:deck){
 						frame.add(new Card(a));
 					}

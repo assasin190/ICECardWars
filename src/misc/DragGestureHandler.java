@@ -11,18 +11,19 @@ import java.awt.dnd.DragSourceDropEvent;
 import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
 
-import main.Card;
+import javax.swing.JPanel;
+
 
 public class DragGestureHandler implements DragGestureListener, DragSourceListener {
 
     private Container parent;
-    private Card child;
+    private JPanel child;
 
-    public DragGestureHandler(Card child) {
+    public DragGestureHandler(JPanel child) {
         this.child = child;
     }
 
-    public Card getCard() {
+    public JPanel getCard() {
         return child;
     }
 

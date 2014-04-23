@@ -2,6 +2,8 @@ package test;
 
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -14,11 +16,17 @@ import javax.swing.border.EmptyBorder;
 
 import main.Card;
 import main.CardHolder;
+import misc.DropHandler;
+
+import java.awt.Color;
+import javax.swing.BoxLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Test_CardHolder extends JFrame {
 
 	private JPanel contentPane;
-	private CardHolder ch1;
+	private JPanel ch1;
 	private CardHolder ch2;
 	private JLabel st1;
 	private JLabel st2;
@@ -59,16 +67,18 @@ public class Test_CardHolder extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(0, 3, 0, 0));
 
-		ch1 = new CardHolder();
-
+		ch1 = new JPanel();
+		ch1.setBackground(new Color(255, 255, 153));
+		DropHandler dropHandler = new DropHandler();
+		DropTarget dropTarget = new DropTarget(ch1, DnDConstants.ACTION_MOVE, dropHandler, true);
 		contentPane.add(ch1);
+		ch1.setLayout(new GridLayout(4, 4, 0, 0));
 
 
 		st1 = new JLabel("New label");
 		contentPane.add(st1);
 
 		ch2 = new CardHolder();
-
 		panel = new JPanel();
 		contentPane.add(panel);
 
@@ -79,7 +89,7 @@ public class Test_CardHolder extends JFrame {
 		btnNewButton = new JButton("add");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ch1.add(new JLabel("hue"));
+				ch1.add(new Card(40,true));
 			}
 		});
 		panel.add(btnNewButton);
