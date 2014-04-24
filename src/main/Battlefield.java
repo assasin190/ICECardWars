@@ -14,12 +14,17 @@ import javax.swing.BoxLayout;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
+
+import javax.swing.JLabel;
 
 public class Battlefield extends JFrame {
 
 	private JPanel contentPane;
 	Inw player;
 	Inw opponent;
+	int[] player_deck;
+	int[] opponent_deck;
 	/**
 	 * Launch the application.
 	 */
@@ -43,6 +48,8 @@ public class Battlefield extends JFrame {
 	public Battlefield(Inw player,Inw opponent) {
 		this.player = player;
 		this.opponent = opponent;
+		this.player.addDeck();
+		this.opponent.addDeck();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(0, 0, 800, 700);
 		getContentPane().setLayout(new BorderLayout());
@@ -62,15 +69,18 @@ public class Battlefield extends JFrame {
 		//opponent.setBackground(Color.BLACK);
 		//	contentPane.add(opponent);
 		contentPane.add(opponentPanel);
+		
+		JLabel o_deck = new JLabel(Arrays.toString(opponent.deck));
+		opponentPanel.add(o_deck);
 		JPanel TheirBF = new JPanel();
 		TheirBF.setLayout(new GridLayout(0, 5));
-		JPanel Theirlane1 = new JPanel();
+		CardHolder Theirlane1 = new CardHolder(CardHolder.OPPONENT,true);
 		Theirlane1.setBackground(Color.RED);
-		JPanel Theirlane2= new JPanel();
+		CardHolder Theirlane2 = new CardHolder(CardHolder.OPPONENT,true);
 		Theirlane2.setBackground(Color.BLUE);
-		JPanel Theirlane3 = new JPanel();
+		CardHolder Theirlane3 = new CardHolder(CardHolder.OPPONENT,true);
 		Theirlane3.setBackground(Color.YELLOW);
-		JPanel Theirlane4= new JPanel();
+		CardHolder Theirlane4 = new CardHolder(CardHolder.OPPONENT,true);
 		Theirlane4.setBackground(Color.GREEN);
 		TheirBF.add(opponent);
 		TheirBF.add(Theirlane1);
@@ -82,13 +92,13 @@ public class Battlefield extends JFrame {
 
 		JPanel MyBF = new JPanel();
 		MyBF.setLayout(new GridLayout(0, 5));	
-		JPanel Mylane1 = new JPanel();
+		CardHolder Mylane1 = new CardHolder(CardHolder.OPPONENT,true);
 		Mylane1.setBackground(Color.GREEN);
-		JPanel  Mylane2= new JPanel();
+		CardHolder Mylane2 = new CardHolder(CardHolder.OPPONENT,true);
 		Mylane2.setBackground(Color.YELLOW);
-		JPanel  Mylane3 = new JPanel();
+		CardHolder Mylane3 = new CardHolder(CardHolder.OPPONENT,true);
 		Mylane3.setBackground(Color.BLUE);
-		JPanel  Mylane4= new JPanel();
+		CardHolder Mylane4 = new CardHolder(CardHolder.OPPONENT,true);
 		Mylane4.setBackground(Color.RED);
 		MyBF.add(player);
 		MyBF.add(Mylane1);
@@ -98,9 +108,12 @@ public class Battlefield extends JFrame {
 
 		contentPane.add(MyBF);
 
-		JPanel CardsOnHand = new JPanel();
-		CardsOnHand.setLayout(new GridLayout(1, 8));	
-		contentPane.add(CardsOnHand);
+		JPanel playerPanel = new JPanel();
+		playerPanel.setLayout(new GridLayout(1, 8));	
+		contentPane.add(playerPanel);
+		
+		JLabel p_deck = new JLabel(Arrays.toString(player.deck));
+		playerPanel.add(p_deck);
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 

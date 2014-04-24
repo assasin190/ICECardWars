@@ -40,7 +40,6 @@ public class Inw extends JPanel{
 	String fb_id;
 	ImageIcon profile;
 	int user_ID;
-	private int user_pw;
 	public int[] all_IC;
 	public int[] deck;
 	private JLabel data;
@@ -50,8 +49,8 @@ public class Inw extends JPanel{
 		this.fname = fname;
 		this.lname = lname;
 		this.LP_full = LP;
-		LP_current = LP_full;
 		this.MP_full = MP;
+		LP_current = LP_full;
 		MP_current = MP_full;
 		this.maxDeck = maxDeck;
 		this.fb_id = fb_id;
@@ -88,6 +87,8 @@ public class Inw extends JPanel{
 		this.LP_full = j.get("full_lp").getAsInt();
 		this.MP_full = j.get("full_mp").getAsInt();
 		this.maxDeck = j.get("max_deck_size").getAsInt();
+		LP_current = LP_full;
+		MP_current = MP_full;
 		initGUI();
 	}
 	/**
@@ -104,6 +105,8 @@ public class Inw extends JPanel{
 		this.LP_full = j.get("full_lp").getAsInt();
 		this.MP_full = j.get("full_mp").getAsInt();
 		this.maxDeck = j.get("max_deck_size").getAsInt();
+		LP_current = LP_full;
+		MP_current = MP_full;
 		initGUI();
 	}
 	private void initGUI() {
@@ -174,5 +177,35 @@ public class Inw extends JPanel{
 	}
 	public void updateGUI(){
 		data.setText(fname+" "+lname+" LP: "+LP_current+" MP: "+MP_current);
+	}
+	/**
+	 * Fetch this Inw's data from the server
+	 */
+	public void addDeck(){
+		Gson gs;
+		InputStream is;	
+		String url ="http://128.199.235.83/icw/?q=icw/service/get_deck&user="+user_ID;	//INTERT YOUR ID HERE
+		JsonObject job = null;
+		while(true){
+			try {
+				is = new URL(url).openStream();
+				gs = new Gson();
+				job = gs.fromJson(new InputStreamReader(is), JsonObject.class);
+			} catch (MalformedURLException e) {e.printStackTrace();
+			} catch (IOException e) {
+				System.err.println("Cannot connect, trying again...");
+				continue;
+			}
+	//		Type listType = new TypeToken<List<Integer>>(){}.getType();
+			System.out.println(job);
+			JsonArray ja = job.get("data").getAsJsonArray();
+			deck = new int[ja.size()];
+			int count = 0;
+			for(JsonElement je:ja){
+				deck[count] = je.getAsInt();
+				count++;
+			}
+			break;
+		}
 	}
 }

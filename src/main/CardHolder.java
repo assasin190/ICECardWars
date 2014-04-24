@@ -25,6 +25,7 @@ public class CardHolder extends JPanel{
 	DropTarget dropTarget;
 	protected BufferedImage screenshot;
 	public int type;
+	private CardHolder opposingCH;
 
 	public static void main(String[] args){
 		EventQueue.invokeLater(new Runnable() {
@@ -75,5 +76,14 @@ public class CardHolder extends JPanel{
 	}
 	public Card getCard(){
 		return (Card)this.getComponent(0);
+	}
+	/**Set the reference to CardHolder belonging to the opposing side and on same lane with this CardHolder
+	 * @param c 
+	 */
+	public void setOpposingCH(CardHolder c){
+		opposingCH = c;
+	}
+	public CardHolder getOpposingCardHolder(){
+		return opposingCH;
 	}
 }

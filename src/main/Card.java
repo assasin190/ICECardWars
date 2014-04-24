@@ -99,7 +99,7 @@ public class Card extends JPanel{
 					}
 
 
-					frame.getContentPane().add(new Card(1,true));
+		//			frame.getContentPane().add(new Card(1,true));
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -236,7 +236,55 @@ public class Card extends JPanel{
 		//	System.out.println("DESC:"+desc);
 		System.out.println("DESC:"+desc);
 		initGUI(); 
-
+	}
+	/**In real battles Card need a reference to their caster aswell
+	 * @param ID
+	 * @param caster
+	 */
+	public Card(int ID,Inw caster) {
+		this.caster = caster;
+		JsonObject m2 = CardData.getCardData(ID);
+		car = m2.get("car").getAsDouble();
+		lp = m2.get("lp").getAsInt();
+		spell_param = m2.get("spell_param").getAsString();
+		sa_param = m2.get("sa_param").getAsString();
+		type = m2.get("type").getAsInt();
+		if(type==1){
+			if(!sa_param.equals("")){
+				if(sa_param.contains(",")){
+					param_type = sa_param.substring(0,sa_param.indexOf(','));
+					param_value = Integer.parseInt(sa_param.substring(sa_param.indexOf(',')+1,sa_param.length()));
+				}else
+					param_value = Integer.parseInt(sa_param);
+			}
+		}else if(type==2){
+			if(!spell_param.equals("")){
+				if(spell_param.contains(",")){
+					param_type = spell_param.substring(0,spell_param.indexOf(','));
+					param_value = Integer.parseInt(spell_param.substring(spell_param.indexOf(',')+1,spell_param.length()));
+				}else
+					param_value = Integer.parseInt(spell_param);
+			}
+		}
+		sa_code = m2.get("sa_code").getAsInt();
+		picture = CardData.getCardImage(ID);
+		lck = m2.get("lck").getAsInt();
+		title = m2.get("title").getAsString();
+		atk = m2.get("atk").getAsInt();
+		mc = m2.get("mc").getAsInt();
+		rr = m2.get("rr").getAsInt();
+		ic_id = m2.get("ic_id").getAsInt();
+		sa_mc = m2.get("sa_mc").getAsInt();
+		spell_code = m2.get("spell_code").getAsInt();
+		desc = null;
+		if(type==1){	// DESCRIPTION FOR MONSTER
+			desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
+		}else if(type==2){	//DESCRIPTION FOR SPELL
+			desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
+		}
+		//	System.out.println("DESC:"+desc);
+		System.out.println("DESC:"+desc);
+		initGUI(); 
 	}
 	private void initGUI() {
 		addListeners();
