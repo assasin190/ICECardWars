@@ -66,4 +66,8 @@ public class Main {
 		}
 		return sc1;
 	}
+	/**
+	 * Switches the player <--> opponent turn
+	 */
+
 }

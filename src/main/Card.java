@@ -60,6 +60,9 @@ public class Card extends JPanel{
 	ImageIcon picture;
 	String desc;
 	Inw caster;
+	public boolean Protected;		//invulnerable to normal attack
+	public boolean sacrifice;		//sacrifice
+	public boolean directInw;		//attacks Inw directly
 	private JLabel titleLabel;
 	private JLabel rrLabel;
 	private JLabel descLabel;
@@ -439,5 +442,11 @@ public class Card extends JPanel{
 	}
 	public Inw getCaster(){
 		return caster;
+	}
+	/**
+	 * @return true if card = IC-monster, false if card = IC-spell
+	 */
+	public boolean isMonster(){
+		return type==1;
 	}
 }
