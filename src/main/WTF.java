@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 
 import sun.net.www.content.image.gif;
 
-public class WTF extends JPanel {
+public class WTF extends JPanel{
 
 	public WTF() {
 		JLabel title = new JLabel("Who takes the first turn");
@@ -67,15 +67,19 @@ public class WTF extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				gif.setVisible(true);
+				
+				
 				
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-
-				
+				Thread t = new MyThread(gif);
+				t.start();
+				Thread t2 = new MyThread2();
+				t2.start();
+				/*
 				EventQueue.invokeLater(new Runnable() {		
 
 				@Override
@@ -101,6 +105,8 @@ public class WTF extends JPanel {
 					// TODO Auto-generated method stub
 					
 				});
+				*/
+				
 				
 			}
 			
@@ -132,15 +138,18 @@ public class WTF extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				gif.setVisible(true);
+				//gif.setVisible(true);
 				
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-
-				
+				Thread t = new MyThread(gif);
+				t.start();
+				Thread t2 = new MyThread2();
+				t2.start();
+				/*
 				EventQueue.invokeLater(new Runnable() {		
 
 				@Override
@@ -166,6 +175,7 @@ public class WTF extends JPanel {
 					// TODO Auto-generated method stub
 					
 				});
+				*/
 				
 			}
 			
@@ -214,8 +224,51 @@ public class WTF extends JPanel {
 
 	public static void main(String[] args){
 		WTF a = new WTF();
-		JFrame test = new JFrame();
+		JFrame test = new JFrame(); 
 		test.add(a);
+		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		test.setVisible(true);
+		
 	}
+	
+	class MyThread extends Thread {
+		JLabel gif;
+		
+		public MyThread(JLabel gif) {
+			super();
+			this.gif = gif;
+
+		}
+		
+		public void run() {
+			gif.setVisible(true);
+			
+		}
+	}
+	
+	class MyThread2 extends Thread {
+		
+		public MyThread2() {
+			super();
+		}
+		public void run() {
+			try {
+				sleep(2000);
+				if (Math.random()>0.5){
+					
+					JOptionPane.showMessageDialog(new Frame(), "You go First");
+					
+					
+					
+				} else{
+					JOptionPane.showMessageDialog(new Frame(), "You go Second");
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 }

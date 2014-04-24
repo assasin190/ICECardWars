@@ -429,6 +429,13 @@ public class MainMenu extends JFrame {
 		}
 		chatInput.setText("");
 	}
+	
+	public static boolean isWideScreen(){
+		Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
+		if(screenDimension.getWidth() / screenDimension.getHeight() > 1.4) return true;
+		return false;
+	}
+	
 	class EnterHandler extends KeyAdapter{
 		@Override
 		public void keyPressed(KeyEvent e) {

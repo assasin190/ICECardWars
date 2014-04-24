@@ -20,7 +20,7 @@ import com.google.gson.JsonSyntaxException;
 
 public class SelectOpponent extends JPanel {
 	static ArrayList<Inw> opponentList;
-	JFrame frame;
+	
 	
 	public SelectOpponent(){
 		opponentList = new ArrayList<Inw>();
@@ -28,8 +28,9 @@ public class SelectOpponent extends JPanel {
 	}
 	public static void main(String [] args) {
 		
-		
 		JFrame test = new JFrame();
+		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		SelectOpponent a = new SelectOpponent();
 		try {
 			a.saveAllOpponentsToLocal();
@@ -38,7 +39,7 @@ public class SelectOpponent extends JPanel {
 			e.printStackTrace();
 		}
 		a.SelOpt();
-		a.adddesc();
+	//	a.adddesc();
 		test.add(a);
 		test.setVisible(true);
 		
@@ -61,12 +62,7 @@ public class SelectOpponent extends JPanel {
 				
 			}
 			this.add(pic,BorderLayout.SOUTH);
-		} catch (JsonSyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonIOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
