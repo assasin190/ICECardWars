@@ -1,4 +1,6 @@
 package main;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -8,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.*;
 import javax.swing.text.html.HTMLDocument.Iterator;
 import com.google.gson.Gson;
@@ -17,22 +18,80 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 
-public class SelectOpponent {
-	static ArrayList<Inw> opponentList = new ArrayList<Inw>();
+public class SelectOpponent extends JPanel {
+	static ArrayList<Inw> opponentList;
 	JFrame frame;
 	
+	public SelectOpponent(){
+		opponentList = new ArrayList<Inw>();
+		
+	}
 	public static void main(String [] args) {
 		
+		
+		JFrame test = new JFrame();
+		SelectOpponent a = new SelectOpponent();
+		try {
+			a.saveAllOpponentsToLocal();
+		} catch (JsonSyntaxException | JsonIOException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		a.SelOpt();
+		a.adddesc();
+		test.add(a);
+		test.setVisible(true);
+		
+		
+	}
+	public void SelOpt(){
+		JPanel pic = new JPanel();
+		pic.setLayout(new GridLayout(4,15));
+		this.setLayout(new BorderLayout());
 		try {
 			saveAllOpponentsToLocal();
-		} catch (JsonSyntaxException | JsonIOException | IOException e) {
+			for(int i = 0;i< opponentList.size();i++){
+				
+				
+				pic.add(new JLabel(opponentList.get(i).profile));
+				
+			
+					
+					
+				
+			}
+			this.add(pic,BorderLayout.SOUTH);
+		} catch (JsonSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonIOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		
 	}
 	
-	public static void saveAllOpponentsToLocal() throws JsonSyntaxException, JsonIOException, IOException {
+	public void adddesc(){
+		JPanel des = new JPanel();
+		
+		for(int i = 0;i< opponentList.size();i++){
+			
+			JLabel fname = new JLabel(opponentList.get(i).fname);
+			JLabel lname = new JLabel(opponentList.get(i).lname);
+			JLabel lp = new JLabel(opponentList.get(i).LP + "");
+	//		JLabel mp = new JLabel(opponentList.get(i).M P + "");
+		
+						
+			
+		}
+		
+	}
+	
+	public void saveAllOpponentsToLocal() throws JsonSyntaxException, JsonIOException, IOException {
 			
 		opponentList.clear();
 		URL opponentUrl = new URL("http://128.199.235.83/icw/?q=icw/service/opponent");
@@ -53,6 +112,7 @@ public class SelectOpponent {
 			opponentList.add(inw);
 		
 		}
+		
 			
 	}
 	

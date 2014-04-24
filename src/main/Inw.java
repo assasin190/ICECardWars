@@ -16,7 +16,7 @@ public class Inw extends JPanel{
 	int maxDeck;
 	String fb_id;
 	ImageIcon profile;
-	private int user_ID;
+	int user_ID;
 	private int user_pw;
 	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,ImageIcon profile,int user_ID,int user_PW){
 		this.fname = fname;

@@ -81,9 +81,9 @@ public class WTF extends JPanel {
 				@Override
 				public void run() {
 					try {
-						Thread.sleep(2000);
+						Thread.currentThread().sleep(2000);
 						int chance = 0;
-						if (Math.random()*1==chance){
+						if (Math.random()==chance){
 							
 							JOptionPane.showMessageDialog(new Frame(), "You go First");
 							
@@ -148,7 +148,7 @@ public class WTF extends JPanel {
 					try {
 						Thread.sleep(2000);
 						int chance = 0;
-						if (Math.random()*1==chance){
+						if (Math.random()==chance){
 							
 							JOptionPane.showMessageDialog(new Frame(), "You go First");
 							
