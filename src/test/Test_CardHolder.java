@@ -78,7 +78,7 @@ public class Test_CardHolder extends JFrame {
 		st1 = new JLabel("New label");
 		contentPane.add(st1);
 
-		ch2 = new CardHolder();
+		ch2 = new CardHolder(CardHolder.DECK,false);
 		panel = new JPanel();
 		contentPane.add(panel);
 
@@ -118,7 +118,7 @@ public class Test_CardHolder extends JFrame {
 		});
 		contentPane.add(b2);
 
-		ch3 = new CardHolder();
+		ch3 = new CardHolder(CardHolder.DECK,false);
 		contentPane.add(ch3);
 
 		st3 = new JLabel("update 3");

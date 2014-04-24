@@ -26,6 +26,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import java.awt.FlowLayout;
+import java.awt.BorderLayout;
 
 public class Inw extends JPanel{
 	
@@ -46,6 +47,7 @@ public class Inw extends JPanel{
 	private int user_ID;
 	public int[] all_IC;
 	public int[] deck;
+	private JLabel data;
 	
 	
 	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,int user_ID){
@@ -71,10 +73,27 @@ public class Inw extends JPanel{
 		frame.setSize(700, 700);
 		frame.setVisible(true);
 		frame.getContentPane().setLayout(new GridLayout(4,5));
-		Inw[] a = Inw.getOpponent();
-		for(Inw b:a){
-			System.out.println(b.toString());
-		}
+		Inw a = new Inw("{\"cv_uid\":\"517\",\"fb_id\":\"100000038984537\",\"firstname_en\":\"Assanee\",\"lastname_en\":\"Sukatham\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}");
+	//	for(Inw b:a){
+			System.out.println(a.toString());
+	//	}
+		frame.getContentPane().add(a);
+	}
+	/**	create Inw with String representing the individual Inw JSON data from http://128.199.235.83/icw/?q=icw/service/opponent
+	 * Example String value: 
+	 * "{\"cv_uid\":\"517\",\"fb_id\":\"100000038984537\",\"firstname_en\":\"Assanee\",\"lastname_en\":\"Sukatham\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"
+	 * @param JSONString
+	 */
+	public Inw(String JSONString){
+		JsonObject j = new Gson().fromJson(JSONString, JsonObject.class);
+		this.fb_id = j.get("fb_id").getAsString();
+		this.user_ID = j.get("cv_uid").getAsInt();
+		this.fname = j.get("firstname_en").getAsString();
+		this.lname = j.get("lastname_en").getAsString();
+		this.LP_full = j.get("full_lp").getAsInt();
+		this.MP_full = j.get("full_mp").getAsInt();
+		this.maxDeck = j.get("max_deck_size").getAsInt();
+		initGUI();
 	}
 	/**
 	 *  get Inw data from only JsonObject from http://128.199.235.83/icw/?q=icw/service/opponent
@@ -98,7 +117,11 @@ public class Inw extends JPanel{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		setLayout(new BorderLayout(0, 0));
+		
+		data = new JLabel(profile);
+		data.setText(fname+" "+lname+" LP: "+LP_current+" MP: "+MP_current);
+		add(data);
 	}
 	/**
 	 * @return	An array of all opponent from http://128.199.235.83/icw/?q=icw/service/opponent
@@ -153,5 +176,8 @@ public class Inw extends JPanel{
 			MP_current = MP_current-mp_cost;
 			return true;
 		}else return false;
+	}
+	public void updateGUI(){
+		data.setText(fname+" "+lname+" LP: "+LP_current+" MP: "+MP_current);
 	}
 }

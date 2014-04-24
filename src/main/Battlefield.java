@@ -6,7 +6,6 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 import java.awt.GridLayout;
 
@@ -19,7 +18,8 @@ import java.awt.event.ActionEvent;
 public class Battlefield extends JFrame {
 
 	private JPanel contentPane;
-
+	Inw player;
+	Inw opponent;
 	/**
 	 * Launch the application.
 	 */
@@ -27,7 +27,8 @@ public class Battlefield extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Battlefield frame = new Battlefield();
+					Battlefield frame = new Battlefield(new Inw("{\"cv_uid\":\"516\",\"fb_id\":\"557757076\",\"firstname_en\":\"Disakorn\",\"lastname_en\":\"Suebsanguan Galassi\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
+					, new Inw("{\"cv_uid\":\"517\",\"fb_id\":\"100000038984537\",\"firstname_en\":\"Assanee\",\"lastname_en\":\"Sukatham\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -39,10 +40,12 @@ public class Battlefield extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Battlefield() {
+	public Battlefield(Inw player,Inw opponent) {
+		this.player = player;
+		this.opponent = opponent;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(0, 0, 800, 700);
-		setLayout(new BorderLayout());
+		getContentPane().setLayout(new BorderLayout());
 
 		contentPane = new JPanel();
 
@@ -50,17 +53,17 @@ public class Battlefield extends JFrame {
 		JPanel LcontentPane = new JPanel();
 		JPanel RcontentPane = new JPanel();
 		RcontentPane.setLayout(new GridLayout(3, 1, 0, 0));
-		add(contentPane, BorderLayout.CENTER);
-		add(LcontentPane, BorderLayout.WEST);
-		add(RcontentPane, BorderLayout.EAST);
-		
+		getContentPane().add(contentPane, BorderLayout.CENTER);
+		getContentPane().add(LcontentPane, BorderLayout.WEST);
+		getContentPane().add(RcontentPane, BorderLayout.EAST);
 
-		JPanel opponent = new JPanel();
+
+		JPanel opponentPanel = new JPanel();
 		//opponent.setBackground(Color.BLACK);
-		contentPane.add(opponent);
-
+		//	contentPane.add(opponent);
+		contentPane.add(opponentPanel);
 		JPanel TheirBF = new JPanel();
-		TheirBF.setLayout(new GridLayout(1, 4));
+		TheirBF.setLayout(new GridLayout(0, 5));
 		JPanel Theirlane1 = new JPanel();
 		Theirlane1.setBackground(Color.RED);
 		JPanel Theirlane2= new JPanel();
@@ -69,23 +72,25 @@ public class Battlefield extends JFrame {
 		Theirlane3.setBackground(Color.YELLOW);
 		JPanel Theirlane4= new JPanel();
 		Theirlane4.setBackground(Color.GREEN);
+		TheirBF.add(opponent);
 		TheirBF.add(Theirlane1);
 		TheirBF.add(Theirlane2);
 		TheirBF.add(Theirlane3);
 		TheirBF.add(Theirlane4);
-		
+
 		contentPane.add(TheirBF);
 
 		JPanel MyBF = new JPanel();
-		MyBF.setLayout(new GridLayout(1, 4));	
+		MyBF.setLayout(new GridLayout(0, 5));	
 		JPanel Mylane1 = new JPanel();
-		 Mylane1.setBackground(Color.GREEN);
+		Mylane1.setBackground(Color.GREEN);
 		JPanel  Mylane2= new JPanel();
-		 Mylane2.setBackground(Color.YELLOW);
+		Mylane2.setBackground(Color.YELLOW);
 		JPanel  Mylane3 = new JPanel();
-		 Mylane3.setBackground(Color.BLUE);
+		Mylane3.setBackground(Color.BLUE);
 		JPanel  Mylane4= new JPanel();
-		 Mylane4.setBackground(Color.RED);
+		Mylane4.setBackground(Color.RED);
+		MyBF.add(player);
 		MyBF.add(Mylane1);
 		MyBF.add(Mylane2);
 		MyBF.add(Mylane3);
@@ -99,7 +104,7 @@ public class Battlefield extends JFrame {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 
-	
+
 
 		JButton quitButton = new JButton("Quit");
 		quitButton.addActionListener(new ActionListener() {

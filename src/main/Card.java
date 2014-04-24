@@ -79,7 +79,7 @@ public class Card extends JPanel{
 					JFrame frame = new JFrame();
 					frame.setSize(700, 700);
 					frame.setVisible(true);
-					frame.setLayout(new GridLayout(4,5));
+					frame.getContentPane().setLayout(new GridLayout(4,5));
 					Gson gs;
 					InputStream is;	
 					String url ="http://128.199.235.83/icw/?q=icw/service/get_deck&user=595";	//INTERT YOUR ID HERE
@@ -95,11 +95,11 @@ public class Card extends JPanel{
 					List<Integer> deck = new Gson().fromJson(job.get("data"), listType);
 				//	System.out.println(deck.toString());
 					for(int a:deck){
-						frame.add(new Card(a));
+						frame.getContentPane().add(new Card(a));
 					}
 
 
-					frame.add(new Card(1,true));
+					frame.getContentPane().add(new Card(1,true));
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -189,6 +189,9 @@ public class Card extends JPanel{
 		spell_code = data.get("spell_code").getAsInt();
 		desc = "null";
 	}
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public Card(int ID) {
 
 		JsonObject m2 = CardData.getCardData(ID);
