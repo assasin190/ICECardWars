@@ -112,6 +112,7 @@ public class Inw extends JPanel{
 		initGUI();
 	}
 	private void initGUI() {
+		
 		try {
 			profile = new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture")));
 		} catch (IOException e) {
@@ -179,6 +180,7 @@ public class Inw extends JPanel{
 	}
 	public void updateGUI(){
 		data.setText(fname+" "+lname+" LP: "+LP_current+" MP: "+MP_current);
+		
 	}
 	/**
 	 * Fetch this Inw's data from the server
@@ -213,5 +215,15 @@ public class Inw extends JPanel{
 			}
 			break;
 		}
+	}
+	public boolean attack(int DMG){
+		this.LP_current -= DMG;
+		updateGUI();
+		System.out.println("Inw received "+DMG+ " damages LP is now: "+LP_current);
+		return LP_current<=0;
+	}
+	public void restoreMP(){
+		MP_current = MP_full;
+		updateGUI();
 	}
 }

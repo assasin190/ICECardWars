@@ -103,7 +103,6 @@ public class MainMenu extends JFrame {
 				try {
 					g.drawImage(ImageIO.read(new File("null.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -209,7 +208,7 @@ public class MainMenu extends JFrame {
 	//	startButton.setIcon(null);
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(bf!=null){
+				if(bf!=null){	//TODO: proper check (not done)
 					JOptionPane.showMessageDialog(null, "An instance of ICB is already running!", "",JOptionPane.DEFAULT_OPTION);
 					return;
 				}
