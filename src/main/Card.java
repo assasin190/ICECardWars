@@ -59,7 +59,7 @@ public class Card extends JPanel{
 	String spell_param;
 	ImageIcon picture;
 	String desc;
-
+	Inw caster;
 	private JLabel titleLabel;
 	private JLabel rrLabel;
 	private JLabel descLabel;
@@ -496,5 +496,14 @@ public class Card extends JPanel{
 		Graphics2D g = bi.createGraphics();
 		panel.paint(g);
 		return bi;
+	}
+	public int getType(){
+		return type;
+	}
+	public int getMc(){
+		return mc;
+	}
+	public Inw getCaster(){
+		return caster;
 	}
 }

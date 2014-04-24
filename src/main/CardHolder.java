@@ -16,20 +16,22 @@ import misc.DropHandler;
 
 public class CardHolder extends JPanel{
 
-	public static int PLAYER = 0;
-	public static int OPPONENT = 1;
-	public static int PLAYER_DECK = 2;
-	public static int DUMPSTER = 3;
+	public final static int PLAYER = 0;			//player lane (LIMITED TO ONE CARD)!
+	public final static int OPPONENT = 1;		//opponent lane (LIMITED TO ONE CARD)!
+	public final static int DECK = 2;			//deck, unlimited
+	public final static int DUMPSTER = 3;		//unlimited
+	public final static int HAND = 4;
 	DropHandler dropHandler;
 	DropTarget dropTarget;
 	protected BufferedImage screenshot;
+	public int type;
 
 	public static void main(String[] args){
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					JFrame frame = new JFrame();
-					frame.getContentPane().add(new CardHolder());
+					frame.getContentPane().add(new CardHolder(CardHolder.DECK,false));
 					frame.setSize(700, 700);
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -39,33 +41,36 @@ public class CardHolder extends JPanel{
 		});
 	}
 	
-	public CardHolder() {
-		initGUI();
+	/**
+	 * Creates a CardHolder with specified type and add DnD support
+	 * @param Type - the type of the CardHolder, look at static variable in CardHolder class for detail
+	 * @param customGUI - if true, the JPanel will skip the initGUI method
+	 * 
+	 */
+	public CardHolder(int Type,boolean customGUI) {
+		dropHandler = new DropHandler();
+		dropTarget = new DropTarget(this, DnDConstants.ACTION_MOVE, dropHandler, true);
+		if(!customGUI)initGUI();
 	}
 	private void initGUI() {
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		
-		dropHandler = new DropHandler();
-		dropTarget = new DropTarget(this, DnDConstants.ACTION_MOVE, dropHandler, true);
-	//	setTransferHandler(null);
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setBackground(Color.WHITE);
-		setLayout(new BorderLayout(0, 0));
+		if(type==CardHolder.OPPONENT||type==CardHolder.PLAYER){
+			setLayout(new BorderLayout(0, 0));
+		}
 	}
-	
-	public CardHolder(int type) {
-		setLayout(new BorderLayout(0, 0));
-	}
+
 	public boolean isEmpty(){
 		return this.getComponentCount()==0;
 
 	}
 	public void addCard(Card c){
-		if(!isEmpty())System.err.println("Attempt to add card into nonempty CardHolder");
+		if(!isEmpty()&&(type==0||type==1))System.err.println("Attempt to add card into nonempty Lane");
 		this.add(c);
 	}
 	public void removeCard(){
-		if(isEmpty())System.err.println("Attempt to remove card from empty CardHolder");
+		if(isEmpty()&&(type==0||type==1))System.err.println("Attempt to remove card from empty Lane");
 		this.remove(0);
 	}
 	public Card getCard(){

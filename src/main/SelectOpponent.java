@@ -48,7 +48,7 @@ public class SelectOpponent {
 			int maxDeck = Integer.parseInt(mapList.get(i).get("max_deck_size"));
 			URL fb_url = new URL("https://graph.facebook.com/"+mapList.get(i).get("fb_id")+"/picture");
 			ImageIcon image = new ImageIcon(ImageIO.read(fb_url));
-			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, image, user_ID, 0);
+			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID);
 			opponentList.add(inw);
 		
 		}

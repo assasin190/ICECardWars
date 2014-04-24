@@ -16,8 +16,8 @@ public class Main {
 	private static AudioPlayer bgMusic;
 	private static boolean scSW = true;	//Selected card switch
 	private static Card sc1 = null;	//Selected card 1
-	private static Card sc2 = null;	//Selected card 2
-	public static boolean Turn;		//Universal boolean for turn
+	private static Card sc2 = null;	//Selected card 2	
+	public static boolean Turn;		//Universal boolean for turn , turn = true means it's player turn
 	
 	
 	public static void main(String[] args) {
