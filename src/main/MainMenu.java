@@ -213,7 +213,8 @@ public class MainMenu extends JFrame {
 					JOptionPane.showMessageDialog(null, "An instance of ICB is already running!", "",JOptionPane.DEFAULT_OPTION);
 					return;
 				}
-				bf = new Battlefield();
+				bf = new Battlefield(new Inw("{\"cv_uid\":\"517\",\"fb_id\":\"100000038984537\",\"firstname_en\":\"Assanee\",\"lastname_en\":\"Sukatham\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
+				,new Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
 				bf.setVisible(true);
 			}
 		});

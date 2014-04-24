@@ -39,19 +39,14 @@ public class Inw extends JPanel{
 	int maxDeck;
 	String fb_id;
 	ImageIcon profile;
-<<<<<<< HEAD
 	int user_ID;
 	private int user_pw;
-	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,ImageIcon profile,int user_ID,int user_PW){
-=======
-	private int user_ID;
 	public int[] all_IC;
 	public int[] deck;
 	private JLabel data;
 	
 	
 	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,int user_ID){
->>>>>>> 0a00e18cf2f2ed2cd13f66433a730611f0f4174e
 		this.fname = fname;
 		this.lname = lname;
 		this.LP_full = LP;

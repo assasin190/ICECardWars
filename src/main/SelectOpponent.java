@@ -38,7 +38,6 @@ public class SelectOpponent extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
 		a.SelOpt();
 	//	a.adddesc();
 		test.add(a);
@@ -69,8 +68,6 @@ public class SelectOpponent extends JPanel {
 			e.printStackTrace();
 		}
 		
-=======
->>>>>>> 0a00e18cf2f2ed2cd13f66433a730611f0f4174e
 		
 	}
 	
@@ -81,7 +78,7 @@ public class SelectOpponent extends JPanel {
 			
 			JLabel fname = new JLabel(opponentList.get(i).fname);
 			JLabel lname = new JLabel(opponentList.get(i).lname);
-			JLabel lp = new JLabel(opponentList.get(i).LP + "");
+			JLabel lp = new JLabel(opponentList.get(i).LP_full + "");
 	//		JLabel mp = new JLabel(opponentList.get(i).M P + "");
 		
 						
