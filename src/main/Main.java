@@ -24,7 +24,7 @@ public class Main {
 
 		MainMenu main = new MainMenu(con);
 		Splash frame = new Splash();
-		bgMusic = new AudioPlayer("lilium.wav");
+		bgMusic = new AudioPlayer("Hishoku no sora.wav");
 		bgMusic.play();
 		frame.setLocationRelativeTo(null);
 		frame.setUndecorated(true);
@@ -33,6 +33,8 @@ public class Main {
 		while(true){
 	        try {
 	    		con = new Socket("128.199.235.83",80);
+	    		if(bgMusic.isPlay()==false) bgMusic.play();
+	    		else ;
 			} catch (IOException e1) {
 				int a = JOptionPane.showConfirmDialog(null, "Could not connect to server\nTry again?", "",JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
 				if(a==JOptionPane.YES_OPTION)continue;

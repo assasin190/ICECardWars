@@ -18,9 +18,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import misc.AudioPlayer;
 import sun.net.www.content.image.gif;
 
 public class WTF extends JPanel{
+	
+	private AudioPlayer bgMusic;
 
 	public WTF() {
 		JLabel title = new JLabel("Who takes the first turn");
@@ -40,6 +43,8 @@ public class WTF extends JPanel{
 		this.add(gif);
 		this.add(head);
 		this.add(tail);
+		bgMusic = new AudioPlayer("lilium.wav");
+				bgMusic.play();
 		
 		
 		head.addMouseListener(new MouseListener() {
