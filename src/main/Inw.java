@@ -18,6 +18,9 @@ public class Inw extends JPanel{
 	ImageIcon profile;
 	private int user_ID;
 	private int user_pw;
+	public Card [] deck;
+	
+	
 	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,ImageIcon profile,int user_ID,int user_PW){
 		this.fname = fname;
 		this.lname = lname;
