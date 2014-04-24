@@ -14,6 +14,7 @@ import javax.swing.JComponent;
 
 import main.Card;
 import main.CardHolder;
+import main.Main;
 
 public class DropHandler implements DropTargetListener {
 
@@ -68,17 +69,18 @@ public class DropHandler implements DropTargetListener {
 					Component destination = dtc.getComponent();
 					if (destination instanceof JComponent) {
 						Container original = card.getParent();
-						if(destination instanceof CardHolder){
-							if(((CardHolder) destination).isEmpty()){
+						
+						if(destination instanceof CardHolder && original instanceof CardHolder){	//This, by default, should be true
+							CardHolder c_destination = (CardHolder)destination;
+							CardHolder c_original = (CardHolder)original;
+							if(dropCondition(c_original, c_destination, card)){
 								//TODO: CHECK CARD TYPE AND SPELL CODE
 								if(original instanceof CardHolder){			// Cardholer to cardholder
-									((CardHolder) original).removeCard();
+									c_original.removeCard();
 								}else if(original instanceof Container){	// container to cardholder
 									original.remove(card);
 								}
-								System.out.println("dtc: addCard");
-								CardHolder cc = ((CardHolder) destination);
-								cc.addCard(card);
+								c_destination.addCard(card);
 								success = true;
 								dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 								card.invalidate();
@@ -86,49 +88,53 @@ public class DropHandler implements DropTargetListener {
 							}
 							else{		//destination cardholder is not empty
 								success = false;
-								System.out.println("DROP REJECTED");
 								dtde.rejectDrop();
 							}
 		//				((JComponent)destination).add(card);				
-						}else if(destination instanceof Container){
-							if(original instanceof CardHolder){			// Cardholer to container
-								((CardHolder) original).removeCard();
-							}else if(original instanceof Container){	// container to container
-								original.remove(card);
-							}
-							((JComponent)destination).add(card);
-							success = true;
-							dtde.acceptDrop(DnDConstants.ACTION_MOVE);
-							card.invalidate();
-							card.repaint();
 						}else{
 							success = false;
-							System.out.println("DROP REJECTED");
 							dtde.rejectDrop();
 						}
 
 					} else {
 						success = false;
-						System.out.println("DROP REJECTED");
 						dtde.rejectDrop();
 					}
 				} else {
 					success = false;
-					System.out.println("DROP REJECTED");
 					dtde.rejectDrop();
 				}
 
 			} catch (Exception exp) {
 				success = false;
-				System.out.println("DROP REJECTED");
 				dtde.rejectDrop();
 				exp.printStackTrace();
 			}
 		} else {
 			success = false;
-			System.out.println("DROP REJECTED");
 			dtde.rejectDrop();
 		}
 		dtde.dropComplete(success);
+	}
+	private boolean dropCondition(CardHolder o,CardHolder d, Card c){
+		//CHECK DIFFERENT DROP CONDITION
+		if(o==d){
+			System.out.println("Drop rejected: Source is the same as destination");
+			return false;
+		}
+		int ot = o.type;	
+		int dt = d.type;
+		String s = ot + "|" + dt;
+		switch(s){
+		case CardHolder.DECK+"|"+CardHolder.DECK:
+			System.out.println("Drop accepted: DECK to DECK");
+			return true;
+		case CardHolder.HAND+"|"+CardHolder.PLAYER:
+			// check if [YOUR TURN, CARD = MONSTER, ENOUGH MP TO SUMMON, DESTINATION IS EMPTY]
+			boolean b = Main.Turn&&c.getType()==1&&c.getCaster().useMP(c.getMc())&&d.isEmpty();
+			System.out.println("HAND TO PLAYER: "+b);
+			return b;
+		default: return false;
+		}
 	}
 }

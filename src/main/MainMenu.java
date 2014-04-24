@@ -340,14 +340,9 @@ public class MainMenu extends JFrame {
 				if(job.get("status").getAsInt()==1){
 					welcome.setIcon(new ImageIcon("aloader.gif"));
 					JsonObject j = job.getAsJsonObject("data");
-					ImageIcon ic = null;
-					try {
-						ic = new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+j.get("fb_id").getAsString()+"/picture")));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+
 					user = new Inw(j.get("firstname_en").getAsString(),j.get("lastname_en").getAsString(),j.get("full_lp").getAsInt()
-							,j.get("full_mp").getAsInt(),j.get("max_deck_size").getAsInt(), j.get("fb_id").getAsString(),ic,Integer.parseInt(usernameField.getText()),Integer.parseInt(pw.getText()));
+							,j.get("full_mp").getAsInt(),j.get("max_deck_size").getAsInt(), j.get("fb_id").getAsString(),Integer.parseInt(usernameField.getText()));
 					loginAction(true);
 				}else loginAction(false);
 				System.out.println("Login executor closing...");
