@@ -2,13 +2,17 @@ package main;
 
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 
 public class Test extends JFrame {
 	public static void main(String [] args) {
 		
-		//new Test(new Card(1));
+		System.out.println(MainMenu.isWideScreen());
+		System.out.println(Toolkit.getDefaultToolkit().getScreenSize());
 		
+		/*
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -33,7 +37,7 @@ public class Test extends JFrame {
 				}
 			}
 		});
-		
+		*/
 		
 	}
 	
