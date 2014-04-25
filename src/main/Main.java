@@ -16,9 +16,9 @@ public class Main {
 	private static AudioPlayer bgMusic;
 	private static boolean scSW = true;	//Selected card switch
 	private static Card sc1 = null;	//Selected card 1
-	private static Card sc2 = null;	//Selected card 2	
+	private static Card sc2 = null;	//Selected card 2
 	public static boolean Turn;		//Universal boolean for turn , turn = true means it's player turn
-	
+	public static CardHolder orig;
 	
 	public static void main(String[] args) {
 
@@ -50,26 +50,48 @@ public class Main {
 		frame.dispose();
 	}
 	public static void setSelectedCard(Card c){
+		orig = (CardHolder) c.getParent();
+		sc1 = c;
+		/*
+
 		if(scSW){
 			if(sc2 == c)return;
 			Main.sc1 = c;
-			if(Main.sc2!=null)Main.sc2.deselect();
 			scSW = !scSW;
+			
+			if(sc2!=null){
+				sc2.deselect();
+			}
+			
 		}else{
+
 			if(sc1 == c)return;
 			Main.sc2 = c;
-			if(Main.sc1!=null)Main.sc1.deselect();
 			scSW = !scSW;
+			
+			if(sc1!=null){
+				sc1.deselect();
+			}
 		}
+		*/
 	}
 	public static Card getSelectedCard(){
+		return sc1;
+		/*
 		if(scSW){
 			return sc2;
 		}
 		return sc1;
+		*/
 	}
-	/**
-	 * Switches the player <--> opponent turn
-	 */
+	public static void updateDisplay(){
+		if(Battlefield.selectedCard!=null){
+			System.out.println("static CardHolder display changed");
+			Battlefield.selectedCard.removeAll();
+			Battlefield.selectedCard.add(new Card(getSelectedCard().ic_id));//TODO: only new card created with ID, not actual current stat!
+			Battlefield.selectedCard.revalidate();
+			Battlefield.selectedCard.repaint();
+		}
+	}
 
 }

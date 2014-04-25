@@ -14,6 +14,7 @@ import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,6 +30,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Inw extends JPanel{
 	
@@ -46,7 +49,21 @@ public class Inw extends JPanel{
 	public int[] deck;
 	private JLabel data;
 	
-	
+	public static void main(String[] args){
+		// TESTING : getting all cards from user;
+//		CardData.saveAllCardsToLocal();
+		JFrame frame = new JFrame();
+		frame.setSize(700, 700);
+		frame.setVisible(true);
+		frame.getContentPane().setLayout(new GridLayout(4,5));
+		Inw a = new Inw("{\"cv_uid\":\"517\",\"fb_id\":\"100000038984537\",\"firstname_en\":\"Assanee\",\"lastname_en\":\"Sukatham\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}");
+		Card c = new Card(1,true,a);
+		frame.getContentPane().add(a);
+		System.out.println(a.useMP(3));
+		JButton j = new JButton("ADD");
+
+		frame.add(j);
+	}
 	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,int user_ID){
 		this.fname = fname;
 		this.lname = lname;
@@ -59,22 +76,7 @@ public class Inw extends JPanel{
 		this.user_ID = user_ID;
 		initGUI();
 	}
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args){
-		// TESTING : getting all cards from user;
-//		CardData.saveAllCardsToLocal();
-		JFrame frame = new JFrame();
-		frame.setSize(700, 700);
-		frame.setVisible(true);
-		frame.getContentPane().setLayout(new GridLayout(4,5));
-		Inw a = new Inw("{\"cv_uid\":\"517\",\"fb_id\":\"100000038984537\",\"firstname_en\":\"Assanee\",\"lastname_en\":\"Sukatham\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}");
-	//	for(Inw b:a){
-			System.out.println(a.toString());
-	//	}
-		frame.getContentPane().add(a);
-	}
+
 	/**	create Inw with String representing the individual Inw JSON data from http://128.199.235.83/icw/?q=icw/service/opponent
 	 * Example String value: 
 	 * "{\"cv_uid\":\"517\",\"fb_id\":\"100000038984537\",\"firstname_en\":\"Assanee\",\"lastname_en\":\"Sukatham\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"
@@ -92,6 +94,7 @@ public class Inw extends JPanel{
 		LP_current = LP_full;
 		MP_current = MP_full;
 		initGUI();
+	//	System.out.println("create inw from JSONString successful");
 	}
 	/**
 	 *  get Inw data from only JsonObject from http://128.199.235.83/icw/?q=icw/service/opponent
@@ -115,6 +118,7 @@ public class Inw extends JPanel{
 		
 		try {
 			profile = new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture")));
+			System.out.println(profile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -122,7 +126,9 @@ public class Inw extends JPanel{
 		
 		data = new JLabel(profile);
 		data.setText(fname+" "+lname+" LP: "+LP_current+" MP: "+MP_current);
+		//	data.setText("LP: "+LP_current+" MP: "+MP_current);
 		add(data);
+		
 	}
 	/**
 	 * @return	An array of all opponent from http://128.199.235.83/icw/?q=icw/service/opponent
@@ -158,9 +164,6 @@ public class Inw extends JPanel{
 	public void getAllIC(){
 		
 	}
-	public void getDeck(){	//
-		
-	}
 	public String toString(){
 		return "[FIRSTNAME: "+fname+", LASTNAME: "+lname+", LP: "+LP_full+", MP: "+MP_full+", MAXDECK: "+",IMAGE: "+profile.toString()+"]"; 
 	}
@@ -175,12 +178,15 @@ public class Inw extends JPanel{
 	public boolean useMP(int mp_cost){
 		if(MP_current>=mp_cost){
 			MP_current = MP_current-mp_cost;
+			System.out.println("MP used: "+mp_cost+" MP left"+MP_current);
+			updateGUI();
 			return true;
 		}else return false;
 	}
 	public void updateGUI(){
-		data.setText(fname+" "+lname+" LP: "+LP_current+" MP: "+MP_current);
-		
+		data.setText("LP: "+LP_current+" MP: "+MP_current);
+		validate();
+	//	data.setText(fname+" "+lname+" LP: "+LP_current+" MP: "+MP_current);
 	}
 	/**
 	 * Fetch this Inw's data from the server

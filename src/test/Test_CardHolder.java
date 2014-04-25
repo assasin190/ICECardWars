@@ -26,7 +26,7 @@ import java.awt.event.MouseEvent;
 public class Test_CardHolder extends JFrame {
 
 	private JPanel contentPane;
-	private JPanel ch1;
+	private CardHolder ch1;
 	private CardHolder ch2;
 	private JLabel st1;
 	private JLabel st2;
@@ -67,7 +67,7 @@ public class Test_CardHolder extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(0, 3, 0, 0));
 
-		ch1 = new JPanel();
+		ch1 = new CardHolder(CardHolder.DECK,false);
 		ch1.setBackground(new Color(255, 255, 153));
 		DropHandler dropHandler = new DropHandler();
 		DropTarget dropTarget = new DropTarget(ch1, DnDConstants.ACTION_MOVE, dropHandler, true);
@@ -79,6 +79,7 @@ public class Test_CardHolder extends JFrame {
 		contentPane.add(st1);
 
 		ch2 = new CardHolder(CardHolder.DECK,false);
+		ch2.setBackground(Color.YELLOW);
 		panel = new JPanel();
 		contentPane.add(panel);
 
@@ -118,7 +119,8 @@ public class Test_CardHolder extends JFrame {
 		});
 		contentPane.add(b2);
 
-		ch3 = new CardHolder(CardHolder.DECK,false);
+		ch3 = new CardHolder(CardHolder.PLAYER,false);
+		ch3.setBackground(Color.MAGENTA);
 		contentPane.add(ch3);
 
 		st3 = new JLabel("update 3");
