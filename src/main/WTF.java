@@ -18,12 +18,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-<<<<<<< HEAD
+
 import misc.AudioPlayer;
 import sun.net.www.content.image.gif;
 //import sun.net.www.content.image.gif;
 
-=======
+
 
 import misc.AudioPlayer;
 import sun.net.www.content.image.gif;
@@ -33,11 +33,11 @@ import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
->>>>>>> FETCH_HEAD
+
 
 public class WTF extends JPanel{
 	
-	private AudioPlayer bgMusic;
+	private static AudioPlayer bgMusic;
 
 	public WTF() {
 	
@@ -55,7 +55,10 @@ public class WTF extends JPanel{
 		setLayout(null);
 		this.add(gif);
 		
-		JLabel label = new JLabel("");
+		JLabel label = new JLabel("Choose One Coin");
+		label.setForeground(new Color(216, 191, 216));
+		label.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 60));
+		label.setBounds(470,400,800,300);
 		add(label);
 		
 		JLabel label_1 = new JLabel("");
@@ -256,6 +259,8 @@ public class WTF extends JPanel{
 
 	public static void main(String[] args){
 		WTF a = new WTF();
+		bgMusic = new AudioPlayer("WTF2.wav");
+		bgMusic.playLoop();
 		JFrame test = new JFrame(); 
 		test.getContentPane().add(a);
 		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

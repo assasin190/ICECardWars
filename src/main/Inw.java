@@ -50,10 +50,10 @@ public class Inw extends JPanel{
 	public int[] deck;
 	private JLabel data;
 	
-<<<<<<< HEAD
+
 	
 	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,int user_ID, Image image){
-=======
+
 	public static void main(String[] args){
 		// TESTING : getting all cards from user;
 //		CardData.saveAllCardsToLocal();
@@ -70,7 +70,7 @@ public class Inw extends JPanel{
 		frame.add(j);
 	}
 	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,int user_ID){
->>>>>>> FETCH_HEAD
+
 		this.fname = fname;
 		this.lname = lname;
 		this.LP_full = LP;
@@ -124,13 +124,12 @@ public class Inw extends JPanel{
 	private void initGUI() {
 		
 		try {
-<<<<<<< HEAD
 			//image = ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture"));
 			profile = new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture?type=large")));
-=======
+
 			profile = new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture")));
 			System.out.println(profile);
->>>>>>> FETCH_HEAD
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -142,6 +141,7 @@ public class Inw extends JPanel{
 		add(data);
 		
 	}
+	
 	/**
 	 * @return	An array of all opponent from http://128.199.235.83/icw/?q=icw/service/opponent
 	 */
@@ -245,3 +245,4 @@ public class Inw extends JPanel{
 		updateGUI();
 	}
 }
+
