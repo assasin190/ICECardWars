@@ -18,35 +18,66 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+<<<<<<< HEAD
 import misc.AudioPlayer;
 import sun.net.www.content.image.gif;
 //import sun.net.www.content.image.gif;
 
+=======
+
+import misc.AudioPlayer;
+import sun.net.www.content.image.gif;
+import java.awt.Color;
+import javax.swing.UIManager;
+import java.awt.Font;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+>>>>>>> FETCH_HEAD
 
 public class WTF extends JPanel{
 	
 	private AudioPlayer bgMusic;
 
 	public WTF() {
-		JLabel title = new JLabel("Who takes the first turn");
-		title.setBounds(this.getWidth() / 4, 0, getWidth() / 2, getHeight() / 5);
 	
-		ImageIcon icon = new ImageIcon("coin2.gif");
+		//ImageIcon icon = new ImageIcon("coin2.gif");
 		
 		final JLabel gif = new JLabel();
 		JButton tail = new JButton(new ImageIcon("head.gif"));
-		JButton head = new JButton(new ImageIcon("head1.gif"));
-		tail.setBounds(800, 300, new ImageIcon("head.gif").getIconWidth(), new ImageIcon("head.gif").getIconHeight());
-		head.setBounds(500, 300, new ImageIcon("head1.gif").getIconWidth(), new ImageIcon("head1.gif").getIconHeight());
-		gif.setIcon(icon);
-		gif.setBounds(400, 100, 500, 500);
-		gif.setLocation(500, 500);
+		tail.setBackground(Color.BLACK);
+		tail.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		
 		gif.setVisible(false);
+		setLayout(null);
 		this.add(gif);
-		this.add(head);
+		
+		JLabel label = new JLabel("");
+		add(label);
+		
+		JLabel label_1 = new JLabel("");
+		add(label_1);
+		
+		JLabel label_2 = new JLabel("");
+		add(label_2);
+		JButton head = new JButton(new ImageIcon("head1.gif"));
+		head.setBackground(Color.BLACK);
+		head.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		head.setOpaque(true);
+		head.setBounds(320,300, 200, 200);
+		tail.setBounds(850,300, 200, 200);
+		//tail.setBackground(Color.TRANSLUCENT);
+		head.setForeground(null);
 		this.add(tail);
-		bgMusic = new AudioPlayer("lilium.wav");
-				bgMusic.play();
+		this.add(head);
+		//bgMusic = new AudioPlayer("lilium.wav");
+		//		bgMusic.play();
 		
 		
 		head.addMouseListener(new MouseListener() {
@@ -119,6 +150,7 @@ public class WTF extends JPanel{
 			
 			
 		});
+		this.add(tail);
 		
 		tail.addMouseListener(new MouseListener() {
 
@@ -187,11 +219,6 @@ public class WTF extends JPanel{
 			
 		});
 		
-	
-		
-		
-		this.add(title);
-		
 	}
 	
 	public void paintComponent(final Graphics g){
@@ -218,7 +245,7 @@ public class WTF extends JPanel{
 				Image c_5 = c5.getImage();
 				
 				
-		ImageIcon bg = new ImageIcon("choose.png");
+		ImageIcon bg = new ImageIcon("magic4.jpg");
 		Image gg = bg.getImage();
 		
 	
@@ -230,7 +257,7 @@ public class WTF extends JPanel{
 	public static void main(String[] args){
 		WTF a = new WTF();
 		JFrame test = new JFrame(); 
-		test.add(a);
+		test.getContentPane().add(a);
 		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		test.setVisible(true);
