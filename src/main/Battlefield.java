@@ -79,19 +79,12 @@ public class Battlefield extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-<<<<<<< HEAD
+
 	public Battlefield(Inw player_,Inw opponent_) {
 		Battlefield.player = player_;
 		Battlefield.opponent = opponent_;
 		Battlefield.player.addDeck();
 		Battlefield.opponent.addDeck();
-=======
-	public Battlefield(Inw player,Inw opponent) {
-		this.player = player;
-		this.opponent = opponent;
-		this.player.getDeck();
-		this.opponent.getDeck();
->>>>>>> 7b15c561928cb016f147fbf08d2bc8ea13d0e6f1
 		this.playerDeck = new ArrayList<Integer>(player.deck.length);
 		for(int a:player.deck){
 			playerDeck.add(a);
@@ -502,7 +495,7 @@ public class Battlefield extends JFrame {
 					useButton.setEnabled(true);
 				}	
 			}else if(((CardHolder)c.getParent()).type==CardHolder.PLAYER_HAND&&player.MP_current>=c.mc){
-					useButton.setEnabled(true);	
+				useButton.setEnabled(true);	
 			}else useButton.setEnabled(false);
 			//Do nothing if selected card can't be casted sa/spell
 		}else if(selected){				//TARGET CARD SELECTED AND READY TO USE THE SA/SPELL
@@ -554,13 +547,13 @@ public class Battlefield extends JFrame {
 					System.err.println("ERR: Card doesn't need selection!");
 					break;
 				}
-				
+
 			}
 			useButton.setEnabled(false);
 			cancelButton.setEnabled(false);
 			selected = false;
 			caster = null;
-			
+
 			//lots of switch cases!
 			//use mana
 			//execute spell (checkCastable should already check if there's enough mana)
