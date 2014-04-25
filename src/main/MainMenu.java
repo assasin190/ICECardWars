@@ -40,7 +40,11 @@ import javax.swing.border.EmptyBorder;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
 import javax.swing.UIManager;
+
+import misc.AudioPlayer;
+import java.awt.Font;
 
 
 public class MainMenu extends JFrame {
@@ -84,6 +88,7 @@ public class MainMenu extends JFrame {
 	private Component rigidArea;
 	private Component verticalGlue;
 	private Component verticalGlue_1;
+	private static AudioPlayer bgMusic;
 	public MainMenu(Socket con) {
 		
 		chatArea = new JTextArea();
@@ -121,11 +126,16 @@ public class MainMenu extends JFrame {
 		loginPanel.add(horizontalGlue);
 		
 		welcome = new JLabel("");
+		welcome.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		welcome.setForeground(Color.RED);
 		welcome.setHorizontalAlignment(SwingConstants.RIGHT);
 		welcome.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		loginPanel.add(welcome);
 		
 		usernameField = new JTextField();
+		usernameField.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 13));
+		usernameField.setForeground(Color.RED);
+		usernameField.setBackground(Color.BLACK);
 		usernameField.setToolTipText("Username");
 		usernameField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -145,6 +155,9 @@ public class MainMenu extends JFrame {
 		usernameField.setColumns(10);
 		
 		pw = new JPasswordField();
+		pw.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 13));
+		pw.setForeground(Color.RED);
+		pw.setBackground(Color.BLACK);
 		pw.setToolTipText("Password");
 		pw.addKeyListener(new KeyAdapter() {
 			@Override
@@ -204,10 +217,13 @@ public class MainMenu extends JFrame {
 		verticalGlue_1 = Box.createVerticalGlue();
 		ButtonPanel.add(verticalGlue_1);
 		
-		startButton = new JButton("Commence a new ICB");
+		startButton = new JButton("New Game");
 	//	startButton.setIcon(null);
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				Main.bgMusic.close();
+				bgMusic = new AudioPlayer("DuelNew.wav");
+				bgMusic.play();
 				if(bf!=null){	//TODO: proper check (not done)
 					JOptionPane.showMessageDialog(null, "An instance of ICB is already running!", "",JOptionPane.DEFAULT_OPTION);
 					return;
@@ -221,12 +237,20 @@ public class MainMenu extends JFrame {
 		startButton.setEnabled(false);
 		ButtonPanel.add(startButton);
 		
-		continueButton = new JButton("Continue the current ICB");
+		continueButton = new JButton("Continue The Game");
 		continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		continueButton.setEnabled(false);
 		ButtonPanel.add(continueButton);
 		
 		arrangeDeck = new JButton("Arrange Decks");
+		arrangeDeck.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Main.bgMusic.close();
+				bgMusic = new AudioPlayer("Arrange the deck New.wav");
+				bgMusic.play();
+				
+			}
+		});
 		arrangeDeck.setAlignmentX(Component.CENTER_ALIGNMENT);
 		arrangeDeck.setEnabled(false);
 		ButtonPanel.add(arrangeDeck);

@@ -18,12 +18,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-<<<<<<< HEAD
+
 import misc.AudioPlayer;
 import sun.net.www.content.image.gif;
-=======
-//import sun.net.www.content.image.gif;
->>>>>>> 9a91a3b14799266925350549503b9d1c7e0d8aff
+import java.awt.Color;
+import javax.swing.UIManager;
+import java.awt.Font;
 
 public class WTF extends JPanel{
 	
@@ -31,6 +31,7 @@ public class WTF extends JPanel{
 
 	public WTF() {
 		JLabel title = new JLabel("Who takes the first turn");
+		title.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		title.setBounds(this.getWidth() / 4, 0, getWidth() / 2, getHeight() / 5);
 	
 		ImageIcon icon = new ImageIcon("coin2.gif");
@@ -38,6 +39,7 @@ public class WTF extends JPanel{
 		final JLabel gif = new JLabel();
 		JButton tail = new JButton(new ImageIcon("head.gif"));
 		JButton head = new JButton(new ImageIcon("head1.gif"));
+		head.setBackground(UIManager.getColor("Button.background"));
 		tail.setBounds(800, 300, new ImageIcon("head.gif").getIconWidth(), new ImageIcon("head.gif").getIconHeight());
 		head.setBounds(500, 300, new ImageIcon("head1.gif").getIconWidth(), new ImageIcon("head1.gif").getIconHeight());
 		gif.setIcon(icon);
@@ -47,8 +49,8 @@ public class WTF extends JPanel{
 		this.add(gif);
 		this.add(head);
 		this.add(tail);
-		bgMusic = new AudioPlayer("lilium.wav");
-				bgMusic.play();
+		//bgMusic = new AudioPlayer("lilium.wav");
+		//		bgMusic.play();
 		
 		
 		head.addMouseListener(new MouseListener() {
@@ -220,7 +222,7 @@ public class WTF extends JPanel{
 				Image c_5 = c5.getImage();
 				
 				
-		ImageIcon bg = new ImageIcon("choose.png");
+		ImageIcon bg = new ImageIcon("magic3.jpg");
 		Image gg = bg.getImage();
 		
 	
@@ -232,7 +234,7 @@ public class WTF extends JPanel{
 	public static void main(String[] args){
 		WTF a = new WTF();
 		JFrame test = new JFrame(); 
-		test.add(a);
+		test.getContentPane().add(a);
 		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		test.setVisible(true);

@@ -13,7 +13,7 @@ public class Main {
 	static Socket con;
 	static PrintWriter out;
 	static BufferedReader in;
-	private static AudioPlayer bgMusic;
+	 static AudioPlayer bgMusic;
 	private static boolean scSW = true;	//Selected card switch
 	private static Card sc1 = null;	//Selected card 1
 	private static Card sc2 = null;	//Selected card 2	
@@ -25,7 +25,7 @@ public class Main {
 		MainMenu main = new MainMenu(con);
 		Splash frame = new Splash();
 		bgMusic = new AudioPlayer("Hishoku no sora.wav");
-		bgMusic.play();
+		bgMusic.playLoop();
 		frame.setLocationRelativeTo(null);
 		frame.setUndecorated(true);
 		frame.setVisible(true);
@@ -33,8 +33,8 @@ public class Main {
 		while(true){
 	        try {
 	    		con = new Socket("128.199.235.83",80);
-	    		if(bgMusic.isPlay()==false) bgMusic.play();
-	    		else ;
+	    		//if(bgMusic.isPlay()==false) bgMusic.play();
+	    		//else ;
 			} catch (IOException e1) {
 				int a = JOptionPane.showConfirmDialog(null, "Could not connect to server\nTry again?", "",JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
 				if(a==JOptionPane.YES_OPTION)continue;

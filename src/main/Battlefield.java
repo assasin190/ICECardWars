@@ -77,6 +77,8 @@ public class Battlefield extends JFrame {
 	public Battlefield(Inw player,Inw opponent) {
 		this.player = player;
 		this.opponent = opponent;
+		this.player.getDeck();
+		this.opponent.getDeck();
 		this.playerDeck = new ArrayList<Integer>(player.deck.length);
 		for(int a:player.deck){
 			playerDeck.add(a);
