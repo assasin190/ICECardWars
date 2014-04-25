@@ -24,31 +24,51 @@ import sun.net.www.content.image.gif;
 import java.awt.Color;
 import javax.swing.UIManager;
 import java.awt.Font;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
 public class WTF extends JPanel{
 	
 	private AudioPlayer bgMusic;
 
 	public WTF() {
-		JLabel title = new JLabel("Who takes the first turn");
-		title.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		title.setBounds(this.getWidth() / 4, 0, getWidth() / 2, getHeight() / 5);
 	
-		ImageIcon icon = new ImageIcon("coin2.gif");
+		//ImageIcon icon = new ImageIcon("coin2.gif");
 		
 		final JLabel gif = new JLabel();
 		JButton tail = new JButton(new ImageIcon("head.gif"));
-		JButton head = new JButton(new ImageIcon("head1.gif"));
-		head.setBackground(UIManager.getColor("Button.background"));
-		tail.setBounds(800, 300, new ImageIcon("head.gif").getIconWidth(), new ImageIcon("head.gif").getIconHeight());
-		head.setBounds(500, 300, new ImageIcon("head1.gif").getIconWidth(), new ImageIcon("head1.gif").getIconHeight());
-		gif.setIcon(icon);
-		gif.setBounds(400, 100, 500, 500);
-		gif.setLocation(500, 500);
+		tail.setBackground(Color.BLACK);
+		tail.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		
 		gif.setVisible(false);
+		setLayout(null);
 		this.add(gif);
-		this.add(head);
+		
+		JLabel label = new JLabel("");
+		add(label);
+		
+		JLabel label_1 = new JLabel("");
+		add(label_1);
+		
+		JLabel label_2 = new JLabel("");
+		add(label_2);
+		JButton head = new JButton(new ImageIcon("head1.gif"));
+		head.setBackground(Color.BLACK);
+		head.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		head.setOpaque(true);
+		head.setBounds(320,300, 200, 200);
+		tail.setBounds(850,300, 200, 200);
+		//tail.setBackground(Color.TRANSLUCENT);
+		head.setForeground(null);
 		this.add(tail);
+		this.add(head);
 		//bgMusic = new AudioPlayer("lilium.wav");
 		//		bgMusic.play();
 		
@@ -123,6 +143,7 @@ public class WTF extends JPanel{
 			
 			
 		});
+		this.add(tail);
 		
 		tail.addMouseListener(new MouseListener() {
 
@@ -191,11 +212,6 @@ public class WTF extends JPanel{
 			
 		});
 		
-	
-		
-		
-		this.add(title);
-		
 	}
 	
 	public void paintComponent(final Graphics g){
@@ -222,7 +238,7 @@ public class WTF extends JPanel{
 				Image c_5 = c5.getImage();
 				
 				
-		ImageIcon bg = new ImageIcon("magic3.jpg");
+		ImageIcon bg = new ImageIcon("magic4.jpg");
 		Image gg = bg.getImage();
 		
 	
