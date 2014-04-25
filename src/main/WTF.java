@@ -66,7 +66,7 @@ public class WTF extends JPanel{
 		
 		JLabel label_2 = new JLabel("");
 		add(label_2);
-		JButton head = new JButton(new ImageIcon("head1.gif"));
+		JButton head = new JButton(new ImageIcon("gold.jpg"));
 		head.setBackground(Color.BLACK);
 		head.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
