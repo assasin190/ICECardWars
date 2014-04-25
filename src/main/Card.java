@@ -60,6 +60,9 @@ public class Card extends JPanel{
 	ImageIcon picture;
 	String desc;
 	Inw caster;
+	public boolean Protected = false;		//invulnerable to normal attack
+	public boolean sacrifice = false;		//sacrifice
+	public boolean directInw = false;		//attacks Inw directly
 	private JLabel titleLabel;
 	private JLabel rrLabel;
 	private JLabel descLabel;
@@ -332,7 +335,6 @@ public class Card extends JPanel{
 			try {
 				picture = ImageIO.read(new File("null.jpg"));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		pictureIcon = new JLabel(new ImageIcon(picture));
@@ -439,5 +441,36 @@ public class Card extends JPanel{
 	}
 	public Inw getCaster(){
 		return caster;
+	}
+	/**
+	 * @return true if card = IC-monster, false if card = IC-spell
+	 */
+	public boolean isMonster(){
+		return type==1;
+	}
+	/**Apply the SA or Spell belonging to card C to this card
+	 * @param c the monster or spell card to apply
+	 * @return true if the monster is dead after receiving the SA/Spell
+	 */
+	public boolean apply(Card c){
+		return false;
+		//TODO: not done!
+	}
+	/**Attack this card with the specified damage
+	 * @param DMG the damage dealt (calculate ATK + LUK beforehand)
+	 * @return true if the monster is dead after receiving the attack
+	 */
+	public boolean attack(int DMG){
+		if(Protected){
+			System.out.println(this.title+" is protected!");
+			return false;
+		}
+		System.out.println(this.title+" received "+DMG+" damage");
+		this.lp -= DMG;
+		this.repaint();
+		return lp<=0;
+	}
+	public int generateNetAtk(){
+		return (int) Math.max(0, atk-lck + (int)(Math.random() * ((lck*2) + 1)));
 	}
 }

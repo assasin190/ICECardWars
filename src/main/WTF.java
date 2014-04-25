@@ -18,8 +18,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+<<<<<<< HEAD
 import misc.AudioPlayer;
 import sun.net.www.content.image.gif;
+=======
+//import sun.net.www.content.image.gif;
+>>>>>>> 9a91a3b14799266925350549503b9d1c7e0d8aff
 
 public class WTF extends JPanel{
 	
@@ -82,8 +86,8 @@ public class WTF extends JPanel{
 				// TODO Auto-generated method stub
 				Thread t = new MyThread(gif);
 				t.start();
-				Thread t2 = new MyThread2();
-				t2.start();
+				//Thread t2 = new MyThread2();
+				//t2.start();
 				/*
 				EventQueue.invokeLater(new Runnable() {		
 
@@ -152,8 +156,6 @@ public class WTF extends JPanel{
 				// TODO Auto-generated method stub
 				Thread t = new MyThread(gif);
 				t.start();
-				Thread t2 = new MyThread2();
-				t2.start();
 				/*
 				EventQueue.invokeLater(new Runnable() {		
 
@@ -249,15 +251,6 @@ public class WTF extends JPanel{
 		public void run() {
 			gif.setVisible(true);
 			
-		}
-	}
-	
-	class MyThread2 extends Thread {
-		
-		public MyThread2() {
-			super();
-		}
-		public void run() {
 			try {
 				sleep(2000);
 				if (Math.random()>0.5){
@@ -275,5 +268,5 @@ public class WTF extends JPanel{
 			}
 		}
 	}
-
+	
 }

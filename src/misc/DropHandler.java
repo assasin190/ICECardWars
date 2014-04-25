@@ -129,7 +129,7 @@ public class DropHandler implements DropTargetListener {
 		case CardHolder.DECK+"|"+CardHolder.DECK:
 			System.out.println("Drop accepted: DECK to DECK");
 			return true;
-		case CardHolder.HAND+"|"+CardHolder.PLAYER:
+		case CardHolder.PLAYER_HAND+"|"+CardHolder.PLAYER:
 			// check if [YOUR TURN, CARD = MONSTER, ENOUGH MP TO SUMMON, DESTINATION IS EMPTY]
 			boolean b = Main.Turn&&c.getType()==1&&c.getCaster().useMP(c.getMc())&&d.isEmpty();
 			System.out.println("HAND TO PLAYER: "+b);

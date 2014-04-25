@@ -16,11 +16,12 @@ import misc.DropHandler;
 
 public class CardHolder extends JPanel{
 
-	public final static int PLAYER = 0;			//player lane (LIMITED TO ONE CARD)!
-	public final static int OPPONENT = 1;		//opponent lane (LIMITED TO ONE CARD)!
-	public final static int DECK = 2;			//deck, unlimited
-	public final static int DUMPSTER = 3;		//unlimited
-	public final static int HAND = 4;
+	public final static int PLAYER = 0;				//player lane (LIMITED TO ONE CARD)!
+	public final static int OPPONENT = 1;			//opponent lane (LIMITED TO ONE CARD)!
+	public final static int DECK = 2;				//deck, unlimited, Cards is freely transferable between deck
+	public final static int DUMPSTER = 3;			//unlimited capacity
+	public final static int PLAYER_HAND = 4;		//unlimited capacity
+	public final static int OPPONENT_HAND = 5;		//unlimited capacity card may probably display as hidden
 	DropHandler dropHandler;
 	DropTarget dropTarget;
 	protected BufferedImage screenshot;

@@ -24,7 +24,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 
@@ -79,7 +81,7 @@ public class Inw extends JPanel{
 	 * @param JSONString
 	 */
 	public Inw(String JSONString){
-		JsonObject j = new Gson().fromJson(JSONString, JsonObject.class);
+		JsonObject j = (JsonObject)new JsonParser().parse(JSONString);
 		this.fb_id = j.get("fb_id").getAsString();
 		this.user_ID = j.get("cv_uid").getAsInt();
 		this.fname = j.get("firstname_en").getAsString();
@@ -110,6 +112,7 @@ public class Inw extends JPanel{
 		initGUI();
 	}
 	private void initGUI() {
+		
 		try {
 			profile = new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture")));
 		} catch (IOException e) {
@@ -177,6 +180,7 @@ public class Inw extends JPanel{
 	}
 	public void updateGUI(){
 		data.setText(fname+" "+lname+" LP: "+LP_current+" MP: "+MP_current);
+		
 	}
 	/**
 	 * Fetch this Inw's data from the server
@@ -198,6 +202,10 @@ public class Inw extends JPanel{
 			}
 	//		Type listType = new TypeToken<List<Integer>>(){}.getType();
 			System.out.println(job);
+			if(job.get("data").isJsonNull()){
+				System.err.println("User hasn't save his/her deck yet!");
+				return;
+			}
 			JsonArray ja = job.get("data").getAsJsonArray();
 			deck = new int[ja.size()];
 			int count = 0;
@@ -207,5 +215,15 @@ public class Inw extends JPanel{
 			}
 			break;
 		}
+	}
+	public boolean attack(int DMG){
+		this.LP_current -= DMG;
+		updateGUI();
+		System.out.println("Inw received "+DMG+ " damages LP is now: "+LP_current);
+		return LP_current<=0;
+	}
+	public void restoreMP(){
+		MP_current = MP_full;
+		updateGUI();
 	}
 }
