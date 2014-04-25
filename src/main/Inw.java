@@ -41,13 +41,14 @@ public class Inw extends JPanel{
 	int maxDeck;
 	String fb_id;
 	ImageIcon profile;
+	Image image;
 	int user_ID;
 	public int[] all_IC;
 	public int[] deck;
 	private JLabel data;
 	
 	
-	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,int user_ID){
+	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,int user_ID, Image image){
 		this.fname = fname;
 		this.lname = lname;
 		this.LP_full = LP;
@@ -57,6 +58,7 @@ public class Inw extends JPanel{
 		this.maxDeck = maxDeck;
 		this.fb_id = fb_id;
 		this.user_ID = user_ID;
+		this.image = image;
 		initGUI();
 	}
 	/**
@@ -114,7 +116,8 @@ public class Inw extends JPanel{
 	private void initGUI() {
 		
 		try {
-			profile = new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture")));
+			//image = ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture"));
+			profile = new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture?type=large")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

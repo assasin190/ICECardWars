@@ -18,12 +18,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-<<<<<<< HEAD
 import misc.AudioPlayer;
 import sun.net.www.content.image.gif;
-=======
 //import sun.net.www.content.image.gif;
->>>>>>> 9a91a3b14799266925350549503b9d1c7e0d8aff
+
 
 public class WTF extends JPanel{
 	
