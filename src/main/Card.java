@@ -50,7 +50,7 @@ public class Card extends JPanel{
 	double car;
 	int sa_code;
 	int sa_mc;
-	String sa_param;
+	private String sa_param;
 	String param_type = "";
 	double param_value = 0;
 	int rr;
@@ -63,6 +63,7 @@ public class Card extends JPanel{
 	public boolean Protected = false;		//invulnerable to normal attack
 	public boolean sacrifice = false;		//sacrifice
 	public boolean directInw = false;		//attacks Inw directly
+	public boolean SAactivated = false;		//the monster already uses the SA for its turn
 	private JLabel titleLabel;
 	private JLabel rrLabel;
 	private JLabel descLabel;
@@ -77,7 +78,13 @@ public class Card extends JPanel{
 
 		EventQueue.invokeLater(new Runnable() {		//TEST GETTING DECK
 			public void run() {
-				try {
+					
+					Card garf = new Card(3,true);
+					Card sli = new Card(1,true);
+					System.out.println(garf.param_value);
+					sli.apply(garf);
+					System.out.println(sli.toString());
+					/*
 					CardData.saveAllCardsToLocal();
 					JFrame frame = new JFrame();
 					frame.setSize(700, 700);
@@ -107,13 +114,16 @@ public class Card extends JPanel{
 				catch (Exception e) {
 					e.printStackTrace();
 				}
+				
+				*/
+				
 			}
 		});
 
 	}
 	@Override
 	public void addNotify() {
-		System.out.println("CARD: addNotify");
+	//	System.out.println("CARD: addNotify");
 		super.addNotify();
 		if (dgr == null) {
 			dragGestureHandler = new DragGestureHandler(this);
@@ -126,7 +136,7 @@ public class Card extends JPanel{
 
 	@Override
 	public void removeNotify() {
-		System.out.println("CARD: removeNotify");
+	//	System.out.println("CARD: removeNotify");
 		if (dgr != null) {
 			dgr.removeDragGestureListener(dragGestureHandler);
 			dragGestureHandler = null;
@@ -193,6 +203,23 @@ public class Card extends JPanel{
 		spell_param = data.get("spell_param").getAsString();
 		sa_param = data.get("sa_param").getAsString();
 		type = data.get("type").getAsInt();
+		if(type==1){
+			if(!sa_param.equals("")){
+				if(sa_param.contains(",")){
+					param_type = sa_param.substring(0,sa_param.indexOf(','));
+					param_value =Double.parseDouble(sa_param.substring(sa_param.indexOf(',')+1,sa_param.length()));
+				}else
+					param_value =Double.parseDouble(sa_param);
+			}
+		}else if(type==2){
+			if(!spell_param.equals("")){
+				if(spell_param.contains(",")){
+					param_type = spell_param.substring(0,spell_param.indexOf(','));
+					param_value =Double.parseDouble(spell_param.substring(spell_param.indexOf(',')+1,spell_param.length()));
+				}else
+					param_value =Double.parseDouble(spell_param);
+			}
+		}
 		sa_code = data.get("sa_code").getAsInt();
 		picture = b;
 		lck = data.get("lck").getAsInt();
@@ -221,17 +248,17 @@ public class Card extends JPanel{
 			if(!sa_param.equals("")){
 				if(sa_param.contains(",")){
 					param_type = sa_param.substring(0,sa_param.indexOf(','));
-					param_value = Double.parseDouble(sa_param.substring(sa_param.indexOf(',')+1,sa_param.length()));
+					param_value =Double.parseDouble(sa_param.substring(sa_param.indexOf(',')+1,sa_param.length()));
 				}else
-					param_value = Double.parseDouble(sa_param);
+					param_value =Double.parseDouble(sa_param);
 			}
 		}else if(type==2){
 			if(!spell_param.equals("")){
 				if(spell_param.contains(",")){
 					param_type = spell_param.substring(0,spell_param.indexOf(','));
-					param_value = Double.parseDouble(spell_param.substring(spell_param.indexOf(',')+1,spell_param.length()));
+					param_value =Double.parseDouble(spell_param.substring(spell_param.indexOf(',')+1,spell_param.length()));
 				}else
-					param_value = Double.parseDouble(spell_param);
+					param_value =Double.parseDouble(spell_param);
 			}
 		}
 		sa_code = m2.get("sa_code").getAsInt();
@@ -270,17 +297,17 @@ public class Card extends JPanel{
 			if(!sa_param.equals("")){
 				if(sa_param.contains(",")){
 					param_type = sa_param.substring(0,sa_param.indexOf(','));
-					param_value = Double.parseDouble(sa_param.substring(sa_param.indexOf(',')+1,sa_param.length()));
+					param_value =Double.parseDouble(sa_param.substring(sa_param.indexOf(',')+1,sa_param.length()));
 				}else
-					param_value = Double.parseDouble(sa_param);
+					param_value =Double.parseDouble(sa_param);
 			}
 		}else if(type==2){
 			if(!spell_param.equals("")){
 				if(spell_param.contains(",")){
 					param_type = spell_param.substring(0,spell_param.indexOf(','));
-					param_value = Double.parseDouble(spell_param.substring(spell_param.indexOf(',')+1,spell_param.length()));
+					param_value =Double.parseDouble(spell_param.substring(spell_param.indexOf(',')+1,spell_param.length()));
 				}else
-					param_value = Double.parseDouble(spell_param);
+					param_value =Double.parseDouble(spell_param);
 			}
 		}
 		sa_code = m2.get("sa_code").getAsInt();
@@ -308,7 +335,7 @@ public class Card extends JPanel{
 			@Override
 			public void mousePressed(MouseEvent e) {
 	//			setBorder(new LineBorder(Color.MAGENTA, 5));
-				System.out.println("selectedCardChanged");
+	//			System.out.println("selectedCardChanged");
 				Main.setSelectedCard(Card.this);
 				Main.updateDisplay();
 		//		if(Battlefield.selectedCard!=null)Battlefield.setDisplayCard(Card.this);
@@ -493,19 +520,19 @@ public class Card extends JPanel{
 		if(c.isMonster()){
 			switch(c.sa_code){
 			case 1:	// increase self
-				param(c.sa_param,c.param_value);
+				param(c.param_type,c.param_value);
 				break;
 			case 2:	// decreasing opposing
-				param(c.sa_param,-c.param_value);
+				param(c.param_type,-c.param_value);
 				break;
 			case 3:	// increase team
-				param(c.sa_param,c.param_value);
+				param(c.param_type,c.param_value);
 				break;
 			case 4:	// decrease opponent
-				param(c.sa_param,-c.param_value);
+				param(c.param_type,-c.param_value);
 				break;
 			case 5:	// increase team , sacrifice
-				param(c.sa_param,c.param_value);
+				param(c.param_type,c.param_value);
 				break;
 			case 6:
 				car = param_value;
@@ -517,10 +544,10 @@ public class Card extends JPanel{
 		}else{
 			switch(c.spell_code){
 			case 1: //increase
-				param(c.sa_param,c.param_value);
+				param(c.param_type,c.param_value);
 				break;
 			case 2:	//decrease
-				param(c.sa_param,-c.param_value);
+				param(c.param_type,-c.param_value);
 				break;
 			case 3:	//re shuffle deck
 				System.err.println("This should already be done in Battlefield!");
