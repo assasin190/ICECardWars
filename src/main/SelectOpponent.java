@@ -62,8 +62,8 @@ public class SelectOpponent extends JPanel {
 		
 	}
 	public void createGUI(){
-		JPanel southPanel = new JPanel();
-		southPanel.setLayout(new GridLayout(4,15));
+		JPanel opponentPanel = new JPanel();
+		opponentPanel.setLayout(new GridLayout(7, 9));
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
 		this.setLayout(new BorderLayout());
 		/*
@@ -77,11 +77,11 @@ public class SelectOpponent extends JPanel {
 		*/
 		for(int i = 0; i < opponentList.size(); i++) {
 			MyPanel pic = new MyPanel(opponentList.get(i));
-			pic.setPreferredSize(new Dimension(72, 128));
-			southPanel.add(pic);
+			pic.setPreferredSize(new Dimension(140, 140));
+			opponentPanel.add(pic);
 			
 		}
-		this.add(southPanel,BorderLayout.PAGE_END);
+		this.add(opponentPanel,BorderLayout.LINE_START);
 	}
 	
 	
@@ -101,7 +101,7 @@ public class SelectOpponent extends JPanel {
 			int LP = Integer.parseInt(mapList.get(i).get("full_lp"));
 			int MP = Integer.parseInt(mapList.get(i).get("full_mp"));
 			int maxDeck = Integer.parseInt(mapList.get(i).get("max_deck_size"));
-			URL fb_url = new URL("https://graph.facebook.com/"+mapList.get(i).get("fb_id")+"/picture?width=128&height=128");
+			URL fb_url = new URL("https://graph.facebook.com/"+mapList.get(i).get("fb_id")+"/picture?width=140&height=140");
 			BufferedImage image = ImageIO.read(fb_url);
 			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID, image);
 			opponentList.add(inw);
@@ -129,7 +129,6 @@ public class SelectOpponent extends JPanel {
 			*/
 			
 			g.drawImage(inw.image, 0, 0, this.getWidth(), this.getHeight(), null);
-			System.out.println(this.getWidth() + ", " + this.getHeight());
 		}
 	}
 	
