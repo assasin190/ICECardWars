@@ -56,9 +56,10 @@ public class Battlefield extends JFrame {
 	private JButton endButton;
 	private JButton quitButton;
 	private JButton useButton;
-	private JPanel p_dumpster;
-	private JPanel o_dumpster;
+	private CardHolder p_dumpster;
+	private CardHolder o_dumpster;
 	private JButton cancelButton;
+	private boolean firstTurn = true;
 	private boolean selected = false;	//will be true if a card is selected and you can use its SA/Spell
 	// AND YOU CONFIRM THE SA/spell use by pressing the useButton
 	private Card caster = null;
@@ -201,7 +202,7 @@ public class Battlefield extends JFrame {
 		opponentPanel.add(o_hand);
 		o_hand.setLayout(new BoxLayout(o_hand, BoxLayout.X_AXIS));
 
-		o_dumpster = new JPanel();
+		o_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
 		o_dumpster.setBackground(Color.LIGHT_GRAY);
 		opponentPanel.add(o_dumpster);
 		o_dumpster.setLayout(new BoxLayout(o_dumpster, BoxLayout.X_AXIS));
@@ -210,7 +211,7 @@ public class Battlefield extends JFrame {
 		playerPanel.add(p_hand);
 		p_hand.setLayout(new BoxLayout(p_hand, BoxLayout.X_AXIS));
 
-		p_dumpster = new JPanel();
+		p_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
 		p_dumpster.setBackground(Color.LIGHT_GRAY);
 		playerPanel.add(p_dumpster);
 		p_dumpster.setLayout(new BoxLayout(p_dumpster, BoxLayout.X_AXIS));
@@ -234,6 +235,12 @@ public class Battlefield extends JFrame {
 		endButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//---------------------------------- END PLAYER PP TURN ----------------------------------
+				if(firstTurn){
+					firstTurn = false;
+					AIturn();
+					return;
+				}
+
 				endButton.setEnabled(false);
 				System.out.println("MP LEFT: "+player.MP_current);
 				Main.Turn = false;
@@ -251,25 +258,57 @@ public class Battlefield extends JFrame {
 							stop();return;
 						}
 					}
-					else if(!ch.isEmpty()){//attack the inw directly if there's no opposing card
-						if(opponent.attack(dmg)){
-							stop();return;
-						}
-					}
 					else{
-						Card co = ch.getOpposingCardHolder().getCard();
-						if(co.attack(dmg,false)){	//if the attack kill the monster
-							o_dumpster.add(ch.getCard());
-							ch.getOpposingCardHolder().removeCard();
-							if(Math.random()<co.car){
-								System.out.println(co.title+" counterattacked!");
-								if(c.attack(dmg,true)){
-									p_dumpster.add(c);
-									ch.removeCard();
+						CardHolder cho = ch.getOpposingCardHolder();
+						if(!cho.isEmpty()){
+							Card co = cho.getCard();
+							if(co.attack(dmg,false)){	//if the attack kill the monster
+								o_dumpster.add(cho.getCard());
+								cho.repaint();
+					//			cho.removeCard();
+								if(Math.random()<co.car){
+									System.out.println(co.title+" counterattacked!");
+									if(c.attack(dmg,true)){
+										p_dumpster.add(c);
+										ch.repaint();
+							//			ch.removeCard();
+									}
 								}
+						//		ch.repaint();
+							}
+					//		cho.repaint();
+						}else{
+							if(opponent.attack(dmg)){//attack the inw directly if there's no opposing card
+								stop();return;
 							}
 						}
 					}
+					/*			else {
+				CardHolder cho = ch.getOpposingCardHolder();
+				if(!cho.isEmpty()){
+					Card co = cho.getCard();
+					if(co.attack(dmg,false)){	//if the attack kill the monster
+						p_dumpster.add(cho.getCard());
+						cho.removeCard();
+						if(Math.random()<co.car){
+							System.out.println(co.title+" counterattacked!");
+							if(c.attack(dmg,true)){
+								o_dumpster.add(c);
+								ch.removeCard();
+							}
+						}
+					}	
+				}
+			}
+					 * 
+					 * 
+					 * 
+					 * 
+					 * 
+					 * 
+					 * 
+					 * 
+					 */
 					try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 				}
 				//END FP of player turn		
@@ -482,12 +521,33 @@ public class Battlefield extends JFrame {
 			o_hand.add(new Card(opponentDeck.get(0),opponent));	opponentDeck.remove(0);		
 			o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
 			//TODO: insert AI here
-			
-			
-			
+			Card c;
+			if(o_hand.getComponentCount()!=0){
+				c = (Card) o_hand.getComponent(0);
+				if(Theirlane1.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster())Theirlane1.add(o_hand.getComponent(0));
+			}
+	//		o_hand.remove(0);
+			if(o_hand.getComponentCount()!=0){
+				c = (Card) o_hand.getComponent(0);
+				if(c!=null&&Theirlane2.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster())Theirlane2.add(o_hand.getComponent(0));
+			}
+			if(o_hand.getComponentCount()!=0){
+				c = (Card) o_hand.getComponent(0);
+				if(c!=null&&Theirlane3.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster())Theirlane3.add(o_hand.getComponent(0));
+			}
+			if(o_hand.getComponentCount()!=0){
+				c = (Card) o_hand.getComponent(0);
+				if(c!=null&&Theirlane4.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster())Theirlane4.add(o_hand.getComponent(0));
+			}
 		}
 
 		//END AI
+		if(firstTurn){
+			firstTurn = false;
+			endButton.setEnabled(true);
+			playerTurn();
+			return;
+		}
 		//FP ?FPAI
 		for(CardHolder ch:Theirlane_ref){
 			if(ch.isEmpty())continue;
@@ -499,24 +559,30 @@ public class Battlefield extends JFrame {
 					stop();return;
 				}
 			}
-			else if(ch.isEmpty()){//attack the inw directly if there's no opposing card
-				if(player.attack(dmg)){
-					stop();return;
-				}
-			}
 			else {
-				Card co = ch.getOpposingCardHolder().getCard();
-				if(co.attack(dmg,false)){	//if the attack kill the monster
-					p_dumpster.add(ch.getCard());
-					ch.getOpposingCardHolder().removeCard();
-					if(Math.random()<co.car){
-						System.out.println(co.title+" counterattacked!");
-						if(c.attack(dmg,true)){
-							o_dumpster.add(c);
-							ch.removeCard();
+				CardHolder cho = ch.getOpposingCardHolder();
+				if(!cho.isEmpty()){
+					Card co = cho.getCard();
+					if(co.attack(dmg,false)){	//if the attack kill the monster
+						p_dumpster.add(cho.getCard());
+						cho.repaint();
+			//			cho.removeCard();
+						if(Math.random()<co.car){
+							System.out.println(co.title+" counterattacked!");
+							if(c.attack(dmg,true)){
+								o_dumpster.add(c);
+								ch.repaint();
+						//		ch.removeCard();
+							}
 						}
+			//			ch.repaint();
+					}	
+		//			cho.repaint();
+				}else{		//atk inw directly
+					if(player.attack(dmg)){
+						stop();return;
 					}
-				}	
+				}
 			}
 
 

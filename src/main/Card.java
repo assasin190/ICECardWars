@@ -566,6 +566,7 @@ public class Card extends JPanel{
 				break;
 			}
 		}
+		repaint();
 		return lp<=0;
 	}
 
