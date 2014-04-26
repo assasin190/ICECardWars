@@ -47,6 +47,11 @@ import misc.AudioPlayer;
 import java.awt.Font;
 
 
+
+
+import java.awt.BorderLayout;
+
+
 public class MainMenu extends JFrame {
 
 	/**
@@ -177,6 +182,9 @@ public class MainMenu extends JFrame {
 		pw.setColumns(10);
 		
 		loginButton = new JButton("Login");
+		loginButton.setFont(new Font("Tahoma", Font.BOLD, 13));
+		loginButton.setForeground(Color.WHITE);
+		loginButton.setBackground(Color.LIGHT_GRAY);
 		loginButton.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
@@ -218,6 +226,10 @@ public class MainMenu extends JFrame {
 		ButtonPanel.add(verticalGlue_1);
 		
 		startButton = new JButton("New Game");
+		startButton.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		startButton.setForeground(Color.RED);
+		startButton.setIcon(null);
+		startButton.setBackground(new Color(0, 0, 0));
 	//	startButton.setIcon(null);
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -238,11 +250,18 @@ public class MainMenu extends JFrame {
 		ButtonPanel.add(startButton);
 		
 		continueButton = new JButton("Continue The Game");
+		continueButton.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		continueButton.setForeground(Color.RED);
+		continueButton.setBackground(new Color(0, 0, 0));
 		continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		continueButton.setEnabled(false);
 		ButtonPanel.add(continueButton);
 		
 		arrangeDeck = new JButton("Arrange Decks");
+		arrangeDeck.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		arrangeDeck.setForeground(Color.RED);
+		arrangeDeck.setBackground(Color.BLACK);
+		arrangeDeck.setEnabled(false);
 		arrangeDeck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Main.bgMusic.close();
@@ -252,10 +271,12 @@ public class MainMenu extends JFrame {
 			}
 		});
 		arrangeDeck.setAlignmentX(Component.CENTER_ALIGNMENT);
-		arrangeDeck.setEnabled(false);
 		ButtonPanel.add(arrangeDeck);
 		
 		quit = new JButton("Quit");
+		quit.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		quit.setForeground(Color.RED);
+		quit.setBackground(new Color(0, 0, 0));
 		quit.setAlignmentX(Component.CENTER_ALIGNMENT);
 		quit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -464,4 +485,5 @@ public class MainMenu extends JFrame {
 		}
 	}
 }
+
 
