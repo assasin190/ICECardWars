@@ -3,14 +3,23 @@ package main;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 public class Test extends JFrame {
-	public static void main(String [] args) {
+	public static void main(String [] args) throws MalformedURLException, IOException {
 		
-		System.out.println(MainMenu.isWideScreen());
-		System.out.println(Toolkit.getDefaultToolkit().getScreenSize());
+		for(int j = 0;; j++) {
+			System.out.println(j);
+			if(j == 9) break;
+		}
+		
+		BufferedImage img = ImageIO.read(new URL("https://graph.facebook.com/100000038984537/picture?type=large&type=square"));
 		
 		/*
 		EventQueue.invokeLater(new Runnable() {

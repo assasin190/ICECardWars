@@ -1,9 +1,11 @@
 package main;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -12,9 +14,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.html.HTMLDocument.Iterator;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParser;
@@ -23,6 +27,7 @@ import com.google.gson.JsonSyntaxException;
 
 public class SelectOpponent extends JPanel {
 	static ArrayList<Inw> opponentList;
+	static Inw chosenOpponent;
 	MyPanel showPic;
 	
 	
@@ -49,16 +54,17 @@ public class SelectOpponent extends JPanel {
 		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		SelectOpponent a = new SelectOpponent();
 
-		a.SelOpt();
+		a.createGUI();
 	//	a.adddesc();
 		test.add(a);
 		test.setVisible(true);
 		
 		
 	}
-	public void SelOpt(){
-		JPanel pic = new MyPanel();
-		pic.setLayout(new GridLayout(4,15));
+	public void createGUI(){
+		JPanel southPanel = new JPanel();
+		southPanel.setLayout(new GridLayout(4,15));
+		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
 		this.setLayout(new BorderLayout());
 		/*
 		for(int i = 0;i< opponentList.size();i++){
@@ -69,10 +75,13 @@ public class SelectOpponent extends JPanel {
 			
 		}
 		*/
-		this.add(pic,BorderLayout.CENTER);
-		pic.repaint();
-		
-		
+		for(int i = 0; i < opponentList.size(); i++) {
+			MyPanel pic = new MyPanel(opponentList.get(i));
+			pic.setPreferredSize(new Dimension(72, 128));
+			southPanel.add(pic);
+			
+		}
+		this.add(southPanel,BorderLayout.PAGE_END);
 	}
 	
 	
@@ -92,8 +101,8 @@ public class SelectOpponent extends JPanel {
 			int LP = Integer.parseInt(mapList.get(i).get("full_lp"));
 			int MP = Integer.parseInt(mapList.get(i).get("full_mp"));
 			int maxDeck = Integer.parseInt(mapList.get(i).get("max_deck_size"));
-			URL fb_url = new URL("https://graph.facebook.com/"+mapList.get(i).get("fb_id")+"/picture?type=large");
-			Image image = ImageIO.read(fb_url);
+			URL fb_url = new URL("https://graph.facebook.com/"+mapList.get(i).get("fb_id")+"/picture?width=128&height=128");
+			BufferedImage image = ImageIO.read(fb_url);
 			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID, image);
 			opponentList.add(inw);
 		
@@ -101,14 +110,26 @@ public class SelectOpponent extends JPanel {
 	}
 	
 	class MyPanel extends JPanel{
+		Inw inw;
 		
-		public MyPanel() {
+		public MyPanel(Inw inw) {
 			super();
+			this.inw = inw;
 		}
 		
 		public void paint(Graphics g) {
 			
-			g.drawImage(opponentList.get(1).image, 0, 0, 128, 128, null);
+			/*
+			int width = inw.image.getWidth();
+			int height = inw.image.getHeight();
+			if (width > height) {
+				BufferedImage subImage = inw.image.getSubimage((width-height)/2, 0, height, height);
+				inw.image = subImage;
+			}
+			*/
+			
+			g.drawImage(inw.image, 0, 0, this.getWidth(), this.getHeight(), null);
+			System.out.println(this.getWidth() + ", " + this.getHeight());
 		}
 	}
 	

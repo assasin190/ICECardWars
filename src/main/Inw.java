@@ -32,6 +32,7 @@ import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 public class Inw extends JPanel{
 	
@@ -44,7 +45,7 @@ public class Inw extends JPanel{
 	int maxDeck;
 	String fb_id;
 	ImageIcon profile;
-	Image image;
+	BufferedImage image;
 	int user_ID;
 	public int[] all_IC;
 	public int[] deck;
@@ -52,7 +53,20 @@ public class Inw extends JPanel{
 	
 
 	
-	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,int user_ID, Image image){
+	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,int user_ID, BufferedImage image){
+		
+		this.fname = fname;
+		this.lname = lname;
+		this.LP_full = LP;
+		this.MP_full = MP;
+		LP_current = LP_full;
+		MP_current = MP_full;
+		this.maxDeck = maxDeck;
+		this.fb_id = fb_id;
+		this.user_ID = user_ID;
+		this.image = image;
+		initGUI();
+	}
 
 	public static void main(String[] args){
 		// TESTING : getting all cards from user;
@@ -80,7 +94,6 @@ public class Inw extends JPanel{
 		this.maxDeck = maxDeck;
 		this.fb_id = fb_id;
 		this.user_ID = user_ID;
-		this.image = image;
 		initGUI();
 	}
 
@@ -125,10 +138,7 @@ public class Inw extends JPanel{
 		
 		try {
 			//image = ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture"));
-			profile = new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture?type=large")));
-
 			profile = new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+fb_id+"/picture")));
-			System.out.println(profile);
 
 		} catch (IOException e) {
 			e.printStackTrace();
