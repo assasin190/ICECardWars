@@ -43,7 +43,6 @@ public class SelectOpponent extends JPanel {
 		test.add(a);
 		test.setVisible(true);
 		
-		
 	}
 	public void SelOpt(){
 		JPanel pic = new JPanel();
@@ -70,7 +69,6 @@ public class SelectOpponent extends JPanel {
 		
 		
 	}
-	
 	public void adddesc(){
 		JPanel des = new JPanel();
 		
