@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import misc.AudioPlayer;
@@ -42,9 +43,9 @@ public class Main {
 			}; 
 	        break;
 		}
-	//	CardData.saveAllCardsToLocal();
-	//	main.setUndecorated(true);
-	//	main.setExtendedState(JFrame.MAXIMIZED_BOTH);
+	CardData.saveAllCardsToLocal();
+	main.setUndecorated(true);
+	main.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		Splash.setProgress("Starting game");
 		main.setVisible(true);
 		frame.dispose();
