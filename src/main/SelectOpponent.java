@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,6 +18,8 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.MouseInputListener;
 import javax.swing.text.html.HTMLDocument.Iterator;
 
 import com.google.gson.Gson;
@@ -27,8 +30,8 @@ import com.google.gson.JsonSyntaxException;
 
 public class SelectOpponent extends JPanel {
 	static ArrayList<Inw> opponentList;
-	static Inw chosenOpponent;
-	MyPanel showPic;
+	static MyPanel selecting;
+	JPanel display;
 	
 	
 	public SelectOpponent(){
@@ -54,15 +57,17 @@ public class SelectOpponent extends JPanel {
 		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		SelectOpponent a = new SelectOpponent();
 
-		a.createGUI();
+		a.createGUI1920x1080();
 	//	a.adddesc();
 		test.add(a);
 		test.setVisible(true);
 		
 		
 	}
-	public void createGUI(){
+	public void createGUI1920x1080(){
 		JPanel opponentPanel = new JPanel();
+		display = new JPanel();
+		display.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		opponentPanel.setLayout(new GridLayout(7, 9));
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
 		this.setLayout(new BorderLayout());
@@ -77,11 +82,14 @@ public class SelectOpponent extends JPanel {
 		*/
 		for(int i = 0; i < opponentList.size(); i++) {
 			MyPanel pic = new MyPanel(opponentList.get(i));
+			pic.addMouseListener(pic);
+			pic.addMouseMotionListener(pic);
 			pic.setPreferredSize(new Dimension(140, 140));
 			opponentPanel.add(pic);
 			
 		}
 		this.add(opponentPanel,BorderLayout.LINE_START);
+		this.add(display, BorderLayout.CENTER);
 	}
 	
 	
@@ -109,8 +117,9 @@ public class SelectOpponent extends JPanel {
 		}		
 	}
 	
-	class MyPanel extends JPanel{
+	class MyPanel extends JPanel implements MouseInputListener{
 		Inw inw;
+		boolean isSelected;
 		
 		public MyPanel(Inw inw) {
 			super();
@@ -118,17 +127,50 @@ public class SelectOpponent extends JPanel {
 		}
 		
 		public void paint(Graphics g) {
+			super.paint(g);
+			g.drawImage(inw.image, 5, 5, this.getWidth() - 10, this.getHeight() - 10, null);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			selecting = this;
 			
-			/*
-			int width = inw.image.getWidth();
-			int height = inw.image.getHeight();
-			if (width > height) {
-				BufferedImage subImage = inw.image.getSubimage((width-height)/2, 0, height, height);
-				inw.image = subImage;
-			}
-			*/
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			this.setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));
 			
-			g.drawImage(inw.image, 0, 0, this.getWidth(), this.getHeight(), null);
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			this.setBorder(BorderFactory.createEmptyBorder());
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 	
