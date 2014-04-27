@@ -16,15 +16,18 @@ import misc.DropHandler;
 
 public class CardHolder extends JPanel{
 
-	public final static int PLAYER = 0;			//player lane (LIMITED TO ONE CARD)!
-	public final static int OPPONENT = 1;		//opponent lane (LIMITED TO ONE CARD)!
-	public final static int DECK = 2;			//deck, unlimited
-	public final static int DUMPSTER = 3;		//unlimited
-	public final static int HAND = 4;
+	public final static int PLAYER = 0;				//player lane (LIMITED TO ONE CARD)!
+	public final static int OPPONENT = 1;			//opponent lane (LIMITED TO ONE CARD)!
+	public final static int DECK = 2;				//deck, unlimited, Cards is freely transferable between deck
+	public final static int DUMPSTER = 3;			//unlimited capacity
+	public final static int PLAYER_HAND = 4;		//unlimited capacity
+	public final static int OPPONENT_HAND = 5;		//unlimited capacity card may probably display as hidden
+	public final static int DISPLAY = 6;			//single unchangeable display card, use setCard() with this type
 	DropHandler dropHandler;
 	DropTarget dropTarget;
 	protected BufferedImage screenshot;
 	public int type;
+	private CardHolder opposingCH;
 
 	public static void main(String[] args){
 		EventQueue.invokeLater(new Runnable() {
@@ -48,6 +51,7 @@ public class CardHolder extends JPanel{
 	 * 
 	 */
 	public CardHolder(int Type,boolean customGUI) {
+		type = Type;
 		dropHandler = new DropHandler();
 		dropTarget = new DropTarget(this, DnDConstants.ACTION_MOVE, dropHandler, true);
 		if(!customGUI)initGUI();
@@ -56,9 +60,7 @@ public class CardHolder extends JPanel{
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setBackground(Color.WHITE);
-		if(type==CardHolder.OPPONENT||type==CardHolder.PLAYER){
-			setLayout(new BorderLayout(0, 0));
-		}
+		setLayout(new BorderLayout(0, 0));
 	}
 
 	public boolean isEmpty(){
@@ -76,4 +78,16 @@ public class CardHolder extends JPanel{
 	public Card getCard(){
 		return (Card)this.getComponent(0);
 	}
+	/**Set the reference to CardHolder belonging to the opposing side and on same lane with this CardHolder
+	 * @param c 
+	 */
+	public void setOpposingCH(CardHolder c){
+		opposingCH = c;
+	}
+	public CardHolder getOpposingCardHolder(){
+		return opposingCH;
+	}
+
+
+	
 }

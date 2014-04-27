@@ -50,9 +50,9 @@ public class Card extends JPanel{
 	double car;
 	int sa_code;
 	int sa_mc;
-	String sa_param;
+	private String sa_param;
 	String param_type = "";
-	int param_value = 0;
+	double param_value = 0;
 	int rr;
 	//for spell
 	int spell_code;
@@ -60,6 +60,10 @@ public class Card extends JPanel{
 	ImageIcon picture;
 	String desc;
 	Inw caster;
+	public boolean Protected = false;		//invulnerable to normal attack
+	public boolean sacrifice = false;		//sacrifice
+	public boolean directInw = false;		//attacks Inw directly
+	public boolean SAactivated = false;		//the monster already uses the SA for its turn
 	private JLabel titleLabel;
 	private JLabel rrLabel;
 	private JLabel descLabel;
@@ -74,7 +78,13 @@ public class Card extends JPanel{
 
 		EventQueue.invokeLater(new Runnable() {		//TEST GETTING DECK
 			public void run() {
-				try {
+					
+					Card garf = new Card(3,true);
+					Card sli = new Card(1,true);
+					System.out.println(garf.param_value);
+					sli.apply(garf);
+					System.out.println(sli.toString());
+					/*
 					CardData.saveAllCardsToLocal();
 					JFrame frame = new JFrame();
 					frame.setSize(700, 700);
@@ -99,18 +109,21 @@ public class Card extends JPanel{
 					}
 
 
-					frame.getContentPane().add(new Card(1,true));
+		//			frame.getContentPane().add(new Card(1,true));
 				}
 				catch (Exception e) {
 					e.printStackTrace();
 				}
+				
+				*/
+				
 			}
 		});
 
 	}
 	@Override
 	public void addNotify() {
-		System.out.println("CARD: addNotify");
+	//	System.out.println("CARD: addNotify");
 		super.addNotify();
 		if (dgr == null) {
 			dragGestureHandler = new DragGestureHandler(this);
@@ -123,7 +136,7 @@ public class Card extends JPanel{
 
 	@Override
 	public void removeNotify() {
-		System.out.println("CARD: removeNotify");
+	//	System.out.println("CARD: removeNotify");
 		if (dgr != null) {
 			dgr.removeDragGestureListener(dragGestureHandler);
 			dragGestureHandler = null;
@@ -131,7 +144,20 @@ public class Card extends JPanel{
 		dgr = null;
 		super.removeNotify();
 	}
-	public Card(int ID,boolean notused){	//TEMPORARY CONSTRUCTOR THAT ACCESS THE WEB DIRECTLY FOR CARD'S INFO
+	/**TEMPORARY CONSTRUCTOR THAT ACCESS THE WEB DIRECTLY FOR CARD'S INFO
+	 * @param ID
+	 * @param notused
+	 * @param caster
+	 */
+	public Card(int ID,boolean notused,Inw caster){
+		this(ID,notused);
+		this.caster = caster;
+	}
+	/**TEMPORARY CONSTRUCTOR THAT ACCESS THE WEB DIRECTLY FOR CARD'S INFO
+	 * @param ID
+	 * @param notused
+	 */
+	public Card(int ID,boolean notused){	
 		JsonObject data = null;
 		ImageIcon b = null;
 		while(true){
@@ -177,6 +203,23 @@ public class Card extends JPanel{
 		spell_param = data.get("spell_param").getAsString();
 		sa_param = data.get("sa_param").getAsString();
 		type = data.get("type").getAsInt();
+		if(type==1){
+			if(!sa_param.equals("")){
+				if(sa_param.contains(",")){
+					param_type = sa_param.substring(0,sa_param.indexOf(','));
+					param_value =Double.parseDouble(sa_param.substring(sa_param.indexOf(',')+1,sa_param.length()));
+				}else
+					param_value =Double.parseDouble(sa_param);
+			}
+		}else if(type==2){
+			if(!spell_param.equals("")){
+				if(spell_param.contains(",")){
+					param_type = spell_param.substring(0,spell_param.indexOf(','));
+					param_value =Double.parseDouble(spell_param.substring(spell_param.indexOf(',')+1,spell_param.length()));
+				}else
+					param_value =Double.parseDouble(spell_param);
+			}
+		}
 		sa_code = data.get("sa_code").getAsInt();
 		picture = b;
 		lck = data.get("lck").getAsInt();
@@ -188,6 +231,7 @@ public class Card extends JPanel{
 		sa_mc = data.get("sa_mc").getAsInt();
 		spell_code = data.get("spell_code").getAsInt();
 		desc = "null";
+		addListeners();
 	}
 	/**
 	 * @wbp.parser.constructor
@@ -204,17 +248,17 @@ public class Card extends JPanel{
 			if(!sa_param.equals("")){
 				if(sa_param.contains(",")){
 					param_type = sa_param.substring(0,sa_param.indexOf(','));
-					param_value = Integer.parseInt(sa_param.substring(sa_param.indexOf(',')+1,sa_param.length()));
+					param_value =Double.parseDouble(sa_param.substring(sa_param.indexOf(',')+1,sa_param.length()));
 				}else
-					param_value = Integer.parseInt(sa_param);
+					param_value =Double.parseDouble(sa_param);
 			}
 		}else if(type==2){
 			if(!spell_param.equals("")){
 				if(spell_param.contains(",")){
 					param_type = spell_param.substring(0,spell_param.indexOf(','));
-					param_value = Integer.parseInt(spell_param.substring(spell_param.indexOf(',')+1,spell_param.length()));
+					param_value =Double.parseDouble(spell_param.substring(spell_param.indexOf(',')+1,spell_param.length()));
 				}else
-					param_value = Integer.parseInt(spell_param);
+					param_value =Double.parseDouble(spell_param);
 			}
 		}
 		sa_code = m2.get("sa_code").getAsInt();
@@ -234,35 +278,85 @@ public class Card extends JPanel{
 			desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
 		}
 		//	System.out.println("DESC:"+desc);
-		System.out.println("DESC:"+desc);
-		initGUI(); 
-
+	//	System.out.println("DESC:"+desc);
+		addListeners();
 	}
-	private void initGUI() {
+	/**In real battles Card need a reference to their caster aswell
+	 * @param ID
+	 * @param caster
+	 */
+	public Card(int ID,Inw caster) {
+		this.caster = caster;
+		JsonObject m2 = CardData.getCardData(ID);
+		car = m2.get("car").getAsDouble();
+		lp = m2.get("lp").getAsInt();
+		spell_param = m2.get("spell_param").getAsString();
+		sa_param = m2.get("sa_param").getAsString();
+		type = m2.get("type").getAsInt();
+		if(type==1){
+			if(!sa_param.equals("")){
+				if(sa_param.contains(",")){
+					param_type = sa_param.substring(0,sa_param.indexOf(','));
+					param_value =Double.parseDouble(sa_param.substring(sa_param.indexOf(',')+1,sa_param.length()));
+				}else
+					param_value =Double.parseDouble(sa_param);
+			}
+		}else if(type==2){
+			if(!spell_param.equals("")){
+				if(spell_param.contains(",")){
+					param_type = spell_param.substring(0,spell_param.indexOf(','));
+					param_value =Double.parseDouble(spell_param.substring(spell_param.indexOf(',')+1,spell_param.length()));
+				}else
+					param_value =Double.parseDouble(spell_param);
+			}
+		}
+		sa_code = m2.get("sa_code").getAsInt();
+		picture = CardData.getCardImage(ID);
+		lck = m2.get("lck").getAsInt();
+		title = m2.get("title").getAsString();
+		atk = m2.get("atk").getAsInt();
+		mc = m2.get("mc").getAsInt();
+		rr = m2.get("rr").getAsInt();
+		ic_id = m2.get("ic_id").getAsInt();
+		sa_mc = m2.get("sa_mc").getAsInt();
+		spell_code = m2.get("spell_code").getAsInt();
+		desc = null;
+		if(type==1){	// DESCRIPTION FOR MONSTER
+			desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
+		}else if(type==2){	//DESCRIPTION FOR SPELL
+			desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
+		}
+		//	System.out.println("DESC:"+desc);
+	//	System.out.println("DESC:"+desc);
 		addListeners();
 	}
 	public void addListeners(){
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				setBorder(new LineBorder(Color.MAGENTA, 5));
+	//			setBorder(new LineBorder(Color.MAGENTA, 5));
+	//			System.out.println("selectedCardChanged");
 				Main.setSelectedCard(Card.this);
+				Main.updateDisplay();
+		//		if(Battlefield.selectedCard!=null)Battlefield.setDisplayCard(Card.this);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				if(Main.getSelectedCard()==Card.this)return;
-				setBorder(new LineBorder(Color.GREEN, 2));
+	//			if(Main.getSelectedCard()==Card.this)return;
+	//			setBorder(new LineBorder(Color.GREEN, 2));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if(Main.getSelectedCard()==Card.this)return;
-				setBorder(new LineBorder(Color.BLACK, 1));
+	//			if(Main.getSelectedCard()==Card.this)return;
+	//			setBorder(new LineBorder(Color.BLACK, 1));
 			}
 		});
 	}
+	/*
 	public void deselect(){
 		setBorder(new LineBorder(Color.BLACK, 1));
 	}
+	*/
 	public String rr(int rr){
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0;i<rr;i++){
@@ -284,13 +378,11 @@ public class Card extends JPanel{
 			try {
 				picture = ImageIO.read(new File("null.jpg"));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		pictureIcon = new JLabel(new ImageIcon(picture));
 		pictureIcon.setBounds(12, 63, 176, 58);
 		add(pictureIcon);
-<<<<<<< HEAD
 		 */
 
 		g.drawImage(picture.getImage(), getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
@@ -392,4 +484,109 @@ public class Card extends JPanel{
 	public Inw getCaster(){
 		return caster;
 	}
+	/**
+	 * @return true if card = IC-monster, false if card = IC-spell
+	 */
+	public boolean isMonster(){
+		return type==1;
+	}
+	
+	
+	/**
+	 * @param param - sa_param / spell_param
+	 * @param value	- value, IF THE SPELL DECREASE THE PARAMETER, MAKE THE VALUE NEGATIVE!
+	 */
+	public void param(String param,double value){
+		switch(param){
+		case "ATK":
+			atk = (int) Math.max(0, atk + value);
+			break;
+		case "LP":
+			lp = (int) Math.max(0, lp + value);
+			break;
+		case "LCK":
+			lck = (int) Math.max(0, lck + value);
+			break;
+		}
+	}
+	/**Apply the SA or Spell belonging to card C to this card
+	 * This method does not calculate which card will get the apply. That process is done in battlefield processNotify(...) method
+	 * @param c the monster or spell card to apply
+	 * @return true if the monster is dead after receiving the SA/Spell
+	 */
+	public boolean apply(Card c){
+		//return false;
+		//TODO: not done!
+		if(c.isMonster()){
+			switch(c.sa_code){
+			case 1:	// increase self
+				param(c.param_type,c.param_value);
+				break;
+			case 2:	// decreasing opposing
+				param(c.param_type,-c.param_value);
+				break;
+			case 3:	// increase team
+				param(c.param_type,c.param_value);
+				break;
+			case 4:	// decrease opponent
+				param(c.param_type,-c.param_value);
+				break;
+			case 5:	// increase team , sacrifice
+				param(c.param_type,c.param_value);
+				break;
+			case 6:
+				car = param_value;
+				break;
+			case 7:
+				directInw = true;
+				break;
+			}	
+		}else{
+			switch(c.spell_code){
+			case 1: //increase
+				param(c.param_type,c.param_value);
+				break;
+			case 2:	//decrease
+				param(c.param_type,-c.param_value);
+				break;
+			case 3:	//re shuffle deck
+				System.err.println("This should already be done in Battlefield!");
+				break;
+			case 4:
+				Protected = true;
+				break;
+			case 5:	//Heal Inw
+				System.err.println("This should already be done in Battlefield!");
+				break;
+			case 6:	// return can IC
+				System.err.println("This should already be done in Battlefield!");
+				break;
+			case 7:	// return all IC with star greater than ...
+				System.err.println("This should already be done in Battlefield!");
+				break;
+			}
+		}
+		repaint();
+		return lp<=0;
+	}
+
+	/**Attack this card with the specified damage
+	 * @param DMG - the damage dealt (calculate ATK + LUK beforehand)
+	 * @param CAR - if this attack is CAR, protected status doesn't help
+	 * @return true if the monster is dead after receiving the attack
+	 */
+	public boolean attack(int DMG,boolean CAR){
+		if(Protected&&!CAR){
+			System.out.println(this.title+" is protected!");
+			return false;
+		}
+		System.out.println(this.title+" received "+DMG+" damage");
+		this.lp -= DMG;
+		this.repaint();
+		return lp<=0;
+	}
+	public int generateNetAtk(){
+		return (int) Math.max(0, atk-lck + (int)(Math.random() * ((lck*2) + 1)));
+	}
+
 }

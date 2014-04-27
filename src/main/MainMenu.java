@@ -40,7 +40,16 @@ import javax.swing.border.EmptyBorder;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
 import javax.swing.UIManager;
+
+import misc.AudioPlayer;
+import java.awt.Font;
+
+
+
+
+import java.awt.BorderLayout;
 
 
 public class MainMenu extends JFrame {
@@ -84,6 +93,7 @@ public class MainMenu extends JFrame {
 	private Component rigidArea;
 	private Component verticalGlue;
 	private Component verticalGlue_1;
+	private static AudioPlayer bgMusic;
 	public MainMenu(Socket con) {
 		
 		chatArea = new JTextArea();
@@ -101,9 +111,8 @@ public class MainMenu extends JFrame {
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
 				try {
-					g.drawImage(ImageIO.read(new File("null.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+					g.drawImage(ImageIO.read(new File("magic.png")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -122,11 +131,16 @@ public class MainMenu extends JFrame {
 		loginPanel.add(horizontalGlue);
 		
 		welcome = new JLabel("");
+		welcome.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
+		welcome.setForeground(Color.RED);
 		welcome.setHorizontalAlignment(SwingConstants.RIGHT);
 		welcome.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		loginPanel.add(welcome);
 		
 		usernameField = new JTextField();
+		usernameField.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 13));
+		usernameField.setForeground(Color.RED);
+		usernameField.setBackground(Color.BLACK);
 		usernameField.setToolTipText("Username");
 		usernameField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -146,6 +160,9 @@ public class MainMenu extends JFrame {
 		usernameField.setColumns(10);
 		
 		pw = new JPasswordField();
+		pw.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 13));
+		pw.setForeground(Color.RED);
+		pw.setBackground(Color.BLACK);
 		pw.setToolTipText("Password");
 		pw.addKeyListener(new KeyAdapter() {
 			@Override
@@ -165,6 +182,9 @@ public class MainMenu extends JFrame {
 		pw.setColumns(10);
 		
 		loginButton = new JButton("Login");
+		loginButton.setFont(new Font("Tahoma", Font.BOLD, 13));
+		loginButton.setForeground(Color.WHITE);
+		loginButton.setBackground(Color.LIGHT_GRAY);
 		loginButton.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
@@ -205,11 +225,18 @@ public class MainMenu extends JFrame {
 		verticalGlue_1 = Box.createVerticalGlue();
 		ButtonPanel.add(verticalGlue_1);
 		
-		startButton = new JButton("Commence a new ICB");
+		startButton = new JButton("New Game");
+		startButton.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		startButton.setForeground(Color.RED);
+		startButton.setIcon(null);
+		startButton.setBackground(new Color(0, 0, 0));
 	//	startButton.setIcon(null);
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(bf!=null){
+				Main.bgMusic.close();
+				bgMusic = new AudioPlayer("DuelNew.wav");
+				bgMusic.play();
+				if(bf!=null){	//TODO: proper check (not done)
 					JOptionPane.showMessageDialog(null, "An instance of ICB is already running!", "",JOptionPane.DEFAULT_OPTION);
 					return;
 				}
@@ -222,17 +249,34 @@ public class MainMenu extends JFrame {
 		startButton.setEnabled(false);
 		ButtonPanel.add(startButton);
 		
-		continueButton = new JButton("Continue the current ICB");
+		continueButton = new JButton("Continue The Game");
+		continueButton.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		continueButton.setForeground(Color.RED);
+		continueButton.setBackground(new Color(0, 0, 0));
 		continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		continueButton.setEnabled(false);
 		ButtonPanel.add(continueButton);
 		
 		arrangeDeck = new JButton("Arrange Decks");
-		arrangeDeck.setAlignmentX(Component.CENTER_ALIGNMENT);
+		arrangeDeck.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		arrangeDeck.setForeground(Color.RED);
+		arrangeDeck.setBackground(Color.BLACK);
 		arrangeDeck.setEnabled(false);
+		arrangeDeck.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Main.bgMusic.close();
+				bgMusic = new AudioPlayer("Arrange the deck New.wav");
+				bgMusic.play();
+				
+			}
+		});
+		arrangeDeck.setAlignmentX(Component.CENTER_ALIGNMENT);
 		ButtonPanel.add(arrangeDeck);
 		
 		quit = new JButton("Quit");
+		quit.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
+		quit.setForeground(Color.RED);
+		quit.setBackground(new Color(0, 0, 0));
 		quit.setAlignmentX(Component.CENTER_ALIGNMENT);
 		quit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -441,4 +485,5 @@ public class MainMenu extends JFrame {
 		}
 	}
 }
+
 
