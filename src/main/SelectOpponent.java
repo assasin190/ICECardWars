@@ -70,7 +70,7 @@ public class SelectOpponent extends JPanel {
 		opponentPanel.setLayout(new GridLayout(7, 9));
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
 		this.setLayout(new BorderLayout());
-<<<<<<< HEAD
+
 		try {
 			saveAllOpponentsToLocal();
 			for(int i = 0;i< opponentList.size();i++){
@@ -95,7 +95,7 @@ public class SelectOpponent extends JPanel {
 	public void adddesc(){
 		JPanel des = new JPanel();
 		
-=======
+
 		/*
 >>>>>>> 77fd03d02231408958ffe36afdbc04e6fda2c5f2
 		for(int i = 0;i< opponentList.size();i++){
