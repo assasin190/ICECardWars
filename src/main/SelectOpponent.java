@@ -70,6 +70,7 @@ public class SelectOpponent extends JPanel {
 	public void createGUI1920x1080(){
 		JPanel opponentPanel = new JPanel();
 		opponentPanel.setLayout(new GridLayout(7, 9));
+		opponentPanel.setBackground(Color.BLACK);
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
 		this.setLayout(new BorderLayout());
 		/*
@@ -96,7 +97,7 @@ public class SelectOpponent extends JPanel {
 		display = new JPanel();
 		setupDisplay();
 		this.add(display, BorderLayout.CENTER); 
-		this.setBackground(Color.BLACK);
+		
 	}
 	
 	
@@ -159,6 +160,7 @@ public class SelectOpponent extends JPanel {
 		public MyPanel(Inw inw) {
 			super();
 			this.inw = inw;
+			this.setOpaque(false);
 		}
 		
 		public void paint(Graphics g) {
