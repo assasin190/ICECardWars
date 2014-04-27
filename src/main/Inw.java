@@ -65,7 +65,7 @@ public class Inw extends JPanel{
 		this.fb_id = fb_id;
 		this.user_ID = user_ID;
 		this.image = image;
-		initGUI();
+		//initGUI();
 	}
 
 	public static void main(String[] args){

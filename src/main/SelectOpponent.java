@@ -1,7 +1,9 @@
 package main;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -30,8 +32,9 @@ import com.google.gson.JsonSyntaxException;
 
 public class SelectOpponent extends JPanel {
 	static ArrayList<Inw> opponentList;
-	static MyPanel selecting;
-	JPanel display;
+	static MyPanel current;
+	static MyPanel previous;
+	static JPanel display;
 	
 	
 	public SelectOpponent(){
@@ -55,18 +58,16 @@ public class SelectOpponent extends JPanel {
 		JFrame test = new JFrame();
 		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		SelectOpponent a = new SelectOpponent();
+		SelectOpponent so = new SelectOpponent();
 
-		a.createGUI1920x1080();
+		so.createGUI1920x1080();
 	//	a.adddesc();
-		test.add(a);
+		test.add(so);
 		test.setVisible(true);
 		
 	}
 	public void createGUI1920x1080(){
 		JPanel opponentPanel = new JPanel();
-		display = new JPanel();
-		display.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		opponentPanel.setLayout(new GridLayout(7, 9));
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
 		this.setLayout(new BorderLayout());
@@ -108,6 +109,8 @@ public class SelectOpponent extends JPanel {
 		*/
 		for(int i = 0; i < opponentList.size(); i++) {
 			MyPanel pic = new MyPanel(opponentList.get(i));
+			if(i == 0) this.current = pic;
+			if(i == opponentList.size() - 1) this.previous = pic;
 			pic.addMouseListener(pic);
 			pic.addMouseMotionListener(pic);
 			pic.setPreferredSize(new Dimension(140, 140));
@@ -115,7 +118,19 @@ public class SelectOpponent extends JPanel {
 			
 		}
 		this.add(opponentPanel,BorderLayout.LINE_START);
-		this.add(display, BorderLayout.CENTER);
+
+		display = new JPanel();
+		display.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
+		try {
+			JLabel pic = new JLabel(new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+ current.inw.fb_id +"/picture?width=300&height=300"))));
+			pic.setAlignmentX(Component.CENTER_ALIGNMENT);
+			display.add(pic);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.add(display, BorderLayout.CENTER); 
 	}
 	
 	
@@ -139,13 +154,40 @@ public class SelectOpponent extends JPanel {
 			BufferedImage image = ImageIO.read(fb_url);
 			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID, image);
 			opponentList.add(inw);
+			System.out.println(i);
 		
-		}		
+		}
+	}
+	
+	public static void setupDisplay(){
+		display.removeAll();
+		display.add(Box.createRigidArea(new Dimension(0, 75)));
+		JLabel pic = new JLabel();
+		try {
+			pic.setIcon(new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+ current.inw.fb_id +"/picture?width=300&height=300"))));
+			pic.setAlignmentX(Component.CENTER_ALIGNMENT);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		display.add(pic);
+		try {
+			HashMap<String, String> temp = new Gson().fromJson(new InputStreamReader(new URL("https://graph.facebook.com/" + current.inw.fb_id).openStream()), HashMap.class);
+			JLabel fbname = new JLabel(temp.get("name"));
+			fbname.setFont(new Font("Serif", Font.PLAIN, 50));
+			fbname.setAlignmentX(Component.CENTER_ALIGNMENT);
+			display.add(Box.createRigidArea(new Dimension(0, 50)));
+			display.add(fbname);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		display.repaint();
+		JTextPane textPane = new JTextPane();
 	}
 	
 	class MyPanel extends JPanel implements MouseInputListener{
 		Inw inw;
-		boolean isSelected;
 		
 		public MyPanel(Inw inw) {
 			super();
@@ -159,25 +201,31 @@ public class SelectOpponent extends JPanel {
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			selecting = this;
+			
 			
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent arg0) {
+			if(this == current) return;
 			this.setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));
 			
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
+			if(this == current) return;
 			this.setBorder(BorderFactory.createEmptyBorder());
 			
 		}
 
 		@Override
 		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			previous = current;
+			current = this;
+			previous.setBorder(BorderFactory.createEmptyBorder());
+			this.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
+			setupDisplay();
 			
 		}
 
@@ -199,5 +247,6 @@ public class SelectOpponent extends JPanel {
 			
 		}
 	}
+	
 	
 }
