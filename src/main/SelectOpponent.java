@@ -57,13 +57,20 @@ public class SelectOpponent extends JPanel {
 	}
 	public static void main(String [] args) {
 		
+		determineResolution();
 		JFrame test = new JFrame();
 		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		SelectOpponent so = new SelectOpponent();
-
-		so.createGUI1920x1080();
-	//	a.adddesc();
+		
+		switch(screenResolutionString) {
+			case "1024x768":  so.createGUI1366x768();
+							  break;
+			case "1366x768":  so.createGUI1366x768();
+							  break;
+			case "1920x1080": so.createGUI1920x1080();
+							  break;
+		}
 		test.add(so);
 		test.setVisible(true);
 		
@@ -143,7 +150,15 @@ public class SelectOpponent extends JPanel {
 			int LP = Integer.parseInt(mapList.get(i).get("full_lp"));
 			int MP = Integer.parseInt(mapList.get(i).get("full_mp"));
 			int maxDeck = Integer.parseInt(mapList.get(i).get("max_deck_size"));
-			URL fb_url = new URL("https://graph.facebook.com/"+mapList.get(i).get("fb_id")+"/picture?width=140&height=140");
+			URL fb_url = null;
+			switch(screenResolutionString) {
+			case "1024x768":  fb_url = new URL("https://graph.facebook.com/"+mapList.get(i).get("fb_id")+"/picture?width=140&height=140");
+							  break;
+			case "1366x768":  fb_url = new URL("https://graph.facebook.com/"+mapList.get(i).get("fb_id")+"/picture?width=100&height=100");
+							  break;
+			case "1920x1080": fb_url = new URL("https://graph.facebook.com/"+mapList.get(i).get("fb_id")+"/picture?width=140&height=140");
+							  break;
+			}
 			BufferedImage image = ImageIO.read(fb_url);
 			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID, image);
 			opponentList.add(inw);
@@ -182,8 +197,9 @@ public class SelectOpponent extends JPanel {
 	
 	public static void determineResolution() {
 		Dimension temp = Toolkit.getDefaultToolkit().getScreenSize();
-		if(temp.getWidth() < 1366) 
-		}
+		if(temp.getWidth() < 1366) screenResolutionString = "1024x768";
+		else if(temp.getWidth() < 1920) screenResolutionString = "1366x768";
+		else screenResolutionString = "1920x1080";
 		
 	}
 	
@@ -250,5 +266,5 @@ public class SelectOpponent extends JPanel {
 		}
 	}
 	
-	
-}
+}	
+
