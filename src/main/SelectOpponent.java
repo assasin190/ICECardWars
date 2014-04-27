@@ -65,40 +65,14 @@ public class SelectOpponent extends JPanel {
 		test.add(so);
 		test.setVisible(true);
 		
+		
 	}
 	public void createGUI1920x1080(){
 		JPanel opponentPanel = new JPanel();
 		opponentPanel.setLayout(new GridLayout(7, 9));
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
 		this.setLayout(new BorderLayout());
-
-		try {
-			saveAllOpponentsToLocal();
-			for(int i = 0;i< opponentList.size();i++){
-				
-				
-				pic.add(new JLabel(opponentList.get(i).profile));
-				
-			
-					
-					
-				
-			}
-			this.add(pic,BorderLayout.SOUTH);
-		
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-	}
-	public void adddesc(){
-		JPanel des = new JPanel();
-		
-
 		/*
->>>>>>> 77fd03d02231408958ffe36afdbc04e6fda2c5f2
 		for(int i = 0;i< opponentList.size();i++){
 			JLabel lb = new JLabel(opponentList.get(i).profile);
 			lb.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -120,16 +94,8 @@ public class SelectOpponent extends JPanel {
 		this.add(opponentPanel,BorderLayout.LINE_START);
 
 		display = new JPanel();
-		display.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
-		try {
-			JLabel pic = new JLabel(new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+ current.inw.fb_id +"/picture?width=300&height=300"))));
-			pic.setAlignmentX(Component.CENTER_ALIGNMENT);
-			display.add(pic);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		display.setBackground(Color.BLACK);
+		setupDisplay();
 		this.add(display, BorderLayout.CENTER); 
 	}
 	
@@ -161,6 +127,7 @@ public class SelectOpponent extends JPanel {
 	
 	public static void setupDisplay(){
 		display.removeAll();
+		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
 		display.add(Box.createRigidArea(new Dimension(0, 75)));
 		JLabel pic = new JLabel();
 		try {
