@@ -59,6 +59,7 @@ public class MainMenu extends JFrame {
 	 */
 	private static final long serialVersionUID = -2295628688056385946L;
 	Battlefield bf;
+	WTF wtf;
 	private Inw user;
 	ObjectOutputStream out = null;
 	ObjectInputStream in = null;
@@ -236,13 +237,15 @@ public class MainMenu extends JFrame {
 				Main.bgMusic.close();
 				bgMusic = new AudioPlayer("DuelNew.wav");
 				bgMusic.play();
-				if(bf!=null){	//TODO: proper check (not done)
-					JOptionPane.showMessageDialog(null, "An instance of ICB is already running!", "",JOptionPane.DEFAULT_OPTION);
-					return;
-				}
-				bf = new Battlefield(new Inw("{\"cv_uid\":\"517\",\"fb_id\":\"100000038984537\",\"firstname_en\":\"Assanee\",\"lastname_en\":\"Sukatham\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
-				,new Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
-				bf.setVisible(true);
+				//if(bf!=null){	//TODO: proper check (not done)
+				//	JOptionPane.showMessageDialog(null, "An instance of ICB is already running!", "",JOptionPane.DEFAULT_OPTION);
+				//	return;
+				//}
+				wtf = new WTF();
+				wtf.setVisible(true);
+				///bf = new Battlefield(new Inw("{\"cv_uid\":\"517\",\"fb_id\":\"100000038984537\",\"firstname_en\":\"Assanee\",\"lastname_en\":\"Sukatham\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
+				//,new Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
+				//bf.setVisible(true);
 			}
 		});
 		startButton.setAlignmentX(Component.CENTER_ALIGNMENT);

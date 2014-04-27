@@ -222,6 +222,14 @@ public class WTF extends JPanel{
 			
 		});
 		
+		bgMusic = new AudioPlayer("WTF2.wav");
+		bgMusic.playLoop();
+		JFrame test = new JFrame(); 
+		test.getContentPane().add(this);
+		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		test.setVisible(true);
+		
 	}
 	
 	public void paintComponent(final Graphics g){
@@ -258,14 +266,7 @@ public class WTF extends JPanel{
 	}
 
 	public static void main(String[] args){
-		WTF a = new WTF();
-		bgMusic = new AudioPlayer("WTF2.wav");
-		bgMusic.playLoop();
-		JFrame test = new JFrame(); 
-		test.getContentPane().add(a);
-		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		test.setVisible(true);
+		new WTF();
 		
 	}
 	

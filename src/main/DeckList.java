@@ -220,6 +220,7 @@ count = 0;
 		DeckList a = new DeckList(574);
 		JFrame test = new JFrame();
 		test.add(a);
+		a.setBounds(0, 0, test.getWidth()/3, test.getHeight());
 		test.setVisible(true);
 	
 

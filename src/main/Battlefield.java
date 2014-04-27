@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,18 +14,23 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import misc.AudioPlayer;
 
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
@@ -59,6 +65,7 @@ public class Battlefield extends JFrame {
 	private CardHolder p_dumpster;
 	private CardHolder o_dumpster;
 	private JButton cancelButton;
+	private static AudioPlayer bgMusic;
 	private boolean firstTurn = true;
 	private boolean selected = false;	//will be true if a card is selected and you can use its SA/Spell
 	// AND YOU CONFIRM THE SA/spell use by pressing the useButton
@@ -74,6 +81,8 @@ public class Battlefield extends JFrame {
 					, new Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
 					frame.setVisible(true);
 					frame.run();
+					bgMusic = new AudioPlayer("Mahou Battle.wav");
+					bgMusic.playLoop();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -140,15 +149,46 @@ public class Battlefield extends JFrame {
 
 		TheirBF = new JPanel();
 		TheirBF.setLayout(new GridLayout(0, 5));
-		Theirlane1 = new CardHolder(CardHolder.OPPONENT,false);
-		Theirlane1.setBackground(Color.RED);
-		Theirlane2 = new CardHolder(CardHolder.OPPONENT,false);
-		Theirlane2.setBackground(Color.BLUE);
-		Theirlane3 = new CardHolder(CardHolder.OPPONENT,false);
-		Theirlane3.setBackground(Color.YELLOW);
-		Theirlane4 = new CardHolder(CardHolder.OPPONENT,false);
-		Theirlane4.setBackground(Color.GREEN);
-		TheirBF.add(opponent);
+		Theirlane1 = new CardHolder(CardHolder.OPPONENT,false){
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+			try {
+				g.drawImage(ImageIO.read(new File("Lane.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		};
+		Theirlane2 = new CardHolder(CardHolder.OPPONENT,false){
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+			try {
+				g.drawImage(ImageIO.read(new File("Lane.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		};
+		Theirlane3 = new CardHolder(CardHolder.OPPONENT,false){
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+			try {
+				g.drawImage(ImageIO.read(new File("Lane.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		};
+		Theirlane4 = new CardHolder(CardHolder.OPPONENT,false){
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+			try {
+				g.drawImage(ImageIO.read(new File("Lane.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		};		TheirBF.add(opponent);
 		TheirBF.add(Theirlane1);
 		TheirBF.add(Theirlane2);
 		TheirBF.add(Theirlane3);
@@ -162,14 +202,45 @@ public class Battlefield extends JFrame {
 
 		MyBF = new JPanel();
 		MyBF.setLayout(new GridLayout(0, 5));	
-		Mylane1 = new CardHolder(CardHolder.PLAYER,false);
-		Mylane1.setBackground(Color.GREEN);
-		Mylane2 = new CardHolder(CardHolder.PLAYER,false);
-		Mylane2.setBackground(Color.YELLOW);
-		Mylane3 = new CardHolder(CardHolder.PLAYER,false);
-		Mylane3.setBackground(Color.BLUE);
-		Mylane4 = new CardHolder(CardHolder.PLAYER,false);
-		Mylane4.setBackground(Color.RED);
+		Mylane1 = new CardHolder(CardHolder.PLAYER,false){
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+			try {
+				g.drawImage(ImageIO.read(new File("Lane.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		};
+		Mylane2 = new CardHolder(CardHolder.PLAYER,false){
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+			try {
+				g.drawImage(ImageIO.read(new File("Lane.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		};		Mylane3 = new CardHolder(CardHolder.PLAYER,false){
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+			try {
+				g.drawImage(ImageIO.read(new File("Lane.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		};
+		Mylane4 = new CardHolder(CardHolder.PLAYER,false){
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+			try {
+				g.drawImage(ImageIO.read(new File("Lane.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		};
 		MyBF.add(player);
 		MyBF.add(Mylane1);
 		MyBF.add(Mylane2);
