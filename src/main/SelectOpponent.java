@@ -94,9 +94,9 @@ public class SelectOpponent extends JPanel {
 		this.add(opponentPanel,BorderLayout.LINE_START);
 
 		display = new JPanel();
-		display.setBackground(Color.BLACK);
 		setupDisplay();
 		this.add(display, BorderLayout.CENTER); 
+		this.setBackground(Color.BLACK);
 	}
 	
 	
