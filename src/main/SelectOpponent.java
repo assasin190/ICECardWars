@@ -67,24 +67,45 @@ public class SelectOpponent extends JPanel {
 		
 		
 	}
+	
+	public void createGUI1366x768() {
+		JPanel opponentPanel = new JPanel();
+		opponentPanel.setLayout(new GridLayout(7, 9));
+		opponentPanel.setBackground(Color.BLACK);
+		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
+		this.setLayout(new BorderLayout());
+		
+		for(int i = 0; i < opponentList.size(); i++) {
+			MyPanel pic = new MyPanel(opponentList.get(i));
+			if(i == 0) this.current = pic;
+			if(i == opponentList.size() - 1) this.previous = pic;
+			pic.addMouseListener(pic);
+			pic.addMouseMotionListener(pic);
+			pic.setPreferredSize(new Dimension(140, 140));
+			opponentPanel.add(pic);
+			
+		}
+		this.add(opponentPanel,BorderLayout.LINE_START);
+
+		display = new JPanel();
+		setupDisplay();
+		this.add(display, BorderLayout.CENTER); 
+		
+	}
+	
 	public void createGUI1920x1080(){
 		JPanel opponentPanel = new JPanel();
 		opponentPanel.setLayout(new GridLayout(7, 9));
 		opponentPanel.setBackground(Color.BLACK);
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
 		this.setLayout(new BorderLayout());
-		/*
-		for(int i = 0;i< opponentList.size();i++){
-			JLabel lb = new JLabel(opponentList.get(i).profile);
-			lb.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-			pic.add(lb);
-			
-			
-		}
-		*/
+		
 		for(int i = 0; i < opponentList.size(); i++) {
 			MyPanel pic = new MyPanel(opponentList.get(i));
-			if(i == 0) this.current = pic;
+			if(i == 0) {
+				this.current = pic;
+				pic.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
+			}
 			if(i == opponentList.size() - 1) this.previous = pic;
 			pic.addMouseListener(pic);
 			pic.addMouseMotionListener(pic);
