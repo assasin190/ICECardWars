@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -219,8 +220,11 @@ count = 0;
 			IOException {
 		DeckList a = new DeckList(574);
 		JFrame test = new JFrame();
-		test.add(a);
-		a.setBounds(0, 0, test.getWidth()/3, test.getHeight());
+		JPanel ss = new JPanel();
+		ss.setLayout(new BorderLayout());
+		ss.add(a,BorderLayout.EAST);
+		test.add(ss);
+		
 		test.setVisible(true);
 	
 
