@@ -95,6 +95,7 @@ public class MainMenu extends JFrame {
 	private Component verticalGlue;
 	private Component verticalGlue_1;
 	private static AudioPlayer bgMusic;
+	
 	public MainMenu(Socket con) {
 		
 		chatArea = new JTextArea();
@@ -477,6 +478,10 @@ public class MainMenu extends JFrame {
 		Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
 		if(screenDimension.getWidth() / screenDimension.getHeight() > 1.4) return true;
 		return false;
+	}
+	
+	public static Dimension getScreenResolution() {
+		return Toolkit.getDefaultToolkit().getScreenSize();
 	}
 	
 	class EnterHandler extends KeyAdapter{

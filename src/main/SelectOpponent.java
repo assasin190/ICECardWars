@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class SelectOpponent extends JPanel {
 	static MyPanel current;
 	static MyPanel previous;
 	static JPanel display;
+	static String screenResolutionString;
 	
 	
 	public SelectOpponent(){
@@ -77,11 +79,14 @@ public class SelectOpponent extends JPanel {
 		
 		for(int i = 0; i < opponentList.size(); i++) {
 			MyPanel pic = new MyPanel(opponentList.get(i));
-			if(i == 0) this.current = pic;
+			if(i == 0) {
+				this.current = pic;
+				pic.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
+			}
 			if(i == opponentList.size() - 1) this.previous = pic;
 			pic.addMouseListener(pic);
 			pic.addMouseMotionListener(pic);
-			pic.setPreferredSize(new Dimension(140, 140));
+			pic.setPreferredSize(new Dimension(100, 100));
 			opponentPanel.add(pic);
 			
 		}
@@ -173,6 +178,13 @@ public class SelectOpponent extends JPanel {
 		}
 		display.repaint();
 		JTextPane textPane = new JTextPane();
+	}
+	
+	public static void determineResolution() {
+		Dimension temp = Toolkit.getDefaultToolkit().getScreenSize();
+		if(temp.getWidth() < 1366) 
+		}
+		
 	}
 	
 	class MyPanel extends JPanel implements MouseInputListener{
