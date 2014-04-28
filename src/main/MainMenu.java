@@ -113,7 +113,7 @@ public class MainMenu extends JFrame {
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
 				try {
-					g.drawImage(ImageIO.read(new File("magic.png")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+					g.drawImage(ImageIO.read(new File("icw_mainmenu_wallpaper.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

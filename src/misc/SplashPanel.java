@@ -31,7 +31,7 @@ public class SplashPanel extends JPanel{
 		alpha = 0;
 		increasing = true;
 		try {
-			i = ImageIO.read(new File("temp.png"));
+			i = ImageIO.read(new File("icw_splash.jpg"));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

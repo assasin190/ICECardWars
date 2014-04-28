@@ -41,6 +41,9 @@ public class SelectOpponent extends JPanel {
 	static String screenResolutionString;
 	static ArrayList<BufferedImage> displayPicture;
 	static JPanel opponentPanel;
+	static JButton select;
+	static JButton back;
+	static JButton random;
 	
 	public SelectOpponent(){
 		opponentList = new ArrayList<Inw>();
@@ -226,7 +229,7 @@ public class SelectOpponent extends JPanel {
 		fbname.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(Box.createRigidArea(new Dimension(0, 30)));
 		display.add(fbname);
-		JButton select = new JButton("Select");
+		select = new JButton("Select");
 		select.setFont(new Font("Serif", Font.PLAIN, 16));
 		select.addActionListener(new ActionListener() {
 			
@@ -236,7 +239,7 @@ public class SelectOpponent extends JPanel {
 			}
 			
 		});
-		JButton back = new JButton("Back");
+		back = new JButton("Back");
 		back.setFont(new Font("Serif", Font.PLAIN, 16));
 		back.addActionListener(new ActionListener() {
 			@Override
@@ -252,7 +255,7 @@ public class SelectOpponent extends JPanel {
 		temp.add(back);
 		display.add(Box.createRigidArea(new Dimension(0, 30)));
 		display.add(temp);
-		JButton random = new JButton("Random");
+		random = new JButton("Random");
 		random.setFont(new Font("Serif", Font.PLAIN, 20));
 		random.setAlignmentX(Component.CENTER_ALIGNMENT);
 		random.addActionListener(new ActionListener() {
@@ -282,7 +285,7 @@ public class SelectOpponent extends JPanel {
 		fbname.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(Box.createRigidArea(new Dimension(0, 35)));
 		display.add(fbname);
-		JButton select = new JButton("Select");
+		select = new JButton("Select");
 		select.setFont(new Font("Serif", Font.PLAIN, 16));
 		select.addActionListener(new ActionListener() {
 			@Override
@@ -291,7 +294,7 @@ public class SelectOpponent extends JPanel {
 			}
 			
 		});
-		JButton back = new JButton("Back");
+		back = new JButton("Back");
 		back.setFont(new Font("Serif", Font.PLAIN, 16));
 		back.addActionListener(new ActionListener() {
 
@@ -308,7 +311,7 @@ public class SelectOpponent extends JPanel {
 		temp.add(back);
 		display.add(Box.createRigidArea(new Dimension(0, 35)));
 		display.add(temp);
-		JButton random = new JButton("Random");
+		random = new JButton("Random");
 		random.setFont(new Font("Serif", Font.PLAIN, 20));
 		random.setAlignmentX(Component.CENTER_ALIGNMENT);
 		random.addActionListener(new ActionListener() {
@@ -338,7 +341,7 @@ public class SelectOpponent extends JPanel {
 		fbname.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(Box.createRigidArea(new Dimension(0, 50)));
 		display.add(fbname);
-		JButton select = new JButton("Select");
+		select = new JButton("Select");
 		select.setFont(new Font("Serif", Font.PLAIN, 20));
 		select.addActionListener(new ActionListener() {
 			@Override
@@ -347,7 +350,7 @@ public class SelectOpponent extends JPanel {
 			}
 			
 		});
-		JButton back = new JButton("Back");
+		back = new JButton("Back");
 		back.setFont(new Font("Serif", Font.PLAIN, 20));
 		back.addActionListener(new ActionListener() {
 
@@ -364,7 +367,7 @@ public class SelectOpponent extends JPanel {
 		temp.add(back);
 		display.add(Box.createRigidArea(new Dimension(0, 50)));
 		display.add(temp);
-		JButton random = new JButton("Random");
+		random = new JButton("Random");
 		random.setFont(new Font("Serif", Font.PLAIN, 20));
 		random.setAlignmentX(Component.CENTER_ALIGNMENT);
 		random.addActionListener(new ActionListener() {
@@ -455,16 +458,20 @@ public class SelectOpponent extends JPanel {
 	static class MyThread extends Thread {
 		
 		public void run() {
+			
 			int count = 0;
 			int delay = 100;
 			while(true) {
 				try {
-					int random = (int) Math.round(Math.random()*59);
+					int r = (int) Math.round(Math.random()*59);
 					previous = current;
-					current = (MyPanel) opponentPanel.getComponent(random);
+					current = (MyPanel) opponentPanel.getComponent(r);
 					previous.setBorder(BorderFactory.createEmptyBorder());
 					current.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
 					setupDisplay();
+					select.setEnabled(false);
+					back.setEnabled(false);
+					random.setEnabled(false);
 					display.validate();
 					sleep(delay);
 					System.out.println(count++);
@@ -473,7 +480,7 @@ public class SelectOpponent extends JPanel {
 					if(count == 32) delay = 1000;
 					if(count == 35) {
 						current.setBorder(BorderFactory.createLineBorder(Color.GREEN, 10));
-						return;
+						break;
 					}
 					
 				} catch (InterruptedException e) {
@@ -481,6 +488,9 @@ public class SelectOpponent extends JPanel {
 					e.printStackTrace();
 				}
 			}
+			select.setEnabled(true);
+			back.setEnabled(true);
+			random.setEnabled(true);
 		}
 	}
 	
