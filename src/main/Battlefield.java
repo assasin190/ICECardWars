@@ -76,7 +76,7 @@ public class Battlefield extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CardData.saveAllCardsToLocal();
+					//CardData.saveAllCardsToLocal();
 					Battlefield frame = new Battlefield(new Inw("{\"cv_uid\":\"595\",\"fb_id\":\"100003770583869\",\"firstname_en\":\"Pasin\",\"lastname_en\":\"Boonsermsuwong\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
 					, new Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
 					frame.setVisible(true);
@@ -525,7 +525,17 @@ public class Battlefield extends JFrame {
 		cancelButton.setEnabled(false);
 		buttonPanel.add(cancelButton);
 
-		selectedCard = new CardHolder(CardHolder.DISPLAY,false);
+		selectedCard = new CardHolder(CardHolder.DISPLAY,false){
+			public void paintComponent(Graphics g){
+		
+			super.paintComponent(g);
+			try {
+				g.drawImage(ImageIO.read(new File("CardFrame.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		};
 		selectedCard.addContainerListener(new ContainerAdapter() {
 			@Override
 			public void componentAdded(ContainerEvent arg0) {
