@@ -213,9 +213,10 @@ public class Inw extends JPanel{
 	//	data.setText(fname+" "+lname+" LP: "+LP_current+" MP: "+MP_current);
 	}
 	/**
-	 * Fetch this Inw's data from the server
+	 * Fetch this Inw's deck data from the server
+	 * @return true if there is deck AND more than 10 cards in the deck
 	 */
-	public void addDeck(){
+	public boolean addDeck(){
 		Gson gs;
 		InputStream is;	
 		String url ="http://128.199.235.83/icw/?q=icw/service/get_deck&user="+user_ID;	//INTERT YOUR ID HERE
@@ -234,9 +235,10 @@ public class Inw extends JPanel{
 			System.out.println(job);
 			if(job.get("data").isJsonNull()){
 				System.err.println("User hasn't save his/her deck yet!");
-				return;
+				return false;
 			}
 			JsonArray ja = job.get("data").getAsJsonArray();
+			if(ja.size()<10)return false;
 			deck = new int[ja.size()];
 			int count = 0;
 			for(JsonElement je:ja){
@@ -245,6 +247,7 @@ public class Inw extends JPanel{
 			}
 			break;
 		}
+		return true;
 	}
 	public boolean attack(int DMG){
 		this.LP_current -= DMG;
