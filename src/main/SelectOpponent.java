@@ -40,7 +40,7 @@ public class SelectOpponent extends JPanel {
 	static JPanel display;
 	static String screenResolutionString;
 	static ArrayList<BufferedImage> displayPicture;
-	
+	static JPanel opponentPanel;
 	
 	public SelectOpponent(){
 		opponentList = new ArrayList<Inw>();
@@ -77,11 +77,10 @@ public class SelectOpponent extends JPanel {
 		test.add(so);
 		test.setVisible(true);
 		
-		
 	}
 	
 	public void createGUI1024x768(){
-		JPanel opponentPanel = new JPanel();
+		opponentPanel = new JPanel();
 		opponentPanel.setLayout(new GridLayout(8, 8));
 		opponentPanel.setBackground(Color.BLACK);
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
@@ -109,7 +108,7 @@ public class SelectOpponent extends JPanel {
 	}
 	
 	public void createGUI1366x768(){
-		JPanel opponentPanel = new JPanel();
+		opponentPanel = new JPanel();
 		opponentPanel.setLayout(new GridLayout(7, 9));
 		opponentPanel.setBackground(Color.BLACK);
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
@@ -137,7 +136,7 @@ public class SelectOpponent extends JPanel {
 	}
 	
 	public void createGUI1920x1080(){
-		JPanel opponentPanel = new JPanel();
+		opponentPanel = new JPanel();
 		opponentPanel.setLayout(new GridLayout(7, 9));
 		opponentPanel.setBackground(Color.BLACK);
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
@@ -230,6 +229,7 @@ public class SelectOpponent extends JPanel {
 		JButton select = new JButton("Select");
 		select.setFont(new Font("Serif", Font.PLAIN, 16));
 		select.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -239,7 +239,6 @@ public class SelectOpponent extends JPanel {
 		JButton back = new JButton("Back");
 		back.setFont(new Font("Serif", Font.PLAIN, 16));
 		back.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
@@ -253,6 +252,20 @@ public class SelectOpponent extends JPanel {
 		temp.add(back);
 		display.add(Box.createRigidArea(new Dimension(0, 30)));
 		display.add(temp);
+		JButton random = new JButton("Random");
+		random.setFont(new Font("Serif", Font.PLAIN, 20));
+		random.setAlignmentX(Component.CENTER_ALIGNMENT);
+		random.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Thread t = new MyThread();
+				t.start();
+			}
+			
+		});
+		display.add(Box.createRigidArea(new Dimension(0, 50)));
+		display.add(random);
 		display.repaint();
 	}
 	
@@ -295,6 +308,20 @@ public class SelectOpponent extends JPanel {
 		temp.add(back);
 		display.add(Box.createRigidArea(new Dimension(0, 35)));
 		display.add(temp);
+		JButton random = new JButton("Random");
+		random.setFont(new Font("Serif", Font.PLAIN, 20));
+		random.setAlignmentX(Component.CENTER_ALIGNMENT);
+		random.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Thread t = new MyThread();
+				t.start();
+			}
+			
+		});
+		display.add(Box.createRigidArea(new Dimension(0, 50)));
+		display.add(random);
 		display.repaint();
 	}
 	
@@ -337,6 +364,20 @@ public class SelectOpponent extends JPanel {
 		temp.add(back);
 		display.add(Box.createRigidArea(new Dimension(0, 50)));
 		display.add(temp);
+		JButton random = new JButton("Random");
+		random.setFont(new Font("Serif", Font.PLAIN, 20));
+		random.setAlignmentX(Component.CENTER_ALIGNMENT);
+		random.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Thread t = new MyThread();
+				t.start();
+			}
+			
+		});
+		display.add(Box.createRigidArea(new Dimension(0, 50)));
+		display.add(random);
 		display.repaint();
 	}
 	
@@ -408,6 +449,38 @@ public class SelectOpponent extends JPanel {
 		public void mouseMoved(MouseEvent arg0) {
 			// TODO Auto-generated method stub
 			
+		}
+	}
+	
+	static class MyThread extends Thread {
+		
+		public void run() {
+			int count = 0;
+			int delay = 100;
+			while(true) {
+				try {
+					int random = (int) Math.round(Math.random()*59);
+					previous = current;
+					current = (MyPanel) opponentPanel.getComponent(random);
+					previous.setBorder(BorderFactory.createEmptyBorder());
+					current.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
+					setupDisplay();
+					display.validate();
+					sleep(delay);
+					System.out.println(count++);
+					if(count == 20) delay = 250;
+					if(count == 28) delay = 500;
+					if(count == 32) delay = 1000;
+					if(count == 35) {
+						current.setBorder(BorderFactory.createLineBorder(Color.GREEN, 10));
+						return;
+					}
+					
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
