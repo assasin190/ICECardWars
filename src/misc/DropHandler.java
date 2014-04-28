@@ -20,6 +20,10 @@ import main.Main;
 
 public class DropHandler implements DropTargetListener {
 
+	public DropHandler(){
+		super();
+//		this.
+	}
 	@Override
 	public void dragEnter(DropTargetDragEvent dtde) {
 		System.out.println("DROPHANDLER: dragEnter");
@@ -42,7 +46,7 @@ public class DropHandler implements DropTargetListener {
 
 	@Override
 	public void dragOver(DropTargetDragEvent dtde) {
-		System.out.println("DROPHANDLER: dragOver");
+	//	System.out.println("DROPHANDLER: dragOver");
 	}
 
 	@Override
@@ -59,8 +63,8 @@ public class DropHandler implements DropTargetListener {
 	public void drop(DropTargetDropEvent dtde) {
 		System.out.println("DROPHANDLER: drop");
 		System.out.println("original: "+Main.orig);
+		CardHolder c_original = null ;
 		boolean success = false;
-		// Basically, we want to unwrap the present...
 		if (dtde.isDataFlavorSupported(PanelDataFlavor.SHARED_INSTANCE)) {
 			Transferable transferable = dtde.getTransferable();
 			try {
@@ -78,7 +82,7 @@ public class DropHandler implements DropTargetListener {
 						if(destination instanceof CardHolder && original instanceof CardHolder){	//This, by default, should be true
 							System.out.println("DEST/ORIG is instanceof CardHolder");
 							CardHolder c_destination = (CardHolder)destination;
-							CardHolder c_original = (CardHolder)original;
+							c_original = (CardHolder)original;
 					//		if(true){
 							if(dropCondition(c_original, c_destination, card)){
 								//TODO: CHECK CARD TYPE AND SPELL CODE
@@ -89,8 +93,9 @@ public class DropHandler implements DropTargetListener {
 									original.remove(card);
 								}
 								 */
-								c_destination.addCard(card);
-								c_destination.getCard().addListeners();
+								c_destination.addCard(card,dtde.getLocation(),c_original);
+								card.addListeners();
+				//				c_original.remove(card);
 								success = true;
 								dtde.acceptDrop(DnDConstants.ACTION_MOVE);
 								c_destination.revalidate();
@@ -126,32 +131,36 @@ public class DropHandler implements DropTargetListener {
 			dtde.rejectDrop();
 		}
 		System.out.println("DROP: "+success);
+	//	c_original.revalidate();
+	//	c_original.repaint();
 		dtde.dropComplete(success);
 	}
 	private boolean dropCondition(CardHolder o,CardHolder d, Card c){
 		//CHECK DIFFERENT DROP CONDITION
+		
 		if(o==d){
 			System.out.println("Drop rejected: Source is the same as destination");
 			return false;
 		}
 		
-		if((d.type==CardHolder.PLAYER||d.type==CardHolder.OPPONENT)&&!d.isEmpty())return false;
+//		if((d.type==CardHolder.PLAYER||d.type==CardHolder.OPPONENT)&&!d.isEmpty())return false;
 		int ot = o.type;	
 		int dt = d.type;
 		System.out.println(ot + "|" + dt);
 		System.out.println(CardHolder.DECK+"|"+CardHolder.DECK);
 		String s = ot + "|" + dt;
+		
 		switch(s){
+		
 		case CardHolder.DECK+"|"+CardHolder.DECK:
 			System.out.println("Drop accepted: DECK to DECK");
 		return true;
+		
 		case CardHolder.PLAYER_HAND+"|"+CardHolder.PLAYER:
 			// check if [YOUR TURN, CARD = MONSTER, ENOUGH MP TO SUMMON, DESTINATION IS EMPTY]
 			boolean b = Main.Turn&&
 			c.getType()==1&&
-			Battlefield.player.useMP(c.getMc())&&
-			d.isEmpty();
-
+			Battlefield.player.useMP(c.getMc());
 		System.out.println("HAND TO PLAYER: "+b);
 		return b;
 		default: return false;
