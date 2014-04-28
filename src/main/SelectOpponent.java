@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -37,6 +39,7 @@ public class SelectOpponent extends JPanel {
 	static MyPanel previous;
 	static JPanel display;
 	static String screenResolutionString;
+	static ArrayList<BufferedImage> displayPicture;
 	
 	
 	public SelectOpponent(){
@@ -64,7 +67,7 @@ public class SelectOpponent extends JPanel {
 		SelectOpponent so = new SelectOpponent();
 		
 		switch(screenResolutionString) {
-			case "1024x768":  so.createGUI1366x768();
+			case "1024x768":  so.createGUI1024x768();
 							  break;
 			case "1366x768":  so.createGUI1366x768();
 							  break;
@@ -77,7 +80,35 @@ public class SelectOpponent extends JPanel {
 		
 	}
 	
-	public void createGUI1366x768() {
+	public void createGUI1024x768(){
+		JPanel opponentPanel = new JPanel();
+		opponentPanel.setLayout(new GridLayout(8, 8));
+		opponentPanel.setBackground(Color.BLACK);
+		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
+		this.setLayout(new BorderLayout());
+		
+		for(int i = 0; i < opponentList.size(); i++) {
+			MyPanel pic = new MyPanel(opponentList.get(i));
+			if(i == 0) {
+				this.current = pic;
+				pic.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
+			}
+			if(i == opponentList.size() - 1) this.previous = pic;
+			pic.addMouseListener(pic);
+			pic.addMouseMotionListener(pic);
+			pic.setPreferredSize(new Dimension(90, 90));
+			opponentPanel.add(pic);
+			
+		}
+		this.add(opponentPanel,BorderLayout.LINE_START);
+
+		display = new JPanel();
+		setupDisplay();
+		this.add(display, BorderLayout.CENTER); 
+		
+	}
+	
+	public void createGUI1366x768(){
 		JPanel opponentPanel = new JPanel();
 		opponentPanel.setLayout(new GridLayout(7, 9));
 		opponentPanel.setBackground(Color.BLACK);
@@ -151,6 +182,7 @@ public class SelectOpponent extends JPanel {
 			int MP = Integer.parseInt(mapList.get(i).get("full_mp"));
 			int maxDeck = Integer.parseInt(mapList.get(i).get("max_deck_size"));
 			URL fb_url = null;
+			/*
 			switch(screenResolutionString) {
 			case "1024x768":  fb_url = new URL("https://graph.facebook.com/"+mapList.get(i).get("fb_id")+"/picture?width=140&height=140");
 							  break;
@@ -159,8 +191,12 @@ public class SelectOpponent extends JPanel {
 			case "1920x1080": fb_url = new URL("https://graph.facebook.com/"+mapList.get(i).get("fb_id")+"/picture?width=140&height=140");
 							  break;
 			}
+			*/
+			fb_url = new URL("https://graph.facebook.com/" + mapList.get(i).get("fb_id") + "/picture?width=200&height=200");
+			HashMap<String, String> temp2 = new Gson().fromJson(new InputStreamReader(new URL("https://graph.facebook.com/" + mapList.get(i).get("fb_id")).openStream()), HashMap.class);
+			String fbname = temp2.get("name");
 			BufferedImage image = ImageIO.read(fb_url);
-			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID, image);
+			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID, image, fbname);
 			opponentList.add(inw);
 			System.out.println(i);
 		
@@ -168,31 +204,140 @@ public class SelectOpponent extends JPanel {
 	}
 	
 	public static void setupDisplay(){
+		switch(screenResolutionString) {
+		case "1024x768":  setupDisplay1024x768();
+						  break;
+		case "1366x768":  setupDisplay1366x768();
+						  break;
+		case "1920x1080": setupDisplay1920x1080();
+						  break;
+		}
+	}
+	
+	public static void setupDisplay1024x768(){
 		display.removeAll();
 		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
 		display.add(Box.createRigidArea(new Dimension(0, 75)));
 		JLabel pic = new JLabel();
-		try {
-			pic.setIcon(new ImageIcon(ImageIO.read(new URL("https://graph.facebook.com/"+ current.inw.fb_id +"/picture?width=300&height=300"))));
-			pic.setAlignmentX(Component.CENTER_ALIGNMENT);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		pic.setIcon(new ImageIcon(current.inw.image));
+		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(pic);
-		try {
-			HashMap<String, String> temp = new Gson().fromJson(new InputStreamReader(new URL("https://graph.facebook.com/" + current.inw.fb_id).openStream()), HashMap.class);
-			JLabel fbname = new JLabel(temp.get("name"));
-			fbname.setFont(new Font("Serif", Font.PLAIN, 50));
-			fbname.setAlignmentX(Component.CENTER_ALIGNMENT);
-			display.add(Box.createRigidArea(new Dimension(0, 50)));
-			display.add(fbname);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		JLabel fbname = new JLabel(current.inw.fbname);
+		fbname.setFont(new Font("Serif", Font.PLAIN, 22));
+		fbname.setAlignmentX(Component.CENTER_ALIGNMENT);
+		display.add(Box.createRigidArea(new Dimension(0, 30)));
+		display.add(fbname);
+		JButton select = new JButton("Select");
+		select.setFont(new Font("Serif", Font.PLAIN, 16));
+		select.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+			
+		});
+		JButton back = new JButton("Back");
+		back.setFont(new Font("Serif", Font.PLAIN, 16));
+		back.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+			
+		});
+		JPanel temp = new JPanel();
+		temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
+		temp.add(select);
+		temp.add(Box.createRigidArea(new Dimension(40, 0)));
+		temp.add(back);
+		display.add(Box.createRigidArea(new Dimension(0, 30)));
+		display.add(temp);
 		display.repaint();
-		JTextPane textPane = new JTextPane();
+	}
+	
+	public static void setupDisplay1366x768(){
+		display.removeAll();
+		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
+		display.add(Box.createRigidArea(new Dimension(0, 50)));
+		JLabel pic = new JLabel();
+		pic.setIcon(new ImageIcon(current.inw.image));
+		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
+		display.add(pic);
+		JLabel fbname = new JLabel(current.inw.fbname);
+		fbname.setFont(new Font("Serif", Font.PLAIN, 36));
+		fbname.setAlignmentX(Component.CENTER_ALIGNMENT);
+		display.add(Box.createRigidArea(new Dimension(0, 35)));
+		display.add(fbname);
+		JButton select = new JButton("Select");
+		select.setFont(new Font("Serif", Font.PLAIN, 16));
+		select.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+			
+		});
+		JButton back = new JButton("Back");
+		back.setFont(new Font("Serif", Font.PLAIN, 16));
+		back.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+			
+		});
+		JPanel temp = new JPanel();
+		temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
+		temp.add(select);
+		temp.add(Box.createRigidArea(new Dimension(25, 0)));
+		temp.add(back);
+		display.add(Box.createRigidArea(new Dimension(0, 35)));
+		display.add(temp);
+		display.repaint();
+	}
+	
+	public static void setupDisplay1920x1080(){
+		display.removeAll();
+		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
+		display.add(Box.createRigidArea(new Dimension(0, 75)));
+		JLabel pic = new JLabel();
+		pic.setIcon(new ImageIcon(current.inw.image));
+		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
+		display.add(pic);
+		JLabel fbname = new JLabel(current.inw.fbname);
+		fbname.setFont(new Font("Serif", Font.PLAIN, 50));
+		fbname.setAlignmentX(Component.CENTER_ALIGNMENT);
+		display.add(Box.createRigidArea(new Dimension(0, 50)));
+		display.add(fbname);
+		JButton select = new JButton("Select");
+		select.setFont(new Font("Serif", Font.PLAIN, 20));
+		select.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+			
+		});
+		JButton back = new JButton("Back");
+		back.setFont(new Font("Serif", Font.PLAIN, 20));
+		back.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+			
+		});
+		JPanel temp = new JPanel();
+		temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
+		temp.add(select);
+		temp.add(Box.createRigidArea(new Dimension(40, 0)));
+		temp.add(back);
+		display.add(Box.createRigidArea(new Dimension(0, 50)));
+		display.add(temp);
+		display.repaint();
 	}
 	
 	public static void determineResolution() {

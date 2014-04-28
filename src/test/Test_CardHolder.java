@@ -22,6 +22,8 @@ import java.awt.Color;
 import javax.swing.BoxLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.FlowLayout;
+import java.awt.CardLayout;
 
 public class Test_CardHolder extends JFrame {
 
@@ -90,7 +92,8 @@ public class Test_CardHolder extends JFrame {
 		btnNewButton = new JButton("add");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ch1.add(new Card(40,true));
+				ch1.add(new Card((int)(Math.random() * ((60) + 1)),true));
+				ch1.revalidate();
 			}
 		});
 		panel.add(btnNewButton);
@@ -103,6 +106,7 @@ public class Test_CardHolder extends JFrame {
 			}
 		});
 		contentPane.add(ch2);
+		ch2.setLayout(new CardLayout(0, 0));
 		ch2.addCard(new Card(1,true));
 
 		st2 = new JLabel("New label");

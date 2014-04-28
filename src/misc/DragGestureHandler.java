@@ -13,6 +13,9 @@ import java.awt.dnd.DragSourceListener;
 
 import javax.swing.JPanel;
 
+import main.Card;
+import main.CardHolder;
+
 
 public class DragGestureHandler implements DragGestureListener, DragSourceListener {
 
@@ -50,7 +53,12 @@ public class DragGestureHandler implements DragGestureListener, DragSourceListen
         // by allowing the drop target to remove the component, but that's
         // an argument for another day
         parent.remove(getCard());
-
+        for (int i = 0; i < parent.getComponentCount(); i++) {
+        	if (parent.getComponent(i) == getCard()){
+        		((CardHolder)parent).index = i;
+        		break;
+        	}
+        }
         // Update the display
         parent.invalidate();
         parent.repaint();
@@ -88,8 +96,8 @@ public class DragGestureHandler implements DragGestureListener, DragSourceListen
         // parent
         if (!dsde.getDropSuccess()) {
 
-            getParent().add(getCard());
-
+            getParent().add(getCard(),((CardHolder)getParent()).index);
+            ((CardHolder) getParent()).getCard().addListeners();
             getParent().invalidate();
             getParent().repaint();
 

@@ -39,6 +39,10 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 public class Card extends JPanel{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5704617275462345564L;
 	int ic_id;
 	String title;
 	int type;

@@ -2,8 +2,10 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.image.BufferedImage;
@@ -28,7 +30,7 @@ public class CardHolder extends JPanel{
 	protected BufferedImage screenshot;
 	public int type;
 	private CardHolder opposingCH;
-
+	public int index;
 	public static void main(String[] args){
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -71,6 +73,34 @@ public class CardHolder extends JPanel{
 		if(!isEmpty()&&(type==0||type==1))System.err.println("Attempt to add card into nonempty Lane");
 		this.add(c);
 	}
+	public void addCard(Card card, Point location,CardHolder orig) {
+		// TODO Auto-generated method stub
+		if(!isEmpty()&&(type==0||type==1))System.err.println("Attempt to add card into nonempty Lane");
+		//this.get
+		Component component = this.getComponentAt(location);
+		int index = 0;
+	//	boolean found = false;
+		if (component != null && component.getParent() != null) {
+			for (; index < this.getComponentCount(); index++) {
+				if (this.getComponent(index) == component){
+	//				found = true;
+					break;
+				}
+			}
+		}
+//		if(!found)index = orig.index;
+		/*
+		if(orig == this){
+			System.out.println("Add to same component");
+
+			
+			else this.add(card, index);
+			
+		}
+		*/
+		this.add(card, index);
+	}
+	
 	public void removeCard(){
 		if(isEmpty()&&(type==0||type==1))System.err.println("Attempt to remove card from empty Lane");
 		this.remove(0);
@@ -89,5 +119,4 @@ public class CardHolder extends JPanel{
 	}
 
 
-	
 }
