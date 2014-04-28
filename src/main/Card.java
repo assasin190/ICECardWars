@@ -37,6 +37,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import java.awt.Dimension;
 
 public class Card extends JPanel{
 	/**
@@ -270,6 +271,7 @@ public class Card extends JPanel{
 	 * @wbp.parser.constructor
 	 */
 	public Card(int ID) {
+		setPreferredSize(new Dimension(221, 324));
 
 		JsonObject m2 = CardData.getCardData(ID);
 		car = m2.get("car").getAsDouble();

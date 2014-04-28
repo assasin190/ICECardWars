@@ -454,7 +454,8 @@ public class Battlefield extends JFrame {
 				super.paintComponent(g);
 				
 			try {
-				g.drawImage(ImageIO.read(new File("CardFrame.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+		//		g.drawImage(ImageIO.read(new File("CardFrame.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+				g.drawImage(ImageIO.read(new File("null.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

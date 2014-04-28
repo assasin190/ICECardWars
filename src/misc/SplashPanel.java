@@ -9,9 +9,15 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
 import java.awt.BorderLayout;
+
 import javax.swing.JLabel;
+import javax.swing.BoxLayout;
+import java.awt.Font;
 
 public class SplashPanel extends JPanel{
 
@@ -23,10 +29,19 @@ public class SplashPanel extends JPanel{
 	boolean increasing;
 	Image i;
 	boolean stillOn;
+	public static JLabel progress = new JLabel("test");
 	public SplashPanel() {
 		initGUI();
 	}
 	private void initGUI() {
+	//	progress.setBounds(0, (int) (this.getHeight()/1.3), this.getWidth(), 35);
+		progress.setFont(new Font("Courier New", Font.PLAIN, 24));
+		progress.setForeground(Color.WHITE);
+		progress.setHorizontalAlignment(SwingConstants.CENTER);
+		ImageIcon icon = new ImageIcon("ajax-loader.gif");
+		setLayout(null);
+		progress.setIcon(icon);
+		add(progress);
 		stillOn = true;
 		alpha = 0;
 		increasing = true;
@@ -62,17 +77,21 @@ public class SplashPanel extends JPanel{
 				System.out.println("Splash executor stopped");
 			}	
 		});
-		setLayout(new BorderLayout(0, 0));
 	
 	}
 	
 	@Override
 	public void paintComponent(Graphics g){
+		progress.setBounds(0, (int) (this.getHeight()/1.3), this.getWidth(), 35);
 		super.paintComponent(g);
-		g.drawImage(i, 0, 0, null);
-		Color c = new Color(255, 255, 255, alpha);
+		g.drawImage(i, 0, 0,this.getWidth(),this.getHeight(), null);
+		Color c = new Color(0, 0, 0, alpha);
 		g.setColor(c);
-		g.fillRect(0, 0, 300, 300);
+		g.fillRect(0, 0,this.getWidth(),this.getHeight());
 	}
-
+	public static void setProgress(String s){
+		progress.setText(s);
+		progress.revalidate();
+		progress.repaint();
+	}
 }

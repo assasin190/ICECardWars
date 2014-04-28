@@ -24,6 +24,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
+import java.awt.GridBagLayout;
+import javax.swing.JScrollPane;
 
 public class Test_CardHolder extends JFrame {
 
@@ -38,6 +40,7 @@ public class Test_CardHolder extends JFrame {
 	private JLabel st3;
 	private JPanel panel;
 	private JButton btnNewButton;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Launch the application.
@@ -72,9 +75,12 @@ public class Test_CardHolder extends JFrame {
 		ch1 = new CardHolder(CardHolder.DECK,false);
 		ch1.setBackground(new Color(255, 255, 153));
 		DropHandler dropHandler = new DropHandler();
+		
+		scrollPane = new JScrollPane(ch1);
+		contentPane.add(scrollPane);
 		DropTarget dropTarget = new DropTarget(ch1, DnDConstants.ACTION_MOVE, dropHandler, true);
-		contentPane.add(ch1);
-		ch1.setLayout(new GridLayout(4, 4, 0, 0));
+	//	contentPane.add(ch1);
+		ch1.setLayout(new GridLayout(1, 0, 0, 0));
 
 
 		st1 = new JLabel("New label");
@@ -106,7 +112,7 @@ public class Test_CardHolder extends JFrame {
 			}
 		});
 		contentPane.add(ch2);
-		ch2.setLayout(new CardLayout(0, 0));
+		ch2.setLayout(new GridLayout(1, 0, 0, 0));
 		ch2.addCard(new Card(1,true));
 
 		st2 = new JLabel("New label");
@@ -123,7 +129,7 @@ public class Test_CardHolder extends JFrame {
 		});
 		contentPane.add(b2);
 
-		ch3 = new CardHolder(CardHolder.PLAYER,false);
+		ch3 = new CardHolder(CardHolder.DECK,false);
 		ch3.setBackground(Color.MAGENTA);
 		contentPane.add(ch3);
 

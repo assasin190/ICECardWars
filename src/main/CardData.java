@@ -80,10 +80,10 @@ public abstract class CardData {
 		spell_code.add(null);
 		int count = 1;
 		Gson gs;
-		InputStream is;	
-		
+		InputStream is;		
 		while(true){
 			String url ="http://128.199.235.83/icw/?q=icw/service/ic&ic_id="+count;
+			SplashPanel.setProgress("RETRIEVING DATA: IC NO."+count+"        ");
 			JsonObject job = null;
 			try {
 				is = new URL(url).openStream();
@@ -92,6 +92,7 @@ public abstract class CardData {
 			} catch (MalformedURLException e) {e.printStackTrace();
 			} catch (IOException e) {
 				System.err.println("problem with the connection (retrieving JSON map)... retrying");
+				SplashPanel.setProgress("Could not connect to server, retrying...");
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e1) {
@@ -107,20 +108,23 @@ public abstract class CardData {
 			ImageIcon b = null;
 			try {
 		//		System.out.println("http://128.199.235.83/icw/"+data.get("picture"))
+				SplashPanel.setProgress("RETRIEVING DATA: IC NO."+count+" PICTURE");
 				b = new ImageIcon(ImageIO.read(new URL("http://128.199.235.83/icw/"+data.get("picture").getAsString())));
 			} catch (MalformedURLException e) {
+
+			} catch (IOException e) {
+				e.printStackTrace();
 				System.err.println("problem with the connection (retrieving picture)... retrying");
+				SplashPanel.setProgress("Could not connect to server, retrying...");
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
 				continue;
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 			System.out.println(data);
-			Splash.setProgress("RETRIEVING DATA FROM WEB: "+data);
+		//	SplashPanel.setProgress("RETRIEVING DATA FROM WEB: "+data);
 			all_image.add(b);
 			all_card.add(data);
 			count++;
@@ -129,6 +133,7 @@ public abstract class CardData {
 		//GET SPELL CODE
 		while(true){
 			String url ="http://128.199.235.83/icw/?q=icw/service/spell";
+			SplashPanel.setProgress("RETRIEVING DATA: SPELL DATA");
 			JsonObject job = null;
 			try {
 				is = new URL(url).openStream();
@@ -137,6 +142,7 @@ public abstract class CardData {
 			} catch (MalformedURLException e) {e.printStackTrace();
 			} catch (IOException e) {
 				System.err.println("problem with the connection (retrieving spell code)... retrying");
+				SplashPanel.setProgress("Could not connect to server, retrying...");
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e1) {
@@ -152,10 +158,11 @@ public abstract class CardData {
 			}
 			break;
 		}
-		System.out.println(spell_code);
+//		System.out.println(spell_code);
 		//GET SA CODE
 		while(true){
 			String url ="http://128.199.235.83/icw/?q=icw/service/sa";
+			SplashPanel.setProgress("RETRIEVING DATA: SA DATA");
 			JsonObject job = null;
 			try {
 				is = new URL(url).openStream();
@@ -164,6 +171,7 @@ public abstract class CardData {
 			} catch (MalformedURLException e) {e.printStackTrace();
 			} catch (IOException e) {
 				System.err.println("problem with the connection (retrieving sa code)... retrying");
+				SplashPanel.setProgress("Could not connect to server, retrying...");
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e1) {
@@ -179,6 +187,6 @@ public abstract class CardData {
 			}
 			break;
 		}
-		System.out.println(sa_code);
+//		System.out.println(sa_code);
 	}
 }

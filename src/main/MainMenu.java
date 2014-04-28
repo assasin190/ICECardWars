@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,12 +45,15 @@ import com.google.gson.JsonObject;
 import javax.swing.UIManager;
 
 import misc.AudioPlayer;
+
 import java.awt.Font;
 
 
 
 
 import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
 public class MainMenu extends JFrame {
@@ -95,28 +99,37 @@ public class MainMenu extends JFrame {
 	private Component verticalGlue;
 	private Component verticalGlue_1;
 	private static AudioPlayer bgMusic;
-	
+	Image i;
+	public static void main(String[] args){
+		MainMenu main = new MainMenu(null);
+		main.setVisible(true);
+	}
 	public MainMenu(Socket con) {
-		
+
+		initGUI();
+	}
+	private void initGUI() {
+
 		chatArea = new JTextArea();
 		chatArea.setEditable(false);
 		chatArea.setBackground(Color.WHITE);
-		
 		playerList = new JTextArea();
-		
 		login = false;
+	//	Image i = ImageIO.read(new File("icw_mainmenu_wallpaper.jpg");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(0, 0,screen.width,screen.height - 30);
+		try {
+			i =ImageIO.read(new File("icw_mainmenu_wallpaper.jpg"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		contentPane = new JPanel(){
 			@Override
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
-				try {
-					g.drawImage(ImageIO.read(new File("icw_mainmenu_wallpaper.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				g.drawImage(i, 0 , 0 ,this.getWidth(), this.getHeight(), this);
 			}
 		};
 		contentPane.setBackground(UIManager.getColor("Button.background"));
@@ -232,23 +245,23 @@ public class MainMenu extends JFrame {
 		startButton.setForeground(Color.RED);
 		startButton.setIcon(null);
 		startButton.setBackground(new Color(0, 0, 0));
-	//	startButton.setIcon(null);
-		startButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Main.bgMusic.close();
-				bgMusic = new AudioPlayer("DuelNew.wav");
-				bgMusic.play();
-				//if(bf!=null){	//TODO: proper check (not done)
-				//	JOptionPane.showMessageDialog(null, "An instance of ICB is already running!", "",JOptionPane.DEFAULT_OPTION);
-				//	return;
-				//}
-				wtf = new WTF();
-				wtf.setVisible(true);
-				///bf = new Battlefield(new Inw("{\"cv_uid\":\"517\",\"fb_id\":\"100000038984537\",\"firstname_en\":\"Assanee\",\"lastname_en\":\"Sukatham\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
-				//,new Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
-				//bf.setVisible(true);
-			}
-		});
+		//	startButton.setIcon(null);
+			startButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Main.bgMusic.close();
+					bgMusic = new AudioPlayer("DuelNew.wav");
+					bgMusic.play();
+					//if(bf!=null){	//TODO: proper check (not done)
+					//	JOptionPane.showMessageDialog(null, "An instance of ICB is already running!", "",JOptionPane.DEFAULT_OPTION);
+					//	return;
+					//}
+					wtf = new WTF();
+					wtf.setVisible(true);
+					///bf = new Battlefield(new Inw("{\"cv_uid\":\"517\",\"fb_id\":\"100000038984537\",\"firstname_en\":\"Assanee\",\"lastname_en\":\"Sukatham\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
+					//,new Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
+					//bf.setVisible(true);
+				}
+			});
 		startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		startButton.setEnabled(false);
 		ButtonPanel.add(startButton);
@@ -299,17 +312,17 @@ public class MainMenu extends JFrame {
 		
 		ChatPanel = new JPanel();
 		ChatPanel.setVisible(false);
-	//	contentPane.add(ChatPanel, BorderLayout.EAST);
-		ChatPanel.setLayout(new BorderLayout(0, 0));
+		//	contentPane.add(ChatPanel, BorderLayout.EAST);
+			ChatPanel.setLayout(new BorderLayout(0, 0));
 		
 		lblNewLabel = new JLabel("Chat Room");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		ChatPanel.add(lblNewLabel, BorderLayout.NORTH);
 		
 		playerList.setBackground(Color.WHITE);
-
 		
-		ChatInputPanel = new JPanel();
+				
+				ChatInputPanel = new JPanel();
 		ChatPanel.add(ChatInputPanel, BorderLayout.SOUTH);
 		ChatInputPanel.setLayout(new BoxLayout(ChatInputPanel, BoxLayout.X_AXIS));
 		
@@ -337,13 +350,12 @@ public class MainMenu extends JFrame {
 		lblNewLabel_1 = new JLabel("Player List");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		playerListPanel.add(lblNewLabel_1);
-
-
-		chatAreaScr = new JScrollPane(chatArea);
+		
+		
+				chatAreaScr = new JScrollPane(chatArea);
 		playerListScr = new JScrollPane(playerList);
 		playerListPanel.add(playerListScr);
 		ChatPanel.add(chatAreaScr, BorderLayout.CENTER);
-
 	}
 	public void sendLogin(){
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
@@ -354,9 +366,9 @@ public class MainMenu extends JFrame {
 					logoutAction();
 					return;
 				}
+				loginButton.setText("Logging in...");
 				loginButton.setEnabled(false);
 				loginButton.setIcon(new ImageIcon("aloader.gif"));
-				loginButton.setText("Logging in...");
 				String url = "http://128.199.235.83/icw/?q=icw/service/login&user="
 				+usernameField.getText()+"&pass="+pw.getText();
 				InputStream is;
@@ -380,12 +392,9 @@ public class MainMenu extends JFrame {
 					}	
 					break;
 				}
-				loginButton.setEnabled(true);
-				loginButton.setText("Login");
-				loginButton.setIcon(null);
 				
 				System.out.println(job.toString());
-				System.out.println("ENDU"+usernameField.getText()+":pass="+pw.getText());
+			//	System.out.println("ENDU"+usernameField.getText()+":pass="+pw.getText());
 				if(job.get("status").getAsInt()==1){
 					welcome.setIcon(new ImageIcon("aloader.gif"));
 					JsonObject j = job.getAsJsonObject("data");
@@ -407,6 +416,8 @@ public class MainMenu extends JFrame {
 			usernameField.setVisible(false);
 			pw.setVisible(false);
 			loginButton.setText("Log Out");
+			loginButton.setEnabled(true);
+			loginButton.setIcon(null);
 			welcome.setText("Welcome "+user.fname+" "+user.lname+"! ");
 			welcome.setIcon(user.profile);
 //
@@ -417,7 +428,7 @@ public class MainMenu extends JFrame {
 			arrangeDeck.setEnabled(true);
 		}
 		else{
-			JOptionPane.showMessageDialog(null, "Incorrect username or password!", "",JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showMessageDialog(this, "Incorrect username or password!", "",JOptionPane.DEFAULT_OPTION);
 			loginFailedAttempt++;
 			if(loginFailedAttempt==3){
 				Executors.newSingleThreadExecutor().execute(new Runnable(){
@@ -444,6 +455,9 @@ public class MainMenu extends JFrame {
 					}			
 				});
 			}
+			loginButton.setEnabled(true);
+			loginButton.setText("Login");
+			loginButton.setIcon(null);
 		}
 	}
 	public void logoutAction(){
