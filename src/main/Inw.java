@@ -38,6 +38,7 @@ public class Inw extends JPanel{
 	
 	String fname;
 	String lname;
+	String fbname;
 	int LP_full;
 	int LP_current;
 	int MP_full;
@@ -53,7 +54,7 @@ public class Inw extends JPanel{
 	
 
 	
-	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,int user_ID, BufferedImage image){
+	public Inw(String fname,String lname,int LP,int MP,int maxDeck,String fb_id,int user_ID, BufferedImage image, String fbname){
 		
 		this.fname = fname;
 		this.lname = lname;
@@ -65,6 +66,7 @@ public class Inw extends JPanel{
 		this.fb_id = fb_id;
 		this.user_ID = user_ID;
 		this.image = image;
+		this.fbname = fbname;
 		//initGUI();
 	}
 

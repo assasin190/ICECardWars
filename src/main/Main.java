@@ -14,7 +14,7 @@ public class Main {
 	static Socket con;
 	static PrintWriter out;
 	static BufferedReader in;
-	 static AudioPlayer bgMusic;
+	static AudioPlayer bgMusic;
 	private static boolean scSW = true;	//Selected card switch
 	private static Card sc1 = null;	//Selected card 1
 	private static Card sc2 = null;	//Selected card 2
