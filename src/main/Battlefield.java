@@ -73,7 +73,7 @@ public class Battlefield extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					//CardData.saveAllCardsToLocal();
+					CardData.saveAllCardsToLocal();
 					Battlefield frame = new Battlefield(new Inw("{\"cv_uid\":\"595\",\"fb_id\":\"100003770583869\",\"firstname_en\":\"Pasin\",\"lastname_en\":\"Boonsermsuwong\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
 					//				, new Inw("{\"cv_uid\":\"584\",\"fb_id\":\"1035721781\",\"firstname_en\":\"Min\",\"lastname_en\":\"Uswachoke\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
 					, new Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
@@ -448,15 +448,18 @@ public class Battlefield extends JFrame {
 		buttonPanel.add(cancelButton);
 
 		selectedCard = new CardHolder(CardHolder.DISPLAY,false){
+			@Override
 			public void paintComponent(Graphics g){
-		
-			super.paintComponent(g);
+
+				super.paintComponent(g);
+				
 			try {
 				g.drawImage(ImageIO.read(new File("CardFrame.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
+				 
+			}
 		};
 		selectedCard.addContainerListener(new ContainerAdapter() {
 			@Override
@@ -525,19 +528,10 @@ public class Battlefield extends JFrame {
 		p_hand.add(new Card(52));
 	}
 	public void playerPP(){
-		System.out.println("PLAYER TURN");
+		System.out.println("PLAYER PP TURN");
 		Main.Turn = true;
 		endButton.setEnabled(true);
 		player.restoreMP();	
-		if(firstTurn==0){
-			System.out.println("PROTECTION DISABLE");
-
-			for(CardHolder ch:Mylane_ref){		//disable protection buff for player
-				if(!ch.isEmpty()){
-					ch.getCard().Protected = false;
-				}
-			}
-		}
 		//PP ?PPPL
 		if(playerDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
 			if(player.attack(opponentDeck.size())){
@@ -550,6 +544,7 @@ public class Battlefield extends JFrame {
 		System.out.println("PLAYER TURN INITIALS DONE!");
 	}
 	public void playerFP(){
+		
 		//---------------------------------- END PLAYER PP TURN ----------------------------------
 		if(firstTurn!=0){
 			firstTurn--;
@@ -558,7 +553,7 @@ public class Battlefield extends JFrame {
 		}
 		//		System.out.println();
 		endButton.setEnabled(false);
-		System.out.println("PLAYER TURN ENDED, MP LEFT: "+player.MP_current);
+		System.out.println("PLAYER FP TURN");
 		Main.Turn = false;
 		endButton.setEnabled(false);
 		//FP of player turn ?FPPL
@@ -581,6 +576,8 @@ public class Battlefield extends JFrame {
 						o_dumpster.add(cho.getCard());
 						cho.repaint();
 						//			cho.removeCard();
+						//		ch.repaint();
+					}else{
 						if(Math.random()<co.car){
 							System.out.println(co.title+" counterattacked!");
 							if(c.attack(dmg,true)){
@@ -589,7 +586,6 @@ public class Battlefield extends JFrame {
 								//			ch.removeCard();
 							}
 						}
-						//		ch.repaint();
 					}
 					//		cho.repaint();
 				}else{
@@ -627,11 +623,6 @@ public class Battlefield extends JFrame {
 			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 		//END FP of player turn		
-		for(CardHolder ch:Theirlane_ref){		//disable protection buff for opponent
-			if(!ch.isEmpty()){
-				ch.getCard().Protected = false;
-			}
-		}
 		for(CardHolder ch:Mylane_ref){		//kill sacrifice card, and disable directInw
 			if(!ch.isEmpty()){				//disable direct inw attack buff, SAactivated false
 				Card c = ch.getCard();
@@ -642,22 +633,21 @@ public class Battlefield extends JFrame {
 				}else c.directInw = false;	c.SAactivated = false;
 			}
 		}
+		for(CardHolder ch:Theirlane_ref){		//disable protection buff for opponent
+			if(!ch.isEmpty()){
+				ch.getCard().Protected = false;
+			}
+		}
 		AIturn();		//end
 	}
 	public void AIturn(){
-		System.out.println("OPPONENT TURN");
+		System.out.println("OPPONENT PP TURN");
 		Main.Turn = false;
 		endButton.setEnabled(false);
 		opponent.restoreMP();
-		if(firstTurn==0){
-			for(CardHolder ch:Theirlane_ref){		//disable protection buff for opponent
-				if(!ch.isEmpty()){
-					ch.getCard().Protected = false;
-				}
-			}
-		}
 
 		//AI	?PPAI
+		System.out.println("OPPONENT FP TURN");
 		//CURRENT AI: if possible, add 3 cards to lane 1,2,3
 		if(opponentDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
 			if(opponent.attack(playerDeck.size())){
@@ -713,6 +703,8 @@ public class Battlefield extends JFrame {
 						p_dumpster.add(cho.getCard());
 						cho.repaint();
 						//			cho.removeCard();
+						//			ch.repaint();
+					}else{
 						if(Math.random()<co.car){
 							System.out.println(co.title+" counterattacked!");
 							if(c.attack(dmg,true)){
@@ -721,8 +713,7 @@ public class Battlefield extends JFrame {
 								//		ch.removeCard();
 							}
 						}
-						//			ch.repaint();
-					}	
+					}
 					//			cho.repaint();
 				}else{		//atk inw directly
 					if(player.attack(dmg)){
@@ -745,6 +736,11 @@ public class Battlefield extends JFrame {
 				}else c.directInw = false;	c.SAactivated = false;
 			}
 		}
+		for(CardHolder ch:Mylane_ref){		//disable protection buff for player
+			if(!ch.isEmpty()){
+				ch.getCard().Protected = false;
+			}
+		}
 		//	endButton.setEnabled(true);
 		playerPP();
 	}
@@ -752,9 +748,10 @@ public class Battlefield extends JFrame {
 	 * End the game
 	 */
 	public void stop(){
-		isActive = false;
-		this.removeAll();
 		JOptionPane.showMessageDialog(null, "GAME ENDED!!", "",JOptionPane.DEFAULT_OPTION);
+		isActive = false;
+		this.dispose();
+		bgMusic.stop();
 	}
 
 	/**only used to bypass calling method from nested class
@@ -867,8 +864,5 @@ public class Battlefield extends JFrame {
 		//Choose a monster on your side and increase A of
 		//the monster by X
 		//TODO: can you select yourself!?
-
-
 	}
-
 }

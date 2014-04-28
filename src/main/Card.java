@@ -64,10 +64,10 @@ public class Card extends JPanel{
 	ImageIcon picture;
 	String desc;
 	Inw caster;
-	public boolean Protected = false;		//invulnerable to normal attack
-	public boolean sacrifice = false;		//sacrifice
-	public boolean directInw = false;		//attacks Inw directly
-	public boolean SAactivated = false;		//the monster already uses the SA for its turn
+	boolean Protected = false;		//invulnerable to normal attack
+	boolean sacrifice = false;		//sacrifice
+	boolean directInw = false;		//attacks Inw directly
+	boolean SAactivated = false;		//the monster already uses the SA for its turn
 	private JLabel titleLabel;
 	private JLabel rrLabel;
 	private JLabel descLabel;
@@ -147,6 +147,35 @@ public class Card extends JPanel{
 		}
 		dgr = null;
 		super.removeNotify();
+	}
+	/**Creates a clone of card c (right now only used for display)
+	 * @param c
+	 */
+	public Card(Card c){
+		ic_id = c.ic_id;
+		title = c.title;
+		type = c.type;
+		mc = c.mc;
+		atk = c.atk;
+		lp = c.lp;
+		lck = c.lck;
+		car = c.car;
+		sa_code  = c.sa_code;
+		sa_mc = c.sa_mc;
+		sa_param = c.sa_param;
+		param_type = c.param_type;
+		param_value = c.param_value;
+		rr = c.rr;
+		spell_code = c.spell_code;
+		spell_param = c.spell_param;
+		picture = c.picture;
+		desc = c.desc;
+		repaint();
+	//	caster = c.caster;
+	//	Protected = c.Protected;
+	//	sacrifice = c.sacrifice;
+	//	directInw = c.directInw;
+	//	SAactivated = c.SAactivated;
 	}
 	/**TEMPORARY CONSTRUCTOR THAT ACCESS THE WEB DIRECTLY FOR CARD'S INFO
 	 * @param ID

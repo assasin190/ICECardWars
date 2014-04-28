@@ -202,7 +202,7 @@ public class Inw extends JPanel{
 	public boolean useMP(int mp_cost){
 		if(MP_current>=mp_cost){
 			MP_current = MP_current-mp_cost;
-			System.out.println("MP used: "+mp_cost+" MP left"+MP_current);
+	//		System.out.println("MP used: "+mp_cost+" MP left"+MP_current);
 			updateGUI();
 			return true;
 		}else return false;

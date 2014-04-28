@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import misc.AudioPlayer;
@@ -87,12 +89,12 @@ public class Main {
 	}
 	public static void updateDisplay(){
 		if(Battlefield.selectedCard!=null){
-			System.out.println("static CardHolder display changed");
+		//	System.out.println("static CardHolder display changed");
 			Battlefield.selectedCard.removeAll();
-			Battlefield.selectedCard.add(new Card(getSelectedCard().ic_id));//TODO: only new card created with ID, not actual current stat!
+			Battlefield.selectedCard.add(new Card(getSelectedCard()));//TODO: only new card created with ID, not actual current stat!
 			Battlefield.selectedCard.revalidate();
 			Battlefield.selectedCard.repaint();
 		}
 	}
-
+	
 }
