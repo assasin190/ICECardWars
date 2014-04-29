@@ -42,6 +42,7 @@ public class WTF extends JPanel{
 	JButton head;
 	JButton hide1;
 	JButton hide2;
+	Boolean a;
 
 	public WTF() {
 	
@@ -58,14 +59,27 @@ public class WTF extends JPanel{
 		hide2.setBackground(Color.BLACK);
 	 tail = new JButton(new ImageIcon("head.gif"));
 		tail.setBackground(Color.BLACK);
+		tail.setSelected(false);
 		tail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (Math.random()>0.5){
-					hide2.setVisible(true);
+					hide1.setVisible(true);
+					
+
+					JOptionPane.showMessageDialog(new Frame(), "You go Second");
+					a =false;
+				
+					
 				}
 				else{
-					hide1.setVisible(true);
+					hide2.setVisible(true);
+
+					JOptionPane.showMessageDialog(new Frame(), "You go First");
+				
+					a=true;
 				}
+				boolean b =tail.isSelected();
+				System.out.print(b);
 			}
 		});
 		
@@ -88,16 +102,24 @@ public class WTF extends JPanel{
 		JLabel label_2 = new JLabel("");
 		add(label_2);
 		 head = new JButton(new ImageIcon("head1.gif"));
-		head.setSelected(true);
+		head.setSelected(false);
 		head.setBackground(Color.BLACK);
 		head.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (Math.random()>0.5){
 					hide1.setVisible(true);
+
+					JOptionPane.showMessageDialog(new Frame(), "You go First");
+				a=true;
 				}
 				else{
 					hide2.setVisible(true);
+
+					JOptionPane.showMessageDialog(new Frame(), "You go Second");
+				a=false;
 				}
+				boolean b =head.isSelected();
+				System.out.print(b);
 			}
 		});
 		head.setOpaque(true);
@@ -307,25 +329,7 @@ public class WTF extends JPanel{
 
 		}
 		
-		public void run() {
-			gif.setVisible(true);
-			
-			try {
-				sleep(2000);
-				if (hide2.isVisible()==tail.isSelected()==true){
-					
-					JOptionPane.showMessageDialog(new Frame(), "You go First");
-					
-					
-					
-				} else{
-					JOptionPane.showMessageDialog(new Frame(), "You go Second");
-				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		
 	}
 	
 }
