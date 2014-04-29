@@ -38,22 +38,43 @@ import java.awt.GridLayout;
 public class WTF extends JPanel{
 	
 	private static AudioPlayer bgMusic;
+	JButton tail;
+	JButton head;
+	JButton hide1;
+	JButton hide2;
 
 	public WTF() {
 	
 		//ImageIcon icon = new ImageIcon("coin2.gif");
 		
 		final JLabel gif = new JLabel();
-		JButton tail = new JButton(new ImageIcon("head.gif"));
+		 hide1 = new JButton(new ImageIcon("head1.gif"));
+		hide1.setBackground(Color.BLACK);
+		hide1.setBounds(320,100, 200, 200);
+		hide1.setVisible(false);
+		 hide2 = new JButton(new ImageIcon("head.gif"));
+		hide2.setBounds(850,100, 200, 200);
+		hide2.setVisible(false);
+		hide2.setBackground(Color.BLACK);
+	 tail = new JButton(new ImageIcon("head.gif"));
 		tail.setBackground(Color.BLACK);
 		tail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (Math.random()>0.5){
+					hide2.setVisible(true);
+				}
+				else{
+					hide1.setVisible(true);
+				}
 			}
 		});
+		
 		
 		gif.setVisible(false);
 		setLayout(null);
 		this.add(gif);
+		this.add(hide1);
+		this.add(hide2);
 		
 		JLabel label = new JLabel("Choose One Coin");
 		label.setForeground(new Color(216, 191, 216));
@@ -66,10 +87,17 @@ public class WTF extends JPanel{
 		
 		JLabel label_2 = new JLabel("");
 		add(label_2);
-		JButton head = new JButton(new ImageIcon("gold.jpg"));
+		 head = new JButton(new ImageIcon("head1.gif"));
+		head.setSelected(true);
 		head.setBackground(Color.BLACK);
 		head.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent arg0) {
+				if (Math.random()>0.5){
+					hide1.setVisible(true);
+				}
+				else{
+					hide2.setVisible(true);
+				}
 			}
 		});
 		head.setOpaque(true);
@@ -284,7 +312,7 @@ public class WTF extends JPanel{
 			
 			try {
 				sleep(2000);
-				if (Math.random()>0.5){
+				if (hide2.isVisible()==tail.isSelected()==true){
 					
 					JOptionPane.showMessageDialog(new Frame(), "You go First");
 					
