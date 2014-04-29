@@ -266,6 +266,8 @@ public class DeckList extends JPanel {
 
 		DeckList a = new DeckList(574);
 		JFrame test = new JFrame();
+		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		JPanel ss = new JPanel();
 		JPanel st = new JPanel();
 		
