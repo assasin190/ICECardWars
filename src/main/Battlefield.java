@@ -10,7 +10,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,43 +31,51 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import misc.AudioPlayer;
+import misc.BF_save;
 
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.JScrollPane;
+
 import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class Battlefield extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3457162401020244642L;
 	//WARNING!! DO NOT ADD COMPONENT TO CARDHOLDER CLASS
 	private JPanel middlePane;
 	private JPanel contentPane;
 	public static Inw player;
 	public static Inw opponent;
-	List<Integer> playerDeck ;
-	List<Integer> opponentDeck;
+	public List<Integer> playerDeck ;
+	public List<Integer> opponentDeck;
 	CardHolder[] Mylane_ref;
 	CardHolder[] Theirlane_ref;
 	private CardHolder o_hand;
 	private CardHolder p_hand;
 	private JPanel MyBF;
 	private JPanel TheirBF;
-	private JLabel o_deck;
-	private JLabel p_deck;
-	private CardHolder Mylane4;
-	private CardHolder Mylane3;
-	private CardHolder Mylane2;
-	private CardHolder Mylane1;
-	private CardHolder Theirlane4;
-	private CardHolder Theirlane3;
-	private CardHolder Theirlane2;
-	private CardHolder Theirlane1;
+	public CardHolder Mylane4;
+	public CardHolder Mylane3;
+	public CardHolder Mylane2;
+	public CardHolder Mylane1;
+	public CardHolder Theirlane4;
+	public CardHolder Theirlane3;
+	public CardHolder Theirlane2;
+	public CardHolder Theirlane1;
 	private JButton endButton;
 	private JButton quitButton;
 	private JButton useButton;
-	private CardHolder p_dumpster;
-	private CardHolder o_dumpster;
+	public CardHolder p_dumpster;
+	public CardHolder o_dumpster;
 	private JButton cancelButton;
 	private static AudioPlayer bgMusic;
 	private boolean lowHealthMusic = false;	//true if player have <10% LP
@@ -72,9 +84,10 @@ public class Battlefield extends JFrame {
 	// AND YOU CONFIRM THE SA/spell use by pressing the useButton
 	private Card caster = null;
 	public static CardHolder selectedCard;
-	private boolean isActive = true;
+	private boolean isActive = true;	//battlefield is still running
 	private JScrollPane p_hand_scr;
 	private JScrollPane o_hand_scr;
+	private JButton breakButton;
 	//TODO: create more efficient method converting from ArrayList to String (label)
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -86,7 +99,7 @@ public class Battlefield extends JFrame {
 					, new Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
 					//			frame.setVisible(true);
 					//			frame.run();
-					
+
 					bgMusic = new AudioPlayer("Mahou Battle.wav");
 					bgMusic.playLoop();
 				} catch (Exception e) {
@@ -96,14 +109,47 @@ public class Battlefield extends JFrame {
 		});
 	}
 
+	public Battlefield(String sav){
+		BF_save savObject = null;
+		try {
+			FileInputStream fin = new FileInputStream("save.sav");
+			ObjectInputStream ois = new ObjectInputStream(fin);
+			savObject = (BF_save) ois.readObject();
+			ois.close();
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Battlefield.player = savObject.player;
+		Battlefield.opponent = savObject.opponent;
+		playerDeck = savObject.playerDeck;
+		opponentDeck = savObject.opponentDeck;
+		initGUI();
+		p_dumpster = savObject.pDumpster;
+		o_dumpster = savObject.oDumpster;
+		p_hand = savObject.pHand;
+		o_hand = savObject.oHand;
+		if(savObject.my1!=null)Mylane1.add(savObject.my1);
+		if(savObject.my2!=null)Mylane2.add(savObject.my2);
+		if(savObject.my3!=null)Mylane3.add(savObject.my3);
+		if(savObject.my4!=null)Mylane4.add(savObject.my4);
+		if(savObject.th1!=null)Theirlane1.add(savObject.th1);
+		if(savObject.th2!=null)Theirlane2.add(savObject.th2);
+		if(savObject.th3!=null)Theirlane3.add(savObject.th3);
+		if(savObject.th4!=null)Theirlane4.add(savObject.th4);
+		setVisible(true);
+		runBFchecker();
+		Main.Turn = true;
+		endButton.setEnabled(true);
+		breakButton.setEnabled(true);
+	}
 	/**
-	 * Create the frame.
+	 * @wbp.parser.constructor
 	 */
-
 	public Battlefield(Inw player_,Inw opponent_) {
 		Battlefield.player = player_;
 		Battlefield.opponent = opponent_;
-		System.out.println("FULLMP"+opponent.MP_full);
+		//System.out.println("FULLMP"+opponent.MP_full);
 		//	System.out.println(player.deck.length);
 		if(!Battlefield.player.addDeck()){
 			System.out.println("PL DISPOSE");
@@ -153,7 +199,6 @@ public class Battlefield extends JFrame {
 		middlePane.setLayout(new GridLayout(4, 1, 0, 0));
 		JPanel LcontentPane = new JPanel();
 		JPanel RcontentPane = new JPanel();
-		RcontentPane.setLayout(new GridLayout(3, 1, 0, 0));
 		contentPane.add(middlePane, BorderLayout.CENTER);
 		contentPane.add(LcontentPane, BorderLayout.WEST);
 		contentPane.add(RcontentPane, BorderLayout.EAST);
@@ -164,9 +209,6 @@ public class Battlefield extends JFrame {
 		//	contentPane.add(opponent);
 		middlePane.add(opponentPanel);
 		opponentPanel.setLayout(new GridLayout(0, 1, 0, 0));
-
-		o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
-		opponentPanel.add(o_deck);
 
 
 		TheirBF = new JPanel();
@@ -288,10 +330,7 @@ public class Battlefield extends JFrame {
 		middlePane.add(playerPanel);
 		playerPanel.setLayout(new GridLayout(0, 1, 0, 0));
 
-		p_deck = new JLabel("DECK: "+Arrays.toString(playerDeck.toArray()));
-		playerPanel.add(p_deck);
-		
-		
+
 
 		o_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
 		o_hand.setBackground(new Color(255, 204, 255));
@@ -304,8 +343,8 @@ public class Battlefield extends JFrame {
 		o_dumpster.setBackground(Color.LIGHT_GRAY);
 		opponentPanel.add(o_dumpster);
 		o_dumpster.setLayout(new BoxLayout(o_dumpster, BoxLayout.X_AXIS));
-		
-		
+
+
 		p_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
 		p_hand.setBackground(new Color(255, 204, 255));
 		p_hand_scr = new JScrollPane(p_hand);
@@ -315,26 +354,38 @@ public class Battlefield extends JFrame {
 		p_dumpster.setBackground(Color.LIGHT_GRAY);
 		playerPanel.add(p_dumpster);
 		p_dumpster.setLayout(new BoxLayout(p_dumpster, BoxLayout.X_AXIS));
+		GridBagLayout gbl_RcontentPane = new GridBagLayout();
+		gbl_RcontentPane.columnWidths = new int[]{107, 0};
+		gbl_RcontentPane.rowHeights = new int[]{218, 218, 0};
+		gbl_RcontentPane.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_RcontentPane.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		RcontentPane.setLayout(gbl_RcontentPane);
 
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+		GridBagConstraints gbc_buttonPanel = new GridBagConstraints();
+		gbc_buttonPanel.fill = GridBagConstraints.BOTH;
+		gbc_buttonPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_buttonPanel.gridx = 0;
+		gbc_buttonPanel.gridy = 0;
+		RcontentPane.add(buttonPanel, gbc_buttonPanel);
+
+		endButton = new JButton("End Turn");
+		endButton.setEnabled(false);
+		
+		endButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				playerFP();
+			}
+		});
+		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
 
 
 
 		quitButton = new JButton("Quit");
+		buttonPanel.add(quitButton);
 		quitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Battlefield.this.dispose();
-			}
-		});
-		buttonPanel.add(quitButton);
-		RcontentPane.add(buttonPanel);
-
-		endButton = new JButton("End Turn");
-		endButton.setEnabled(false);
-		endButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				playerFP();
 			}
 		});
 		buttonPanel.add(endButton);
@@ -386,21 +437,21 @@ public class Battlefield extends JFrame {
 						selected = true;cancelButton.setEnabled(true);
 						break;
 					case 3:		//TODO: TEST  ////  REMOVE CARDS FOR USED SPELLS 
-						//ALL CARDS WILL BE RESET (which is probably not a problem)
-						System.out.println("SPELL REDRAW USED!");
-						while(p_dumpster.getComponentCount()>0){
-							Card t = (Card) p_dumpster.getComponent(0);
-							playerDeck.add(t.ic_id);
-						}
-						int drawAmount = (int) Math.min(c.param_value, playerDeck.size());
-						Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
-						//can't draw more than deck size!!
-						for(int i = 0;i<drawAmount;i++){
-							p_hand.add(new Card(i));
-						}
-						player.useMP(c.sa_mc);
-						p_dumpster.add(c);
-						break;
+					//ALL CARDS WILL BE RESET (which is probably not a problem)
+					System.out.println("SPELL REDRAW USED!");
+					while(p_dumpster.getComponentCount()>0){
+						Card t = (Card) p_dumpster.getComponent(0);
+						playerDeck.add(t.ic_id);
+					}
+					int drawAmount = (int) Math.min(c.param_value, playerDeck.size());
+					Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
+					//can't draw more than deck size!!
+					for(int i = 0;i<drawAmount;i++){
+						p_hand.add(new Card(i));
+					}
+					player.useMP(c.sa_mc);
+					p_dumpster.add(c);
+					break;
 					case 4:
 						caster = c;
 						selected = true;cancelButton.setEnabled(true);
@@ -411,17 +462,17 @@ public class Battlefield extends JFrame {
 						p_dumpster.add(c);
 						break;
 					case 6:		//WILL RETURN RANDOMLY FROM DUMPSTER
-						if(p_dumpster.getComponentCount()==0){
-							System.out.println("Your Dumpster is empty!");
-							return;
-						}
-						int random = 0 + (int)((Math.random() * p_dumpster.getComponentCount()));
-						Card temp = (Card) p_dumpster.getComponent(random);
-						p_dumpster.remove(random);
-						p_hand.add(new Card(temp.ic_id));//the Card should be reset to initial status
-						player.useMP(c.sa_mc);
-						p_dumpster.add(c);
-						break;
+					if(p_dumpster.getComponentCount()==0){
+						System.out.println("Your Dumpster is empty!");
+						return;
+					}
+					int random = 0 + (int)((Math.random() * p_dumpster.getComponentCount()));
+					Card temp = (Card) p_dumpster.getComponent(random);
+					p_dumpster.remove(random);
+					p_hand.add(new Card(temp.ic_id));//the Card should be reset to initial status
+					player.useMP(c.sa_mc);
+					p_dumpster.add(c);
+					break;
 					case 7:	//return all card with > param rarity to hand
 						for(int i = p_dumpster.getComponentCount()-1;i>=0;i--){
 							Card t = (Card) p_dumpster.getComponent(i);
@@ -463,19 +514,36 @@ public class Battlefield extends JFrame {
 		cancelButton.setEnabled(false);
 		buttonPanel.add(cancelButton);
 
+		breakButton = new JButton("Take a break");
+		breakButton.setEnabled(false);
+		breakButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				File f = new File("save.sav");
+				try {
+					FileOutputStream fos = new FileOutputStream(f);
+					ObjectOutputStream oos = new ObjectOutputStream(fos);
+					oos.writeObject(new BF_save(Battlefield.this));
+					oos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		buttonPanel.add(breakButton);
+
 		selectedCard = new CardHolder(CardHolder.DISPLAY,false){
 			@Override
 			public void paintComponent(Graphics g){
 
 				super.paintComponent(g);
-				
-			try {
-		//		g.drawImage(ImageIO.read(new File("CardFrame.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
-				g.drawImage(ImageIO.read(new File("null.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-				 
+
+				try {
+					//		g.drawImage(ImageIO.read(new File("CardFrame.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+					g.drawImage(ImageIO.read(new File("null.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
 			}
 		};
 		selectedCard.addContainerListener(new ContainerAdapter() {
@@ -485,13 +553,37 @@ public class Battlefield extends JFrame {
 					processNotify(Main.getSelectedCard());
 			}
 		});
-		RcontentPane.add(selectedCard);
+		GridBagConstraints gbc_selectedCard = new GridBagConstraints();
+		gbc_selectedCard.fill = GridBagConstraints.BOTH;
+		gbc_selectedCard.gridx = 0;
+		gbc_selectedCard.gridy = 1;
+		RcontentPane.add(selectedCard, gbc_selectedCard);
 		//		playerDeck.
 	}
 	/**
 	 * Run the game
 	 */
 	public void run(){	
+		runBFchecker();
+		// DO WTF ACTION
+
+		// IF PLAYER GET TO START, call PlayerTurn();
+		// else call AITurn();
+
+		playerPP();
+		Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
+		Collections.shuffle(opponentDeck, new Random(System.currentTimeMillis()));
+		for(int i = 0;i<5;i++){
+			p_hand.add(new Card(playerDeck.get(0),player));	playerDeck.remove(0);
+			//	p_deck = new JLabel("DECK: "+Arrays.toString(playerDeck.toArray()));
+			o_hand.add(new Card(opponentDeck.get(0),opponent));	opponentDeck.remove(0);		
+			//	o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
+		}
+		p_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		//TEST TEST TEST
+		p_hand.add(new Card(52));
+	}
+	public void runBFchecker(){
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
 			@Override
 			public void run() {
@@ -533,28 +625,12 @@ public class Battlefield extends JFrame {
 			}
 
 		});
-		// DO WTF ACTION
-
-		// IF PLAYER GET TO START, call PlayerTurn();
-		// else call AITurn();
-
-		playerPP();
-		Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
-		Collections.shuffle(opponentDeck, new Random(System.currentTimeMillis()));
-		for(int i = 0;i<5;i++){
-			p_hand.add(new Card(playerDeck.get(0),player));	playerDeck.remove(0);
-			p_deck = new JLabel("DECK: "+Arrays.toString(playerDeck.toArray()));
-			o_hand.add(new Card(opponentDeck.get(0),opponent));	opponentDeck.remove(0);		
-			o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
-		}
-		p_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		//TEST TEST TEST
-		p_hand.add(new Card(52));
 	}
 	public void playerPP(){
 		System.out.println("PLAYER PP TURN");
 		Main.Turn = true;
 		endButton.setEnabled(true);
+		breakButton.setEnabled(true);
 		player.restoreMP();	
 		//PP ?PPPL
 		if(playerDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
@@ -563,23 +639,23 @@ public class Battlefield extends JFrame {
 			}
 		}else{
 			p_hand.add(new Card(playerDeck.get(0),player));	playerDeck.remove(0);
-			p_deck = new JLabel("DECK: "+Arrays.toString(playerDeck.toArray()));	
+			//		p_deck = new JLabel("DECK: "+Arrays.toString(playerDeck.toArray()));	
 		}
 		System.out.println("PLAYER TURN INITIALS DONE!");
 	}
 	public void playerFP(){
-		
+
 		//---------------------------------- END PLAYER PP TURN ----------------------------------
 		if(firstTurn!=0){
 			firstTurn--;
 			AIturn();
 			return;
 		}
-		//		System.out.println();
 		endButton.setEnabled(false);
+		useButton.setEnabled(false);
+		breakButton.setEnabled(false);
 		System.out.println("PLAYER FP TURN");
 		Main.Turn = false;
-		endButton.setEnabled(false);
 		//FP of player turn ?FPPL
 		for(CardHolder ch:Mylane_ref){
 			if(ch.isEmpty())continue;
@@ -666,8 +742,7 @@ public class Battlefield extends JFrame {
 	}
 	public void AIturn(){
 		System.out.println("OPPONENT PP TURN");
-		Main.Turn = false;
-		endButton.setEnabled(false);
+		
 		opponent.restoreMP();
 		//AI	?PPAI
 		System.out.println("OPPONENT FP TURN");
@@ -678,14 +753,14 @@ public class Battlefield extends JFrame {
 			}
 		}else{
 			o_hand.add(new Card(opponentDeck.get(0),opponent));	opponentDeck.remove(0);		
-			o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
+			//		o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
 			//TODO: insert AI here
 			Card c;
 			if(o_hand.getComponentCount()!=0){
 				c = (Card) o_hand.getComponent(0);
 				if(Theirlane1.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster()){
 					Theirlane1.add(o_hand.getComponent(0));
-					
+
 				}
 			}
 			//		o_hand.remove(0);
