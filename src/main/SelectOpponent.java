@@ -477,7 +477,6 @@ public class SelectOpponent extends JPanel {
 					random.setEnabled(false);
 					display.validate();
 					sleep(delay);
-					System.out.println(count++);
 					
 					if(count == 20) delay = 250;
 					if(count == 28) delay = 500;

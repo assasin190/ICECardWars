@@ -1,59 +1,72 @@
 package main;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.ScrollPane;
 import java.awt.Toolkit;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
-public class Test extends JFrame {
+import misc.DropHandler;
+
+public class Test {
+	static JFrame frame;
+	static CardHolder cardholder1;
+	static CardHolder cardholder2;
+	static JScrollPane scrollPane1;
+	static JButton btnNewButton;
+	
 	public static void main(String [] args) throws MalformedURLException, IOException {
 		
-		for(int j = 0;; j++) {
-			System.out.println(j);
-			if(j == 9) break;
-		}
+		frame = new JFrame();
+		cardholder1 = new CardHolder(CardHolder.DECK, false);
+		cardholder1.setBackground(Color.LIGHT_GRAY);
+		DropHandler dropHandler = new DropHandler();
 		
-		BufferedImage img = ImageIO.read(new URL("https://graph.facebook.com/100000038984537/picture?type=large&type=square"));
-		
-		/*
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CardData.saveAllCardsToLocal();
-					//			Object[] o = CardData.allCardData();
-					JFrame frame = new JFrame();
+		scrollPane1 = new JScrollPane(cardholder1, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		DropTarget dropTarget = new DropTarget(cardholder1, DnDConstants.ACTION_MOVE, dropHandler, true);
+		cardholder1.setLayout(new WrapLayout(FlowLayout.LEFT));
 
-					frame.setSize(700, 700);
-					frame.setVisible(true);
-					frame.setLayout(new GridLayout(2,2));
-					for(int i = 1;i<4;i++){
-						frame.add(new Card(i));
-					}
-					Card c = new Card(6);
-					Card c1 = new Card(6);
-					c.atk = 100000;
-					System.out.println(c);
-					System.out.println(c1);
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
+		cardholder2 = new CardHolder(CardHolder.DECK,false);
+		cardholder2.setBackground(Color.YELLOW);
+		cardholder2.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		JPanel temp = new JPanel();
+		temp.setLayout(new GridLayout(1, 2));
+		temp.add(scrollPane1);
+		temp.add(cardholder2);
+		btnNewButton = new JButton("add");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Card c = new Card((int)(Math.random() * ((60) + 1)),true);
+				cardholder1.add(c);
+				cardholder1.revalidate();
 			}
 		});
-		*/
-		
+		frame.setLayout(new BorderLayout());
+		frame.add(btnNewButton, BorderLayout.PAGE_START);
+		frame.add(temp, BorderLayout.CENTER);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		frame.setVisible(true);
+		System.out.println(frame.getSize());
 	}
 	
-	public Test(Card card) {
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.add(card);
-		this.setSize(221, 324);
-		this.setVisible(true);
-	}
+	
 }
