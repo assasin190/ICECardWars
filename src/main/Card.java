@@ -53,6 +53,8 @@ import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
+import javax.swing.ScrollPaneConstants;
+import java.awt.Font;
 
 public class Card extends JPanel{
 	/**
@@ -79,7 +81,7 @@ public class Card extends JPanel{
 	String spell_param;
 	ImageIcon picture;
 	ImageIcon background;
-	String desc;
+	public String desc;
 	Inw caster;
 	boolean Protected = false;		//invulnerable to normal attack
 	boolean sacrifice = false;		//sacrifice
@@ -87,7 +89,7 @@ public class Card extends JPanel{
 	boolean SAactivated = false;		//the monster already uses the SA for its turn
 	private JLabel titleLabel;
 	private JLabel rrLabel;
-	private JLabel descLabel;
+//	private JLabel descLabel;
 	private JLabel car_l;
 	private JLabel lck_l;
 	private JLabel lp_l;
@@ -97,7 +99,7 @@ public class Card extends JPanel{
 	private DragGestureRecognizer dgr;
 	private JPanel pic_panel;
 	private JScrollPane scrollPane;
-	private JTextArea textArea;
+	public JTextArea descArea;
 	private JLabel pic_label;
 	private JPanel statPanel;
 	public static void main(String[] args){
@@ -431,8 +433,13 @@ public class Card extends JPanel{
 		gbc_titleLabel.gridy = 0;
 		this.add(titleLabel, gbc_titleLabel);
 		
-		textArea = new JTextArea(desc);
-		textArea.setEditable(false);
+		descArea = new JTextArea(desc);
+		descArea.setRows(2);
+		descArea.setWrapStyleWord(true);
+		descArea.setFont(new Font("Calibri", Font.PLAIN, 11));
+		descArea.setLineWrap(true);
+		descArea.setMaximumSize(new Dimension(221, 2147483647));
+		descArea.setEditable(false);
 		try {
 			if(isMonster()){
 				background = new ImageIcon(ImageIO.read(new File("card_monster_bg.jpg")));
@@ -479,7 +486,9 @@ public class Card extends JPanel{
 		gbc_mc_l.gridy = 1;
 		this.add(mc_l, gbc_mc_l);
 		
-		scrollPane = new JScrollPane(textArea);
+		scrollPane = new JScrollPane(descArea);
+		scrollPane.setPreferredSize(new Dimension(150, 34));
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.weighty = 0.5;
 		gbc_scrollPane.gridwidth = 4;
@@ -496,7 +505,7 @@ public class Card extends JPanel{
 		gbc_pic_panel.weightx = 0.5;
 		gbc_pic_panel.fill = GridBagConstraints.BOTH;
 		gbc_pic_panel.gridwidth = 4;
-		gbc_pic_panel.insets = new Insets(2, 2, 2, 0);
+		gbc_pic_panel.insets = new Insets(2, 2, 2, 2);
 		gbc_pic_panel.gridx = 0;
 		gbc_pic_panel.gridy = 2;
 		add(pic_panel, gbc_pic_panel);

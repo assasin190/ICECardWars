@@ -54,7 +54,7 @@ public class Test_CardHolder extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-		//			CardData.saveAllCardsToLocal();
+					//			CardData.saveAllCardsToLocal();
 					Test_CardHolder frame = new Test_CardHolder();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -81,7 +81,7 @@ public class Test_CardHolder extends JFrame {
 		ch1 = new CardHolder(CardHolder.DECK,false);
 		ch1.setBackground(new Color(255, 255, 153));
 		DropHandler dropHandler = new DropHandler();
-		
+
 		scrollPane = new JScrollPane(ch1);
 		contentPane.add(scrollPane);
 		DropTarget dropTarget = new DropTarget(ch1, DnDConstants.ACTION_MOVE, dropHandler, true);
@@ -103,12 +103,14 @@ public class Test_CardHolder extends JFrame {
 		btnNewButton = new JButton("add");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ch1.add(new Card((int)(Math.random() * ((60) + 1)),true));
+				Card c = new Card((int)(Math.random() * ((60) + 1)),true);
+				c.descArea.setText("555555555555555555555555555555555555534634634634634634655555555555555555555555555555555534634634634634634655555555555555555555555555555555553463463463463463465555555555555555555555555555555555555555555555555555555555555");
+				ch1.add(c);
 				ch1.revalidate();
 			}
 		});
 		panel.add(btnNewButton);
-		
+
 		btnNewButton_1 = new JButton("red effect");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -119,7 +121,7 @@ public class Test_CardHolder extends JFrame {
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("settext");
-		//		if(ch1.isEmpty())st1.setText("null");
+				//		if(ch1.isEmpty())st1.setText("null");
 				st1.setText(ch1.getComponentCount()+":"+Arrays.toString(ch1.getComponents()));
 
 			}
@@ -135,7 +137,7 @@ public class Test_CardHolder extends JFrame {
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("settext");
-			//	if(ch2.isEmpty())st2.setText("null");
+				//	if(ch2.isEmpty())st2.setText("null");
 				st2.setText(ch2.getComponentCount()+":"+Arrays.toString(ch2.getComponents()));
 
 			}
@@ -153,13 +155,15 @@ public class Test_CardHolder extends JFrame {
 		b3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("settext");
-		//		if(ch3.isEmpty())st3.setText("null");
+				//		if(ch3.isEmpty())st3.setText("null");
 				st3.setText(ch3.getComponentCount()+":"+Arrays.toString(ch3.getComponents()));
 
 			}
 		});
-
-		ch3.addCard(new Card(23,true));
+		Card c = new Card(23,true);
+		//c.desc = "555555555555555555555555555555555555555555555555555555555555555555555555";
+		c.descArea.setText("555555555555555555555555555555555555534634634634634634655555555555555555555555555555555534634634634634634655555555555555555555555555555555553463463463463463465555555555555555555555555555555555555555555555555555555555555");
+		ch3.addCard(c);
 		contentPane.add(b3);
 	}
 

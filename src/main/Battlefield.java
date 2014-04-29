@@ -32,6 +32,8 @@ import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JScrollPane;
+import java.awt.FlowLayout;
 
 public class Battlefield extends JFrame {
 	//WARNING!! DO NOT ADD COMPONENT TO CARDHOLDER CLASS
@@ -71,6 +73,8 @@ public class Battlefield extends JFrame {
 	private Card caster = null;
 	public static CardHolder selectedCard;
 	private boolean isActive = true;
+	private JScrollPane p_hand_scr;
+	private JScrollPane o_hand_scr;
 	//TODO: create more efficient method converting from ArrayList to String (label)
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -285,20 +289,26 @@ public class Battlefield extends JFrame {
 
 		p_deck = new JLabel("DECK: "+Arrays.toString(playerDeck.toArray()));
 		playerPanel.add(p_deck);
+		
+		
 
 		o_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
 		o_hand.setBackground(new Color(255, 204, 255));
-		opponentPanel.add(o_hand);
-		o_hand.setLayout(new BoxLayout(o_hand, BoxLayout.X_AXIS));
+		o_hand_scr = new JScrollPane(o_hand);
+		opponentPanel.add(o_hand_scr);
+		//opponentPanel.add(o_hand);
+		o_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		o_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
 		o_dumpster.setBackground(Color.LIGHT_GRAY);
 		opponentPanel.add(o_dumpster);
 		o_dumpster.setLayout(new BoxLayout(o_dumpster, BoxLayout.X_AXIS));
+		
+		
 		p_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
 		p_hand.setBackground(new Color(255, 204, 255));
-		playerPanel.add(p_hand);
-		p_hand.setLayout(new BoxLayout(p_hand, BoxLayout.X_AXIS));
+		p_hand_scr = new JScrollPane(p_hand);
+		playerPanel.add(p_hand_scr);
 
 		p_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
 		p_dumpster.setBackground(Color.LIGHT_GRAY);
@@ -536,6 +546,7 @@ public class Battlefield extends JFrame {
 			o_hand.add(new Card(opponentDeck.get(0),opponent));	opponentDeck.remove(0);		
 			o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
 		}
+		p_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		//TEST TEST TEST
 		p_hand.add(new Card(52));
 	}
