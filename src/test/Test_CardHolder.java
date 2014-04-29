@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import main.Card;
@@ -61,6 +62,16 @@ public class Test_CardHolder extends JFrame {
 					e.printStackTrace();
 				}
 			}
+		});
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				System.out.println("Hello");
+				
+				
+			}
+		
 		});
 	}
 

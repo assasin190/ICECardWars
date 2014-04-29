@@ -318,8 +318,7 @@ public class SelectOpponent extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Thread t = new MyThread();
-				t.start();
+				new MyThread().start();
 			}
 			
 		});
@@ -456,6 +455,10 @@ public class SelectOpponent extends JPanel {
 	}
 	
 	static class MyThread extends Thread {
+		
+		public MyThread() {
+			super();
+		}
 		
 		public void run() {
 			
