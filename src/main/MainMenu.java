@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -262,6 +264,38 @@ public class MainMenu extends JFrame {
 					//bf.setVisible(true);
 				}
 			});
+			startButton.addMouseListener(new MouseListener(){
+				
+				public void mouseEntered(MouseEvent arg0) {
+					bgMusic = new AudioPlayer("beep.wav");
+					bgMusic.play();
+					
+				}
+
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
 		startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		startButton.setEnabled(false);
 		ButtonPanel.add(startButton);
@@ -272,6 +306,38 @@ public class MainMenu extends JFrame {
 		continueButton.setBackground(new Color(0, 0, 0));
 		continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		continueButton.setEnabled(false);
+		continueButton.addMouseListener(new MouseListener(){
+			
+			public void mouseEntered(MouseEvent arg0) {
+				bgMusic = new AudioPlayer("beep.wav");
+				bgMusic.play();
+				
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		ButtonPanel.add(continueButton);
 		
 		arrangeDeck = new JButton("Arrange Decks");
@@ -288,6 +354,38 @@ public class MainMenu extends JFrame {
 			}
 		});
 		arrangeDeck.setAlignmentX(Component.CENTER_ALIGNMENT);
+		arrangeDeck.addMouseListener(new MouseListener(){
+			
+			public void mouseEntered(MouseEvent arg0) {
+				bgMusic = new AudioPlayer("beep.wav");
+				bgMusic.play();
+				
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		ButtonPanel.add(arrangeDeck);
 		
 		quit = new JButton("Quit");
@@ -295,6 +393,38 @@ public class MainMenu extends JFrame {
 		quit.setForeground(Color.RED);
 		quit.setBackground(new Color(0, 0, 0));
 		quit.setAlignmentX(Component.CENTER_ALIGNMENT);
+	quit.addMouseListener(new MouseListener(){
+			
+			public void mouseEntered(MouseEvent arg0) {
+				bgMusic = new AudioPlayer("beep.wav");
+				bgMusic.play();
+				
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		quit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int n = JOptionPane.showOptionDialog(contentPane, "Are you sure you want to quit?" ,
