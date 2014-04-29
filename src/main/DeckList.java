@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -18,6 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,13 +36,14 @@ public class DeckList extends JPanel {
 	ArrayList<JPanel> list = new ArrayList<JPanel>();
 	Card hold;
 	JScrollPane scroller = new JScrollPane(this);
-	int x = this.getWidth();
-	int y = this.getHeight();
+	int full = 0;
 	int count;
 	JPanel mydeck, left = new JPanel(), right = new JPanel();
 	Dimension screenSize = getToolkit().getScreenSize();
 	boolean check = true;
+	boolean holding = false;
 	Image drag;
+	JButton go = new JButton("go");
 
 	public DeckList(int userid) {
 		count = 0;
@@ -49,7 +53,7 @@ public class DeckList extends JPanel {
 		JsonObject job = null;
 
 		InputStream is;
-		Dimension screenSize = getToolkit().getScreenSize();
+		final Dimension screenSize = getToolkit().getScreenSize();
 		//System.out.println(screenSize.getHeight());
 		CardData.saveAllCardsToLocal();
 	
@@ -66,7 +70,7 @@ public class DeckList extends JPanel {
 				deck.add(new Card(Integer.parseInt(usercard.substring(count,
 						usercard.indexOf(",", count)))));
 
-				x++;
+			
 				count = usercard.indexOf(",", count) + 1;
 			}
 			deck.add(new Card(Integer.parseInt(usercard.substring(count,
@@ -80,46 +84,11 @@ public class DeckList extends JPanel {
 		this.setVisible(true);
 
 		int track = 0;
+		
 		right.setLayout(new GridLayout(40, 7));
 		left.setVisible(true);
 		left.setLayout(new GridLayout(20,7));
-		left.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-				check = false;
-			
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-			
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-
-			}
-
-		});
+		
 		for (int i = 0; i < 40; i++) {
 			ImageIcon ee = deck.get(track).picture;
 			final Image picz3 = ee.getImage().getScaledInstance(20, 20,
@@ -145,9 +114,62 @@ public class DeckList extends JPanel {
 			temp.add(lck);
 
 			JLabel car = new JLabel("CAR: " + deck.get(track).car);
+			
 
 			temp.add(car);
 			temp.setOpaque(false);
+			if(left.getComponentCount()!=20) go.setEnabled(false);
+			else go.setEnabled(true);
+			go.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+			});
+			left.addMouseListener(new MouseListener() {
+
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+					check = false;
+				
+				}
+
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+				
+
+				}
+
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					holding = true;
+
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					if(holding){
+						full++;
+					}
+					
+
+				}
+
+			});
 			temp.addMouseListener(new MouseListener() {
 
 				@Override
@@ -181,9 +203,12 @@ public class DeckList extends JPanel {
 				@Override
 				public void mouseReleased(MouseEvent arg0) {
 					// TODO Auto-generated method stub
+					
 					if (check) {
 						temp.setVisible(true);
 						right.add(temp);
+						list.remove(temp);
+						if(left.getComponentCount()!=20) go.setEnabled(false);
 					
 
 					} else {
@@ -192,10 +217,22 @@ public class DeckList extends JPanel {
 						left.add(temp);
 						//temp.removeAll();
 						
-						right.repaint();
 						
 						
 					}
+					if(left.getComponentCount()!=20) go.setEnabled(false);
+					else go.setEnabled(true);
+					go.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+					});
+					left.repaint();
+					right.repaint();
 
 				}
 
@@ -206,16 +243,19 @@ public class DeckList extends JPanel {
 			count++;
 		}
 		
+		
+		
 
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		
-
+		super.paintComponent(g);
+/*
 		ImageIcon sea = new ImageIcon("sea.jpg");
 		Image seaz = sea.getImage();
 		g.drawImage(seaz, 0, 0, this.getWidth(), this.getHeight(), null);
+		*/
 
 	}
 
@@ -232,6 +272,8 @@ public class DeckList extends JPanel {
 		ss.setLayout(new BorderLayout());
 		ss.add(a.right, BorderLayout.EAST);
 		ss.add(a.left,BorderLayout.CENTER);
+		ss.add(a.go,BorderLayout.SOUTH);
+		
 		test.add(ss);
 
 		test.setVisible(true);
