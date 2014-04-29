@@ -25,19 +25,26 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import misc.DragGestureHandler;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+
 import java.awt.BorderLayout;
+
 import javax.swing.SwingConstants;
 import javax.swing.ScrollPaneConstants;
+
 import java.awt.Font;
 
 public class Card extends JPanel{
@@ -405,7 +412,7 @@ public class Card extends JPanel{
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.rowHeights = new int[] {10, 10, 10, 55, 10};
 		gridBagLayout.columnWidths = new int[] {20, 20, 20, 20};
-		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0};
+		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0};
 		setLayout(gridBagLayout);
 		titleLabel = new JLabel(title);
@@ -413,7 +420,7 @@ public class Card extends JPanel{
 		GridBagConstraints gbc_titleLabel = new GridBagConstraints();
 		gbc_titleLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_titleLabel.anchor = GridBagConstraints.NORTH;
-		gbc_titleLabel.insets = new Insets(2, 2, 2, 2);
+		gbc_titleLabel.insets = new Insets(2, 2, 5, 5);
 		gbc_titleLabel.gridx = 0;
 		gbc_titleLabel.gridy = 0;
 		this.add(titleLabel, gbc_titleLabel);
@@ -436,7 +443,7 @@ public class Card extends JPanel{
 		
 		mcLabel = new JLabel("MC");
 		GridBagConstraints gbc_mcLabel = new GridBagConstraints();
-		gbc_mcLabel.insets = new Insets(0, 2, 2, 2);
+		gbc_mcLabel.insets = new Insets(0, 2, 5, 2);
 		gbc_mcLabel.gridx = 3;
 		gbc_mcLabel.gridy = 0;
 		add(mcLabel, gbc_mcLabel);
@@ -446,7 +453,7 @@ public class Card extends JPanel{
 		gbc_statPanel.weighty = 0.1;
 		gbc_statPanel.anchor = GridBagConstraints.NORTH;
 		gbc_statPanel.gridwidth = 4;
-		gbc_statPanel.insets = new Insets(2, 0, 2, 2);
+		gbc_statPanel.insets = new Insets(2, 0, 5, 2);
 		gbc_statPanel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_statPanel.gridx = 0;
 		gbc_statPanel.gridy = 3;
@@ -468,14 +475,14 @@ public class Card extends JPanel{
 		GridBagConstraints gbc_rrLabel = new GridBagConstraints();
 		gbc_rrLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_rrLabel.anchor = GridBagConstraints.NORTH;
-		gbc_rrLabel.insets = new Insets(2, 2, 5, 2);
+		gbc_rrLabel.insets = new Insets(2, 2, 5, 5);
 		gbc_rrLabel.gridx = 0;
 		gbc_rrLabel.gridy = 1;
 		this.add(rrLabel, gbc_rrLabel);
 		mc_l = new JLabel(mc+"");
 		mc_l.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_mc_l = new GridBagConstraints();
-		gbc_mc_l.insets = new Insets(2, 2, 2, 2);
+		gbc_mc_l.insets = new Insets(2, 2, 5, 2);
 		gbc_mc_l.gridx = 3;
 		gbc_mc_l.gridy = 1;
 		this.add(mc_l, gbc_mc_l);
@@ -486,7 +493,7 @@ public class Card extends JPanel{
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.weighty = 0.5;
 		gbc_scrollPane.gridwidth = 4;
-		gbc_scrollPane.insets = new Insets(2, 2, 2, 2);
+		gbc_scrollPane.insets = new Insets(2, 2, 5, 2);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 4;
@@ -495,8 +502,8 @@ public class Card extends JPanel{
 		pic_panel = new JPanel();
 		pic_panel.setOpaque(false);
 		GridBagConstraints gbc_pic_panel = new GridBagConstraints();
-		gbc_pic_panel.weighty = 0.1;
-		gbc_pic_panel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_pic_panel.weighty = 0.4;
+		gbc_pic_panel.fill = GridBagConstraints.BOTH;
 		gbc_pic_panel.gridwidth = 4;
 		gbc_pic_panel.insets = new Insets(2, 2, 5, 2);
 		gbc_pic_panel.gridx = 0;
@@ -753,25 +760,18 @@ public class Card extends JPanel{
 		return (int) Math.max(0, atk-lck + (int)(Math.random() * ((lck*2) + 1)));
 	}
 	public void effectRed(){
-		Executors.newSingleThreadExecutor().execute(new Runnable(){
+		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run() {
-				float alpha = 0.0f;
+				int alpha = 0;
 				Graphics g = Card.this.getGraphics();
 				if(g==null)return;
-				Graphics2D g2d = (Graphics2D) g;
-				g2d.setColor(Color.RED);
-				while(alpha <=0.8f){
-					g2d.setComposite(AlphaComposite.getInstance(
-							AlphaComposite.SRC_OVER, alpha));
-					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-					g2d.fillRect(0, 0, Card.this.getWidth(), Card.this.getHeight());
-					alpha += 0.05f;
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+				alpha = 255;
+				while(alpha > 0){
+					g.setColor(new Color(255,0,0,alpha));
+					g.fillRect(0, 0, getWidth(), getHeight());
+					try {Thread.sleep(15);} catch (InterruptedException e) {e.printStackTrace();}
+					alpha -= 5;
 					repaint();
 				}
 				repaint();
