@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
 import misc.DropHandler;
+import java.awt.FlowLayout;
 
 public class CardHolder extends JPanel{
 
@@ -57,12 +58,12 @@ public class CardHolder extends JPanel{
 		dropHandler = new DropHandler();
 		dropTarget = new DropTarget(this, DnDConstants.ACTION_MOVE, dropHandler, true);
 		if(!customGUI)initGUI();
+	//	initGUI();
 	}
 	private void initGUI() {
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		setBackground(Color.WHITE);
-		setLayout(new BorderLayout(0, 0));
+		setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 	}
 
 	public boolean isEmpty(){

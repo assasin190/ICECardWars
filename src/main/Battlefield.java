@@ -210,7 +210,8 @@ public class Battlefield extends JFrame {
 					e.printStackTrace();
 				}
 			}
-		};		TheirBF.add(opponent);
+		};		
+		TheirBF.add(opponent);
 		TheirBF.add(Theirlane1);
 		TheirBF.add(Theirlane2);
 		TheirBF.add(Theirlane3);

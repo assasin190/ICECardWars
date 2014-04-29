@@ -31,6 +31,7 @@ import java.awt.CardLayout;
 import java.awt.GridBagLayout;
 
 import javax.swing.JScrollPane;
+import java.awt.BorderLayout;
 
 public class Test_CardHolder extends JFrame {
 
@@ -158,6 +159,7 @@ public class Test_CardHolder extends JFrame {
 		ch3 = new CardHolder(CardHolder.DECK,false);
 		ch3.setBackground(Color.MAGENTA);
 		contentPane.add(ch3);
+		ch3.setLayout(new BorderLayout(0, 0));
 
 		st3 = new JLabel("update 3");
 		contentPane.add(st3);

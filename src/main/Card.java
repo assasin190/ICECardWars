@@ -2,11 +2,9 @@ package main;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.dnd.DnDConstants;
@@ -19,38 +17,24 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
-
 import misc.DragGestureHandler;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
-
 import java.awt.Dimension;
-import javax.swing.JButton;
-import javax.swing.JTextField;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
-import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
 import javax.swing.ScrollPaneConstants;
@@ -102,6 +86,7 @@ public class Card extends JPanel{
 	public JTextArea descArea;
 	private JLabel pic_label;
 	private JPanel statPanel;
+	private JLabel mcLabel;
 	public static void main(String[] args){
 
 		EventQueue.invokeLater(new Runnable() {		//TEST GETTING DECK
@@ -418,7 +403,7 @@ public class Card extends JPanel{
 	}
 	public void initGUI(){
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.rowHeights = new int[] {10, 10, 10, 10, 10};
+		gridBagLayout.rowHeights = new int[] {10, 10, 10, 55, 10};
 		gridBagLayout.columnWidths = new int[] {20, 20, 20, 20};
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0};
@@ -449,11 +434,20 @@ public class Card extends JPanel{
 			e.printStackTrace();
 		}
 		
+		mcLabel = new JLabel("MC");
+		GridBagConstraints gbc_mcLabel = new GridBagConstraints();
+		gbc_mcLabel.insets = new Insets(0, 2, 2, 2);
+		gbc_mcLabel.gridx = 3;
+		gbc_mcLabel.gridy = 0;
+		add(mcLabel, gbc_mcLabel);
+		
 		statPanel = new JPanel();
 		GridBagConstraints gbc_statPanel = new GridBagConstraints();
+		gbc_statPanel.weighty = 0.1;
+		gbc_statPanel.anchor = GridBagConstraints.NORTH;
 		gbc_statPanel.gridwidth = 4;
 		gbc_statPanel.insets = new Insets(2, 0, 2, 2);
-		gbc_statPanel.fill = GridBagConstraints.BOTH;
+		gbc_statPanel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_statPanel.gridx = 0;
 		gbc_statPanel.gridy = 3;
 		add(statPanel, gbc_statPanel);
@@ -474,14 +468,14 @@ public class Card extends JPanel{
 		GridBagConstraints gbc_rrLabel = new GridBagConstraints();
 		gbc_rrLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_rrLabel.anchor = GridBagConstraints.NORTH;
-		gbc_rrLabel.insets = new Insets(2, 2, 2, 2);
+		gbc_rrLabel.insets = new Insets(2, 2, 5, 2);
 		gbc_rrLabel.gridx = 0;
 		gbc_rrLabel.gridy = 1;
 		this.add(rrLabel, gbc_rrLabel);
 		mc_l = new JLabel(mc+"");
 		mc_l.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_mc_l = new GridBagConstraints();
-		gbc_mc_l.insets = new Insets(2, 1, 2, 2);
+		gbc_mc_l.insets = new Insets(2, 2, 2, 2);
 		gbc_mc_l.gridx = 3;
 		gbc_mc_l.gridy = 1;
 		this.add(mc_l, gbc_mc_l);
@@ -501,11 +495,10 @@ public class Card extends JPanel{
 		pic_panel = new JPanel();
 		pic_panel.setOpaque(false);
 		GridBagConstraints gbc_pic_panel = new GridBagConstraints();
-		gbc_pic_panel.weighty = 0.5;
-		gbc_pic_panel.weightx = 0.5;
-		gbc_pic_panel.fill = GridBagConstraints.BOTH;
+		gbc_pic_panel.weighty = 0.1;
+		gbc_pic_panel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_pic_panel.gridwidth = 4;
-		gbc_pic_panel.insets = new Insets(2, 2, 2, 2);
+		gbc_pic_panel.insets = new Insets(2, 2, 5, 2);
 		gbc_pic_panel.gridx = 0;
 		gbc_pic_panel.gridy = 2;
 		add(pic_panel, gbc_pic_panel);
