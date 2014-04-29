@@ -475,13 +475,15 @@ public class SelectOpponent extends JPanel {
 					display.validate();
 					sleep(delay);
 					System.out.println(count++);
+					
 					if(count == 20) delay = 250;
 					if(count == 28) delay = 500;
 					if(count == 32) delay = 1000;
-					if(count == 35) {
+					if(count == 34) {
 						current.setBorder(BorderFactory.createLineBorder(Color.GREEN, 10));
 						break;
 					}
+					
 					
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
