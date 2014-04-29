@@ -59,6 +59,7 @@ public class Test_CardHolder extends JFrame {
 					//			CardData.saveAllCardsToLocal();
 					Test_CardHolder frame = new Test_CardHolder();
 					frame.setVisible(true);
+					//System.out.println(frame.ch1.getComponent(0).getSize());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

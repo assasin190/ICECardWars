@@ -2,6 +2,7 @@ package misc;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Point;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTargetContext;
@@ -11,6 +12,7 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import main.Battlefield;
 import main.Card;
@@ -65,6 +67,7 @@ public class DropHandler implements DropTargetListener {
 		System.out.println("original: "+Main.orig);
 		CardHolder c_original = null ;
 		boolean success = false;
+		Component destination = null;
 		if (dtde.isDataFlavorSupported(PanelDataFlavor.SHARED_INSTANCE)) {
 			Transferable transferable = dtde.getTransferable();
 			try {
@@ -75,7 +78,7 @@ public class DropHandler implements DropTargetListener {
 					//		Main.ch = null;		TODO:
 					DropTargetContext dtc = dtde.getDropTargetContext();
 					//		System.out.println("sth: "+Main.getSelectedCard().getParent());
-					Component destination = dtc.getComponent();
+					destination = dtc.getComponent();
 					if (destination instanceof JComponent) {
 
 						System.out.println("dest: "+destination+" orig: "+original);
@@ -130,6 +133,9 @@ public class DropHandler implements DropTargetListener {
 			success = false;
 			dtde.rejectDrop();
 		}
+
+		JPanel panel = (JPanel) destination;
+		System.out.println(panel.getComponent(0).getSize());
 		System.out.println("DROP: "+success);
 	//	c_original.revalidate();
 	//	c_original.repaint();

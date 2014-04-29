@@ -42,11 +42,11 @@ public class Test {
 		
 		scrollPane1 = new JScrollPane(cardholder1, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		DropTarget dropTarget = new DropTarget(cardholder1, DnDConstants.ACTION_MOVE, dropHandler, true);
-		cardholder1.setLayout(new WrapLayout(FlowLayout.LEFT));
+		cardholder1.setLayout(new WrapLayout(FlowLayout.LEFT, 5, 5));
 
 		cardholder2 = new CardHolder(CardHolder.DECK,false);
 		cardholder2.setBackground(Color.YELLOW);
-		cardholder2.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		cardholder2.setLayout(new WrapLayout(FlowLayout.LEFT, 5, 5));
 		JPanel temp = new JPanel();
 		temp.setLayout(new GridLayout(1, 2));
 		temp.add(scrollPane1);

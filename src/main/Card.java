@@ -234,7 +234,9 @@ public class Card extends JPanel{
 			data = job.getAsJsonObject("data");
 			b = null;
 			try {
-				b = new ImageIcon(ImageIO.read(new URL("http://128.199.235.83/icw/"+data.get("picture").getAsString())));
+				Image img = ImageIO.read(new URL("http://128.199.235.83/icw/"+data.get("picture").getAsString())).getScaledInstance(80, 80, Image.SCALE_DEFAULT);
+				//b = new ImageIcon(ImageIO.read(new URL("http://128.199.235.83/icw/"+data.get("picture").getAsString())));
+				b = new ImageIcon(img);
 			} catch (MalformedURLException e) {
 				System.err.println("problem with the connection (retrieving picture)... retrying");
 				try {
@@ -289,7 +291,7 @@ public class Card extends JPanel{
 	 * @wbp.parser.constructor
 	 */
 	public Card(int ID) {
-		setPreferredSize(new Dimension(221, 324));
+		//Original card size 221x324
 		
 		
 		JsonObject m2 = CardData.getCardData(ID);
@@ -434,7 +436,8 @@ public class Card extends JPanel{
 		descArea.setEditable(false);
 		try {
 			if(isMonster()){
-				background = new ImageIcon(ImageIO.read(new File("card_monster_bg.jpg")));
+				Image img = ImageIO.read(new File("card_monster_bg.jpg")).getScaledInstance(123, 180, Image.SCALE_DEFAULT);
+				background = new ImageIcon(img);
 			}else background = new ImageIcon(ImageIO.read(new File("card_spell_bg.jpg")));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -497,7 +500,7 @@ public class Card extends JPanel{
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 4;
-		add(scrollPane, gbc_scrollPane);
+		//add(scrollPane, gbc_scrollPane);
 		
 		pic_panel = new JPanel();
 		pic_panel.setOpaque(false);
@@ -513,7 +516,7 @@ public class Card extends JPanel{
 		
 		pic_label = new JLabel(picture);
 		pic_panel.add(pic_label);
-
+		this.setPreferredSize(new Dimension(123, 180));
 		updateGUI();
 	}
 	/*
