@@ -30,6 +30,8 @@ import misc.AudioPlayer;
 
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Battlefield extends JFrame {
 	//WARNING!! DO NOT ADD COMPONENT TO CARDHOLDER CLASS
@@ -62,6 +64,7 @@ public class Battlefield extends JFrame {
 	private CardHolder o_dumpster;
 	private JButton cancelButton;
 	private static AudioPlayer bgMusic;
+	private boolean lowHealthMusic = false;	//true if player have <10% LP
 	private int firstTurn = 2;
 	private boolean selected = false;	//will be true if a card is selected and you can use its SA/Spell
 	// AND YOU CONFIRM THE SA/spell use by pressing the useButton
@@ -79,6 +82,7 @@ public class Battlefield extends JFrame {
 					, new Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
 					//			frame.setVisible(true);
 					//			frame.run();
+					
 					bgMusic = new AudioPlayer("Mahou Battle.wav");
 					bgMusic.playLoop();
 				} catch (Exception e) {
@@ -95,6 +99,7 @@ public class Battlefield extends JFrame {
 	public Battlefield(Inw player_,Inw opponent_) {
 		Battlefield.player = player_;
 		Battlefield.opponent = opponent_;
+		System.out.println("FULLMP"+opponent.MP_full);
 		//	System.out.println(player.deck.length);
 		if(!Battlefield.player.addDeck()){
 			System.out.println("PL DISPOSE");
@@ -498,7 +503,13 @@ public class Battlefield extends JFrame {
 							ch.revalidate();ch.repaint();
 							//				Battlefield.this.repaint();
 						}
-					}			
+					}
+					if(!lowHealthMusic&&player.LP_current<player.LP_full/10){
+						bgMusic.stop();
+						bgMusic = new AudioPlayer("The Ground's Color is Yellow.wav");
+						bgMusic.playLoop();
+						lowHealthMusic = true;
+					}
 					try {
 						Thread.sleep(200);
 					} catch (InterruptedException e) {e.printStackTrace();
@@ -646,7 +657,6 @@ public class Battlefield extends JFrame {
 		Main.Turn = false;
 		endButton.setEnabled(false);
 		opponent.restoreMP();
-
 		//AI	?PPAI
 		System.out.println("OPPONENT FP TURN");
 		//CURRENT AI: if possible, add 3 cards to lane 1,2,3
@@ -661,12 +671,17 @@ public class Battlefield extends JFrame {
 			Card c;
 			if(o_hand.getComponentCount()!=0){
 				c = (Card) o_hand.getComponent(0);
-				if(Theirlane1.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster())Theirlane1.add(o_hand.getComponent(0));
+				if(Theirlane1.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster()){
+					Theirlane1.add(o_hand.getComponent(0));
+					
+				}
 			}
 			//		o_hand.remove(0);
 			if(o_hand.getComponentCount()!=0){
 				c = (Card) o_hand.getComponent(0);
-				if(c!=null&&Theirlane2.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster())Theirlane2.add(o_hand.getComponent(0));
+				if(c!=null&&Theirlane2.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster()){
+					Theirlane2.add(o_hand.getComponent(0));
+				}
 			}
 			if(o_hand.getComponentCount()!=0){
 				c = (Card) o_hand.getComponent(0);

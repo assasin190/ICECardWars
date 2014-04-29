@@ -15,16 +15,20 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import main.Card;
+import main.CardData;
 import main.CardHolder;
 import misc.DropHandler;
 
 import java.awt.Color;
+
 import javax.swing.BoxLayout;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
+
 import javax.swing.JScrollPane;
 
 public class Test_CardHolder extends JFrame {
@@ -41,6 +45,7 @@ public class Test_CardHolder extends JFrame {
 	private JPanel panel;
 	private JButton btnNewButton;
 	private JScrollPane scrollPane;
+	private JButton btnNewButton_1;
 
 	/**
 	 * Launch the application.
@@ -49,6 +54,7 @@ public class Test_CardHolder extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+		//			CardData.saveAllCardsToLocal();
 					Test_CardHolder frame = new Test_CardHolder();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -103,6 +109,14 @@ public class Test_CardHolder extends JFrame {
 			}
 		});
 		panel.add(btnNewButton);
+		
+		btnNewButton_1 = new JButton("red effect");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				((Card)ch1.getComponent(0)).effectAttack();;
+			}
+		});
+		panel.add(btnNewButton_1);
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("settext");

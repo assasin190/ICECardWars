@@ -1,11 +1,14 @@
 package main;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureRecognizer;
 import java.awt.dnd.DragSource;
@@ -22,6 +25,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -37,7 +41,18 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+
 import java.awt.Dimension;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
+import javax.swing.SwingConstants;
 
 public class Card extends JPanel{
 	/**
@@ -79,17 +94,21 @@ public class Card extends JPanel{
 	private JLabel mc_l;
 	private DragGestureHandler dragGestureHandler;
 	private DragGestureRecognizer dgr;
+	private JPanel pic_panel;
+	private JScrollPane scrollPane;
+	private JTextArea textArea;
+	private JLabel pic_label;
 	public static void main(String[] args){
 
 		EventQueue.invokeLater(new Runnable() {		//TEST GETTING DECK
 			public void run() {
-					
-					Card garf = new Card(3,true);
-					Card sli = new Card(1,true);
-					System.out.println(garf.param_value);
-					sli.apply(garf);
-					System.out.println(sli.toString());
-					/*
+
+				Card garf = new Card(3,true);
+				Card sli = new Card(1,true);
+				System.out.println(garf.param_value);
+				sli.apply(garf);
+				System.out.println(sli.toString());
+				/*
 					CardData.saveAllCardsToLocal();
 					JFrame frame = new JFrame();
 					frame.setSize(700, 700);
@@ -119,16 +138,16 @@ public class Card extends JPanel{
 				catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-				*/
-				
+
+				 */
+
 			}
 		});
 
 	}
 	@Override
 	public void addNotify() {
-	//	System.out.println("CARD: addNotify");
+		//	System.out.println("CARD: addNotify");
 		super.addNotify();
 		if (dgr == null) {
 			dragGestureHandler = new DragGestureHandler(this);
@@ -141,7 +160,7 @@ public class Card extends JPanel{
 
 	@Override
 	public void removeNotify() {
-	//	System.out.println("CARD: removeNotify");
+		//	System.out.println("CARD: removeNotify");
 		if (dgr != null) {
 			dgr.removeDragGestureListener(dragGestureHandler);
 			dragGestureHandler = null;
@@ -172,11 +191,13 @@ public class Card extends JPanel{
 		picture = c.picture;
 		desc = c.desc;
 		repaint();
-	//	caster = c.caster;
-	//	Protected = c.Protected;
-	//	sacrifice = c.sacrifice;
-	//	directInw = c.directInw;
-	//	SAactivated = c.SAactivated;
+		initGUI();
+		addListeners();
+		//	caster = c.caster;
+		//	Protected = c.Protected;
+		//	sacrifice = c.sacrifice;
+		//	directInw = c.directInw;
+		//	SAactivated = c.SAactivated;
 	}
 	/**TEMPORARY CONSTRUCTOR THAT ACCESS THE WEB DIRECTLY FOR CARD'S INFO
 	 * @param ID
@@ -265,6 +286,7 @@ public class Card extends JPanel{
 		sa_mc = data.get("sa_mc").getAsInt();
 		spell_code = data.get("spell_code").getAsInt();
 		desc = "null";
+		initGUI();
 		addListeners();
 	}
 	/**
@@ -272,7 +294,8 @@ public class Card extends JPanel{
 	 */
 	public Card(int ID) {
 		setPreferredSize(new Dimension(221, 324));
-
+		
+		
 		JsonObject m2 = CardData.getCardData(ID);
 		car = m2.get("car").getAsDouble();
 		lp = m2.get("lp").getAsInt();
@@ -313,7 +336,8 @@ public class Card extends JPanel{
 			desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
 		}
 		//	System.out.println("DESC:"+desc);
-	//	System.out.println("DESC:"+desc);
+		//	System.out.println("DESC:"+desc);
+		initGUI();
 		addListeners();
 	}
 	/**In real battles Card need a reference to their caster aswell
@@ -362,36 +386,132 @@ public class Card extends JPanel{
 			desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
 		}
 		//	System.out.println("DESC:"+desc);
-	//	System.out.println("DESC:"+desc);
+		//	System.out.println("DESC:"+desc);
+		initGUI();
 		addListeners();
 	}
 	public void addListeners(){
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-	//			setBorder(new LineBorder(Color.MAGENTA, 5));
-	//			System.out.println("selectedCardChanged");
+				//			setBorder(new LineBorder(Color.MAGENTA, 5));
+				//			System.out.println("selectedCardChanged");
 				Main.setSelectedCard(Card.this);
 				Main.updateDisplay();
-		//		if(Battlefield.selectedCard!=null)Battlefield.setDisplayCard(Card.this);
+				//		if(Battlefield.selectedCard!=null)Battlefield.setDisplayCard(Card.this);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-	//			if(Main.getSelectedCard()==Card.this)return;
-	//			setBorder(new LineBorder(Color.GREEN, 2));
+				//			if(Main.getSelectedCard()==Card.this)return;
+				//			setBorder(new LineBorder(Color.GREEN, 2));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-	//			if(Main.getSelectedCard()==Card.this)return;
-	//			setBorder(new LineBorder(Color.BLACK, 1));
+				//			if(Main.getSelectedCard()==Card.this)return;
+				//			setBorder(new LineBorder(Color.BLACK, 1));
 			}
 		});
+	}
+	public void initGUI(){
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.rowHeights = new int[]{10, 10, 10, 10, 15};
+		gridBagLayout.columnWidths = new int[] {20, 20, 20, 20};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0};
+		setLayout(gridBagLayout);
+		titleLabel = new JLabel(title);
+		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		GridBagConstraints gbc_titleLabel = new GridBagConstraints();
+		gbc_titleLabel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_titleLabel.anchor = GridBagConstraints.NORTH;
+		gbc_titleLabel.insets = new Insets(5, 2, 1, 2);
+		gbc_titleLabel.gridx = 0;
+		gbc_titleLabel.gridy = 0;
+		this.add(titleLabel, gbc_titleLabel);
+		
+		textArea = new JTextArea(desc);
+		textArea.setEditable(false);
+		rrLabel = new JLabel(rr(rr));
+		GridBagConstraints gbc_rrLabel = new GridBagConstraints();
+		gbc_rrLabel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_rrLabel.anchor = GridBagConstraints.NORTH;
+		gbc_rrLabel.insets = new Insets(1, 2, 1, 2);
+		gbc_rrLabel.gridx = 0;
+		gbc_rrLabel.gridy = 1;
+		this.add(rrLabel, gbc_rrLabel);
+		//descLabel = new JLabel();
+		car_l = new JLabel();
+		car_l.setHorizontalAlignment(SwingConstants.LEFT);
+		GridBagConstraints gbc_car_l = new GridBagConstraints();
+		gbc_car_l.fill = GridBagConstraints.HORIZONTAL;
+		gbc_car_l.insets = new Insets(1, 1, 1, 5);
+		gbc_car_l.gridx = 3;
+		gbc_car_l.gridy = 3;
+		this.add(car_l, gbc_car_l);
+		lck_l = new JLabel();
+		lck_l.setHorizontalAlignment(SwingConstants.CENTER);
+		GridBagConstraints gbc_lck_l = new GridBagConstraints();
+		gbc_lck_l.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lck_l.insets = new Insets(1, 1, 1, 1);
+		gbc_lck_l.gridx = 2;
+		gbc_lck_l.gridy = 3;
+		this.add(lck_l, gbc_lck_l);
+		lp_l = new JLabel();
+		lp_l.setHorizontalAlignment(SwingConstants.CENTER);
+		GridBagConstraints gbc_lp_l = new GridBagConstraints();
+		gbc_lp_l.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lp_l.insets = new Insets(1, 1, 1, 1);
+		gbc_lp_l.gridx = 1;
+		gbc_lp_l.gridy = 3;
+		this.add(lp_l, gbc_lp_l);
+		atk_l = new JLabel();
+		atk_l.setHorizontalAlignment(SwingConstants.CENTER);
+		GridBagConstraints gbc_atk_l = new GridBagConstraints();
+		gbc_atk_l.fill = GridBagConstraints.HORIZONTAL;
+		gbc_atk_l.insets = new Insets(1, 5, 1, 1);
+		gbc_atk_l.gridx = 0;
+		gbc_atk_l.gridy = 3;
+		this.add(atk_l, gbc_atk_l);
+		mc_l = new JLabel(mc+"");
+		mc_l.setHorizontalAlignment(SwingConstants.RIGHT);
+		GridBagConstraints gbc_mc_l = new GridBagConstraints();
+		gbc_mc_l.fill = GridBagConstraints.HORIZONTAL;
+		gbc_mc_l.insets = new Insets(1, 1, 1, 2);
+		gbc_mc_l.gridx = 3;
+		gbc_mc_l.gridy = 1;
+		this.add(mc_l, gbc_mc_l);
+		
+		scrollPane = new JScrollPane(textArea);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.weighty = 0.5;
+		gbc_scrollPane.gridwidth = 4;
+		gbc_scrollPane.insets = new Insets(2, 5, 2, 5);
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 0;
+		gbc_scrollPane.gridy = 4;
+		add(scrollPane, gbc_scrollPane);
+		
+		pic_panel = new JPanel();
+		GridBagConstraints gbc_pic_panel = new GridBagConstraints();
+		gbc_pic_panel.weighty = 0.5;
+		gbc_pic_panel.weightx = 0.5;
+		gbc_pic_panel.fill = GridBagConstraints.BOTH;
+		gbc_pic_panel.gridwidth = 4;
+		gbc_pic_panel.insets = new Insets(2, 5, 2, 5);
+		gbc_pic_panel.gridx = 0;
+		gbc_pic_panel.gridy = 2;
+		add(pic_panel, gbc_pic_panel);
+		pic_panel.setLayout(new BorderLayout(0, 0));
+		
+		pic_label = new JLabel(picture);
+		pic_panel.add(pic_label);
+		updateGUI();
 	}
 	/*
 	public void deselect(){
 		setBorder(new LineBorder(Color.BLACK, 1));
 	}
-	*/
+	 */
 	public String rr(int rr){
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0;i<rr;i++){
@@ -403,11 +523,18 @@ public class Card extends JPanel{
 	public String toString(){
 		return "ic_id="+ic_id+", title="+title+ ", type="+type+ ", mc="+mc+ ", atk="+atk+ ", lp="+lp+ ", lck="+lck+ ", car="+car+ ", sa_code="+sa_code+ ", sa_mc="+sa_mc+ ", sa_param="+sa_param+ ", rr="+rr+ ", spell_code="+spell_code+ ", spell_param="+spell_param+ ", picture="+picture.toString(); 
 	}
+	public void updateGUI(){
+		lp_l.setText("LP: "+lp);
+		atk_l.setText("ATK: "+atk);
+		lck_l.setText("LCK: "+lck);
+		car_l.setText("CAR: "+car);
+	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		/*
 		setBackground(Color.WHITE);
 		setLayout(null);
-		/*
+		
 		setBorder(new LineBorder(Color.BLACK, 1));
 		if(picture==null)
 			try {
@@ -418,7 +545,7 @@ public class Card extends JPanel{
 		pictureIcon = new JLabel(new ImageIcon(picture));
 		pictureIcon.setBounds(12, 63, 176, 58);
 		add(pictureIcon);
-		 */
+		 
 
 		g.drawImage(picture.getImage(), getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
 		g.drawImage(picture.getImage(), getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
@@ -427,12 +554,12 @@ public class Card extends JPanel{
 		lck_l.setBounds(getWidth()/32, 24*getHeight()/32, (int)lck_l.getPreferredSize().getWidth(), 10);
 		add(lck_l);
 
-		/*
+		
 		if(lckLabel != null) remove(lck_l);
 		lckLabel = new JLabel(""+lck);
 		lckLabel.setBounds(80, 192, 56, 16);
 		add(lckLabel);
-		 */
+		 
 
 
 		if(car_l != null) remove(car_l);
@@ -440,12 +567,12 @@ public class Card extends JPanel{
 		car_l.setBounds(getWidth()/32, 26*getHeight()/32, (int)car_l.getPreferredSize().getWidth(), 10);
 		add(car_l);
 
-		/*
+		
 		if(carLabel != null) remove(carLabel);
 		carLabel = new JLabel(""+car);
 		carLabel.setBounds(80, 221, 56, 16);
 		add(carLabel);
-		 */
+		 
 
 
 		if(descLabel != null) remove(descLabel);
@@ -465,11 +592,11 @@ public class Card extends JPanel{
 		mc_l.setBounds(getWidth() - getWidth()/32 - (int)mc_l.getPreferredSize().getWidth(), getHeight()/32, getWidth() - getWidth()/32 , getHeight()/32 + (int)mc_l.getPreferredSize().getHeight());
 		add(mc_l);
 
-		/*
+		
 		mcLabel = new JLabel(""+mc);
 		mcLabel.setBounds(132, 13, 56, 16);
 		add(mcLabel);
-		 */
+		 
 
 
 		if(rrLabel != null) remove(rrLabel);
@@ -482,25 +609,22 @@ public class Card extends JPanel{
 		atk_l = new JLabel("ATK: " + atk);
 		atk_l.setBounds(getWidth()/32, 20*getHeight()/32, (int)atk_l.getPreferredSize().getWidth(), 10);
 		add(atk_l);
-
-		/*
+		
 		if(atkLabel != null) remove(atkLabel);
 		atkLabel = new JLabel(""+atk);
 		atkLabel.setBounds(80, 134, 56, 16);
-		add(atkLabel);
-		 */
+		add(atkLabel); 
 
 		if(lp_l != null) remove(lp_l);
 		lp_l = new JLabel("LP: " + lp);
 		lp_l.setBounds(getWidth()/32, 22*getHeight()/32, (int)lp_l.getPreferredSize().getWidth(), 10);
 		add(lp_l);
 
-		/*
 		if(lpLabel != null) remove(lpLabel);
 		lpLabel = new JLabel(""+lp);
 		lpLabel.setBounds(80, 163, 56, 16);
 		add(lpLabel);
-		 */
+		*/
 	}
 	public BufferedImage createImage(JPanel panel) {
 		int w = panel.getWidth();
@@ -525,8 +649,8 @@ public class Card extends JPanel{
 	public boolean isMonster(){
 		return type==1;
 	}
-	
-	
+
+
 	/**
 	 * @param param - sa_param / spell_param
 	 * @param value	- value, IF THE SPELL DECREASE THE PARAMETER, MAKE THE VALUE NEGATIVE!
@@ -601,6 +725,7 @@ public class Card extends JPanel{
 				break;
 			}
 		}
+		updateGUI();
 		repaint();
 		return lp<=0;
 	}
@@ -617,11 +742,111 @@ public class Card extends JPanel{
 		}
 		System.out.println(this.title+" received "+DMG+" damage");
 		this.lp -= DMG;
-		this.repaint();
+		updateGUI();
+		repaint();
 		return lp<=0;
 	}
 	public int generateNetAtk(){
 		return (int) Math.max(0, atk-lck + (int)(Math.random() * ((lck*2) + 1)));
 	}
+	public void effectRed(){
+		Executors.newSingleThreadExecutor().execute(new Runnable(){
+			@Override
+			public void run() {
+				float alpha = 0.0f;
+				Graphics g = Card.this.getGraphics();
+				if(g==null)return;
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setColor(Color.RED);
+				while(alpha <=0.16f){
+					g2d.setComposite(AlphaComposite.getInstance(
+							AlphaComposite.SRC_OVER, alpha));
+					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+					g2d.fillRect(0, 0, Card.this.getWidth(), Card.this.getHeight());
+					alpha += 0.02f;
+					try {
+						Thread.sleep(20);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				repaint();
+			}
+		});
+	}
+	public void effectGreen(){
+		Executors.newSingleThreadExecutor().execute(new Runnable(){
+			@Override
+			public void run() {
+				float alpha = 0.0f;
+				Graphics g = Card.this.getGraphics();
+				if(g==null)return;
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setColor(Color.GREEN);
+				while(alpha <=0.16f){
+					g2d.setComposite(AlphaComposite.getInstance(
+							AlphaComposite.SRC_OVER, alpha));
+					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+					g2d.fillRect(0, 0, Card.this.getWidth(), Card.this.getHeight());
+					alpha += 0.02f;
+					try {
+						Thread.sleep(20);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				repaint();
+			}
+		});
+	}
+	public void effectSpell(){
+		Executors.newSingleThreadExecutor().execute(new Runnable(){
+			@Override
+			public void run() {
 
+				float alpha = 0.0f;
+				Graphics g = Card.this.getGraphics();
+				if(g==null)return;
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setColor(Color.GREEN);
+				while(alpha <=0.16f){
+					g2d.setComposite(AlphaComposite.getInstance(
+							AlphaComposite.SRC_OVER, alpha));
+					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+					g2d.fillRect(0, 0, Card.this.getWidth(), Card.this.getHeight());
+					alpha += 0.02f;
+					try {
+						Thread.sleep(20);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				repaint();
+			}
+		});
+	}
+	public void effectAttack(){
+		Executors.newSingleThreadExecutor().execute(new Runnable(){
+			@Override
+			public void run() {
+				float alpha = 0.0f;
+				Image t = null;
+				try {
+					t = ImageIO.read(new File("atk.png"));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Graphics g = Card.this.getGraphics();
+				if(g==null)return;
+				g.drawImage(t, 0, 0, Card.this.getWidth(), Card.this.getHeight(), null);
+				try {
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				repaint();
+			}
+		});
+	}
 }
