@@ -85,8 +85,7 @@ public class Test_CardHolder extends JFrame {
 		scrollPane = new JScrollPane(ch1);
 		contentPane.add(scrollPane);
 		DropTarget dropTarget = new DropTarget(ch1, DnDConstants.ACTION_MOVE, dropHandler, true);
-	//	contentPane.add(ch1);
-		ch1.setLayout(new GridLayout(1, 0, 0, 0));
+		ch1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 
 		st1 = new JLabel("New label");
@@ -113,7 +112,7 @@ public class Test_CardHolder extends JFrame {
 		btnNewButton_1 = new JButton("red effect");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				((Card)ch1.getComponent(0)).effectAttack();;
+				((Card)ch1.getComponent(0)).effectRed();;
 			}
 		});
 		panel.add(btnNewButton_1);
