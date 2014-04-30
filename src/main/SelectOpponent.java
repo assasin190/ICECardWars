@@ -48,8 +48,9 @@ public class SelectOpponent extends JPanel {
 	static JButton random;
 	static WTF wtf;
 	private static AudioPlayer bgMusic;
-	
-	public SelectOpponent(){
+	static Inw player;
+	public SelectOpponent(Inw player){
+		this.player = player;
 		opponentList = new ArrayList<Inw>();
 		try {
 			saveAllOpponentsToLocal();
@@ -206,6 +207,7 @@ public class SelectOpponent extends JPanel {
 			String fbname = temp2.get("name");
 			BufferedImage image = ImageIO.read(fb_url);
 			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID, image, fbname);
+		//TODO: change to new constructor
 			opponentList.add(inw);
 			System.out.println(i + ": " + fname);
 		
@@ -258,7 +260,15 @@ public class SelectOpponent extends JPanel {
 		back.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				/*
+			//	String s = "{\"cv_uid\":\"+\",\"fb_id\":\"" + current.inw.fb_id + "\",\"firstname_en\":\"" + current.inw.fname + "\",\"lastname_en\":\"" + current.inw.lname + "\",\"full_lp\":\"40\",\"full_mp\":\"" + current.inw.LP_full + "\",\"max_deck_size\":\"" + current.inw.maxDeck + "\"}";
+				String [] args = {s};
+		//		Battlefield bf = new Battlefield();
+				Battlefield.main(args);
+				System.out.println(s);
+				*/
+				Inw op = current.inw;
+				Battlefield bf = new Battlefield(player,op);
 			}
 			
 		});
@@ -304,11 +314,14 @@ public class SelectOpponent extends JPanel {
 		select.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				/*
 				String s = "{\"cv_uid\":\"+\",\"fb_id\":\"" + current.inw.fb_id + "\",\"firstname_en\":\"" + current.inw.fname + "\",\"lastname_en\":\"" + current.inw.lname + "\",\"full_lp\":\"40\",\"full_mp\":\"" + current.inw.LP_full + "\",\"max_deck_size\":\"" + current.inw.maxDeck + "\"}";
 				String [] args = {s};
-				//Battlefield.main(args);
+				Battlefield bf = new Battlefield();
 				System.out.println(s);
-				
+				*/
+				Inw op = current.inw;
+				Battlefield bf = new Battlefield(player,op);
 			}
 			
 		});
@@ -363,12 +376,14 @@ public class SelectOpponent extends JPanel {
 		select.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				/*
 				String s = "{\"cv_uid\":\"+\",\"fb_id\":\"" + current.inw.fb_id + "\",\"firstname_en\":\"" + current.inw.fname + "\",\"lastname_en\":\"" + SelectOpponent.current.inw.lname + "\",\"full_lp\":\"40\",\"full_mp\":\"" + SelectOpponent.current.inw.LP_full + "\",\"max_deck_size\":\"" + SelectOpponent.current.inw.maxDeck + "\"}";
 				String [] args = {s};
 				Battlefield.main(args);
 				System.out.print(s);
-				//System.out.println("fuck you");
-
+				//System.out.println("fuck you");*/
+				Inw op = current.inw;
+				Battlefield bf = new Battlefield(player,op);
 				
 			}
 			
