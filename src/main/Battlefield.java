@@ -731,8 +731,8 @@ public class Battlefield extends JFrame {
 					o_hand.add(new Card(opponentDeck.get(0),opponent));	opponentDeck.remove(0);		
 					//		o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
 					//TODO: insert AI here
-
-			//		Collections.shuffle(o_hand.getComponents(), new Random(System.currentTimeMillis()));
+					//TODO: shuffle opponent hand
+					//		Collections.shuffle(o_hand.getComponents(), new Random(System.currentTimeMillis()));
 
 					//AI PHRASE 1: Try to summon card into nonempty lanes
 					for(CardHolder lane:Theirlane_ref){
@@ -747,11 +747,23 @@ public class Battlefield extends JFrame {
 					}
 					//AI PHRASE 2: If there are mp left, try to randomly use spell card in hand
 					if(opponent.MP_current>0){
-
+						Component[] components = o_hand.getComponents();
+						for(Component com : components) {
+							Card t = (Card)com;
+							if(!t.isMonster()&&opponent.MP_current>=t.mc)AIuseCard(t);
+						}
 					}
 					//AI PHRASE 3: If there are mp left, try to randomly use SA of current cards in lane
 					if(opponent.MP_current>0){
-						
+						for(CardHolder ch : Theirlane_ref){
+							if(!ch.isEmpty()){
+								Card t = ch.getCard();
+								if(t!=null&&opponent.MP_current>=t.mc){
+									AIuseCard(t);
+								}
+							}
+							
+						}
 					}
 					/*
 					Card c;
@@ -911,7 +923,7 @@ public class Battlefield extends JFrame {
 				break;
 			case 3:		//  REMOVE CARDS FOR USED SPELLS 
 				//ALL CARDS WILL BE RESET (which is probably not a problem)
-			//	System.out.println("SPELL REDRAW USED!");
+				//	System.out.println("SPELL REDRAW USED!");
 				while(o_dumpster.getComponentCount()>0){
 					Card t = (Card) o_dumpster.getComponent(0);
 					opponentDeck.add(t.ic_id);
@@ -936,7 +948,7 @@ public class Battlefield extends JFrame {
 				break;
 			case 6:		//WILL RETURN RANDOMLY FROM DUMPSTER
 				if(o_dumpster.getComponentCount()==0){
-				//	System.out.println("Your Dumpster is empty!");
+					//	System.out.println("Your Dumpster is empty!");
 					return;
 				}
 				int random = 0 + (int)((Math.random() * o_dumpster.getComponentCount()));
