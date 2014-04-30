@@ -324,12 +324,20 @@ public class Battlefield extends JFrame {
 
 		Theirlane1.setOpposingCH(Mylane1);
 		Mylane1.setOpposingCH(Theirlane1);
+		Theirlane1.setLayout(new GridLayout(1, 0, 0, 0));
+		Mylane1.setLayout(new GridLayout(1, 0, 0, 0));
 		Theirlane2.setOpposingCH(Mylane2);
 		Mylane2.setOpposingCH(Theirlane2);
+		Theirlane2.setLayout(new GridLayout(1, 0, 0, 0));
+		Mylane2.setLayout(new GridLayout(1, 0, 0, 0));
 		Theirlane3.setOpposingCH(Mylane3);
 		Mylane3.setOpposingCH(Theirlane3);
+		Theirlane3.setLayout(new GridLayout(1, 0, 0, 0));
+		Mylane3.setLayout(new GridLayout(1, 0, 0, 0));
 		Theirlane4.setOpposingCH(Mylane4);
 		Mylane4.setOpposingCH(Theirlane4);
+		Theirlane4.setLayout(new GridLayout(1, 0, 0, 0));
+		Mylane4.setLayout(new GridLayout(1, 0, 0, 0));
 		JPanel playerPanel = new JPanel();
 		middlePane.add(playerPanel);
 		playerPanel.setLayout(new GridLayout(0, 1, 0, 0));
@@ -397,10 +405,12 @@ public class Battlefield extends JFrame {
 						break;
 					case 2:
 						Card t = ((CardHolder)c.getParent()).getOpposingCardHolder().getCard();//.apply(c);
+					//	System.out.println(t.toString());
 						if(t==null){
 							JOptionPane.showMessageDialog(null, "Opposing lane is empty!", "Error",JOptionPane.ERROR_MESSAGE);
 							break;
 						}
+						if(t.apply(c));o_dumpster.add(t);
 						player.useMP(c.sa_mc);c.SAactivated = true;
 						break;
 					case 3:
@@ -530,8 +540,6 @@ public class Battlefield extends JFrame {
 		buttonPanel.add(breakButton);
 
 		selectedCard = new CardHolder(CardHolder.DISPLAY,false);
-		FlowLayout flowLayout = (FlowLayout) selectedCard.getLayout();
-		flowLayout.setAlignment(FlowLayout.CENTER);
 		selectedCard.addContainerListener(new ContainerAdapter() {
 			@Override
 			public void componentAdded(ContainerEvent arg0) {
@@ -540,6 +548,7 @@ public class Battlefield extends JFrame {
 			}
 		});
 		RcontentPane.add(selectedCard);
+		selectedCard.setLayout(new GridLayout(1, 0, 0, 0));
 
 		desc_area = new JTextArea();
 		desc_area.setWrapStyleWord(true);
@@ -575,7 +584,7 @@ public class Battlefield extends JFrame {
 		}
 		p_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		//TEST TEST TEST
-	//	p_hand.add(new Card(52));
+		p_hand.add(new Card(50));
 	}
 	public void runBFchecker(){
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
@@ -873,7 +882,7 @@ public class Battlefield extends JFrame {
 			//		JOptionPane.showMessageDialog(this, "msg", "Error",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				t.apply(c);
+				if(t.apply(c));p_dumpster.add(t);
 				opponent.useMP(c.sa_mc);c.effectSpell();
 				break;
 			case 3:
@@ -885,7 +894,7 @@ public class Battlefield extends JFrame {
 			case 4:
 				Card tt2 = Mylane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
 				if(tt2==null)break;
-				tt2.apply(c);
+				if(tt2.apply(c))p_dumpster.add(tt2);
 				opponent.useMP(c.sa_mc);c.effectSpell();
 				break;
 			case 5:
@@ -909,7 +918,7 @@ public class Battlefield extends JFrame {
 		}else{
 			switch(c.spell_code){
 			case 1: 
-				Card temp = Mylane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
+				Card temp = Theirlane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
 				if(temp!=null){
 					temp.apply(c);
 					opponent.useMP(c.mc);
@@ -918,8 +927,9 @@ public class Battlefield extends JFrame {
 				}
 				break;
 			case 2:
-				Card temp2 = Theirlane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
+				Card temp2 = Mylane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
 				if(temp2!=null){
+					if(temp2.apply(c))p_dumpster.add(temp2);
 					opponent.useMP(c.mc);
 					c.effectSpell();
 					o_dumpster.add(c);
@@ -943,7 +953,7 @@ public class Battlefield extends JFrame {
 				o_dumpster.add(c);
 				break;
 			case 4:
-				Card temp3 = Mylane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
+				Card temp3 = Theirlane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
 				if(temp3!=null){
 					temp3.apply(c);
 					opponent.useMP(c.mc);
@@ -972,14 +982,12 @@ public class Battlefield extends JFrame {
 				for(int i = p_dumpster.getComponentCount()-1;i>=0;i--){
 					Card t = (Card) p_dumpster.getComponent(i);
 					if(t.rr>c.param_value){
-						p_dumpster.remove(i);
 						p_hand.add(new Card(t.ic_id));
 					}
 				}
 				for(int i = o_dumpster.getComponentCount()-1;i>=0;i--){
 					Card t = (Card) o_dumpster.getComponent(i);
 					if(t.rr>c.param_value){
-						o_dumpster.remove(i);
 						o_hand.add(new Card(t.ic_id));
 					}
 				}
@@ -1057,7 +1065,7 @@ public class Battlefield extends JFrame {
 					break;
 				case 4:
 					if(((CardHolder)c.getParent()).type==CardHolder.OPPONENT){
-						c.apply(caster);c.SAactivated = true;
+						if(c.apply(caster))p_dumpster.add(c);c.SAactivated = true;
 						player.useMP(caster.sa_mc);caster.effectSpell();
 					}else JOptionPane.showMessageDialog(this, "Invalid target!\nPlease select monster on opponent side", "Error",JOptionPane.ERROR_MESSAGE);
 					break;
@@ -1085,9 +1093,9 @@ public class Battlefield extends JFrame {
 					break;
 				case 2:
 					if(((CardHolder)c.getParent()).type==CardHolder.OPPONENT){
-						c.apply(caster);
-						player.useMP(caster.mc);
 						caster.effectSpell();
+						if(c.apply(caster))o_dumpster.add(c);
+						player.useMP(caster.mc);
 						p_dumpster.add(caster);
 					}else System.out.println("Invalid target type!");
 					break;

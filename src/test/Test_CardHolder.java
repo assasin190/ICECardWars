@@ -100,7 +100,6 @@ public class Test_CardHolder extends JFrame {
 		scrollPane = new JScrollPane(ch1);
 		contentPane.add(scrollPane);
 		DropTarget dropTarget = new DropTarget(ch1, DnDConstants.ACTION_MOVE, dropHandler, true);
-		ch1.setLayout(null);
 
 
 		st1 = new JLabel("New label");
@@ -199,6 +198,7 @@ public class Test_CardHolder extends JFrame {
 		contentPane.add(b3);
 		ch1.setOpposingCH(ch2);
 		ch2.setOpposingCH(ch1);
+		ch1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 	}
 
 }

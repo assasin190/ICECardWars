@@ -409,10 +409,10 @@ public class Card extends JPanel{
 	}
 	public void initGUI(){
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.rowHeights = new int[] {10, 10, 10, 55, 10};
+		gridBagLayout.rowHeights = new int[] {10, 0, 0, 55};
 		gridBagLayout.columnWidths = new int[] {20, 20, 20, 20};
 		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0};
 		setLayout(gridBagLayout);
 		titleLabel = new JLabel(title);
 		titleLabel.setForeground(Color.WHITE);
@@ -452,7 +452,6 @@ public class Card extends JPanel{
 		statPanel = new JPanel();
 		GridBagConstraints gbc_statPanel = new GridBagConstraints();
 		gbc_statPanel.weighty = 0.1;
-		gbc_statPanel.anchor = GridBagConstraints.NORTH;
 		gbc_statPanel.gridwidth = 4;
 		gbc_statPanel.insets = new Insets(2, 0, 5, 2);
 		gbc_statPanel.fill = GridBagConstraints.HORIZONTAL;
@@ -460,19 +459,24 @@ public class Card extends JPanel{
 		gbc_statPanel.gridy = 3;
 		add(statPanel, gbc_statPanel);
 		lp_l = new JLabel();
+		lp_l.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		statPanel.add(lp_l);
 		lp_l.setHorizontalAlignment(SwingConstants.CENTER);
 		atk_l = new JLabel();
+		atk_l.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		statPanel.add(atk_l);
 		atk_l.setHorizontalAlignment(SwingConstants.CENTER);
 		lck_l = new JLabel();
+		lck_l.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		statPanel.add(lck_l);
 		lck_l.setHorizontalAlignment(SwingConstants.CENTER);
 		//descLabel = new JLabel();
 		car_l = new JLabel();
+		car_l.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		statPanel.add(car_l);
 		car_l.setHorizontalAlignment(SwingConstants.CENTER);
 		rrLabel = new JLabel(rr(rr));
+		rrLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		rrLabel.setForeground(Color.WHITE);
 		GridBagConstraints gbc_rrLabel = new GridBagConstraints();
 		gbc_rrLabel.fill = GridBagConstraints.HORIZONTAL;
@@ -506,7 +510,7 @@ public class Card extends JPanel{
 		pic_panel.setOpaque(false);
 		GridBagConstraints gbc_pic_panel = new GridBagConstraints();
 		gbc_pic_panel.weighty = 0.4;
-		gbc_pic_panel.fill = GridBagConstraints.BOTH;
+		gbc_pic_panel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_pic_panel.gridwidth = 4;
 		gbc_pic_panel.insets = new Insets(2, 2, 5, 2);
 		gbc_pic_panel.gridx = 0;

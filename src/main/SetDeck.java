@@ -6,6 +6,7 @@ import misc.DropHandler;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import java.awt.Component;
@@ -16,6 +17,7 @@ import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -79,9 +81,17 @@ public class SetDeck extends JPanel {
 							card[i] = cd.ic_id;
 						}
 						System.out.println(Arrays.toString(card));
+
 						try {
-							URL dest = new URL("http://128.199.235.83/icw/?q=icw/service/set_deck&user=624&pass=90408&deck=" + Arrays.toString(card));
-							dest.openStream();
+							String URLString = "http://128.199.235.83/icw/?q=icw/service/set_deck&user=624&pass=90408&deck="+Arrays.toString(card);
+							URLString = URLString.replace(" ", "");
+							URL dest = new URL(URLString);
+							InputStream is = dest.openStream();
+					//		is = new URL(url).openStream();
+							Gson gs = new Gson();
+							JsonObject job = gs.fromJson(new InputStreamReader(is), JsonObject.class);
+							System.out.println("STATUS: "+job.get("status").getAsInt());
+							System.out.println("MSG: "+job.get("msg").getAsString());
 							System.out.println("Hell");
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
