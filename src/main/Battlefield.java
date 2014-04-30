@@ -647,10 +647,11 @@ public class Battlefield extends JFrame {
 					AIturn();
 					return;
 				}
+				System.out.println("PLAYER FP TURN");
 				endButton.setEnabled(false);
 				useButton.setEnabled(false);
 				breakButton.setEnabled(false);
-				System.out.println("PLAYER FP TURN");
+				
 				Main.Turn = false;
 				//FP of player turn ?FPPL
 				for(CardHolder ch:Mylane_ref){
@@ -719,10 +720,9 @@ public class Battlefield extends JFrame {
 			@Override
 			public void run() {
 				System.out.println("OPPONENT PP TURN");
-
 				opponent.restoreMP();
 				//AI	?PPAI
-				System.out.println("OPPONENT FP TURN");
+				
 				if(opponentDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
 					if(opponent.attack(playerDeck.size())){
 						stop();return;
@@ -732,7 +732,7 @@ public class Battlefield extends JFrame {
 					//		o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
 					//TODO: insert AI here
 					//TODO: shuffle opponent hand
-					//		Collections.shuffle(o_hand.getComponents(), new Random(System.currentTimeMillis()));
+					Collections.shuffle(Arrays.asList(o_hand.getComponents()), new Random(System.currentTimeMillis()));
 
 					//AI PHRASE 1: Try to summon card into nonempty lanes
 					for(CardHolder lane:Theirlane_ref){
@@ -750,7 +750,7 @@ public class Battlefield extends JFrame {
 						Component[] components = o_hand.getComponents();
 						for(Component com : components) {
 							Card t = (Card)com;
-							if(!t.isMonster()&&opponent.MP_current>=t.mc)AIuseCard(t);
+							if(t!=null&&!t.isMonster()&&opponent.MP_current>=t.mc)AIuseCard(t);
 						}
 					}
 					//AI PHRASE 3: If there are mp left, try to randomly use SA of current cards in lane
@@ -796,12 +796,14 @@ public class Battlefield extends JFrame {
 				}
 
 				//END AI
+				
 				if(firstTurn!=0){
 					firstTurn--;
 					//			endButton.setEnabled(true);
 					playerPP();
 					return;
 				}
+				System.out.println("OPPONENT FP TURN");
 				//FP ?FPAI
 				for(CardHolder ch:Theirlane_ref){
 					if(ch.isEmpty())continue;
@@ -913,12 +915,12 @@ public class Battlefield extends JFrame {
 			switch(c.spell_code){
 			case 1: 
 				Mylane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
-				opponent.useMP(caster.mc);
+				opponent.useMP(c.mc);
 				p_dumpster.add(c);
 				break;
 			case 2:
 				Theirlane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
-				opponent.useMP(caster.mc);
+				opponent.useMP(c.mc);
 				p_dumpster.add(c);
 				break;
 			case 3:		//  REMOVE CARDS FOR USED SPELLS 

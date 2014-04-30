@@ -135,7 +135,7 @@ public class DropHandler implements DropTargetListener {
 		}
 
 		JPanel panel = (JPanel) destination;
-		System.out.println(panel.getComponent(0).getSize());
+		//System.out.println(panel.getComponent(0).getSize());
 		System.out.println("DROP: "+success);
 	//	c_original.revalidate();
 	//	c_original.repaint();

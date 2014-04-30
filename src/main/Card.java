@@ -1,11 +1,17 @@
 package main;
 
 import java.awt.AlphaComposite;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureRecognizer;
@@ -25,27 +31,15 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 
 import misc.DragGestureHandler;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
-
-import java.awt.BorderLayout;
-
-import javax.swing.SwingConstants;
-import javax.swing.ScrollPaneConstants;
-
-import java.awt.Font;
 
 public class Card extends JPanel{
 	/**

@@ -1,5 +1,6 @@
 package main;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,10 +30,13 @@ public class Main {
 
 		MainMenu main = new MainMenu(con);
 		Splash frame = new Splash();
-		frame.setSize(new Dimension(1920, 1080));
-				frame.setLocationRelativeTo(null);
+		frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+		
 		frame.setUndecorated(true);
 		frame.setVisible(true);
+	//	frame.pack();
+		frame.setLocationRelativeTo(null);
+		
 		SplashPanel.setProgress("Connecting to server");
 		while(true){
 			try {
