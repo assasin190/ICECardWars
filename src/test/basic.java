@@ -1,8 +1,11 @@
 package test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class basic {
 
@@ -21,12 +24,15 @@ public class basic {
 		System.out.println(param_type);
 		System.out.println(param_value);
 		*/
-		int[] a = {1,2,3,4,5,6,7,8,9};
-		List<Integer> l = Arrays.asList(a);
-		Collections.shuffle(Arrays.asList(l));
-		a = l.toArray();
-		System.out.println(Arrays.toString(a));
-		
+		LinkedList<Integer> l = randomIndexArray(6);
+		System.out.println(l);
 	}
-
+	public static LinkedList<Integer> randomIndexArray(int length){
+		LinkedList<Integer> l = new LinkedList<Integer>();
+		for(int i = 0;i<length;i++){
+			l.add(i);
+		}
+		Collections.shuffle(l,new Random(System.currentTimeMillis()));
+		return l;
+	}
 }

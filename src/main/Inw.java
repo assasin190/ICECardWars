@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.IOException;
@@ -253,14 +255,43 @@ public class Inw extends JPanel{
 		return true;
 	}
 	public boolean attack(int DMG){
+		if(DMG<0){
+			effectColor(Color.GREEN);
+		}else effectColor(Color.RED);
 		this.LP_current -= DMG;
 		updateGUI();
 		System.out.println("Inw received "+DMG+ " damages LP is now: "+LP_current);
+		if(DMG>0)Battlefield.notify.append("Inw received "+DMG+ " damages. LP is now: "+LP_current);
+		else Battlefield.notify.append("Inw received "+(-DMG)+ " health. LP is now: "+LP_current);
 		return LP_current<=0;
 	}
 	public void restoreMP(){
 		MP_current = MP_full;
 		updateGUI();
+	}
+	public void effectColor(final Color c){
+	//	Executors.newSingleThreadExecutor().execute
+	//	SwingUtilities.invokeLater
+		Executors.newSingleThreadExecutor().execute(new Runnable(){
+			@Override
+			public void run() {
+				int r = c.getRed();
+				int g = c.getGreen();
+				int b = c.getBlue();
+				int alpha = 0;
+				Graphics gr = Inw.this.getGraphics();
+				if(gr==null)return;
+				alpha = 255;
+				while(alpha > 0){
+					gr.setColor(new Color(r,g,b,alpha));
+					gr.fillRect(0, 0, getWidth(), getHeight());
+					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
+					alpha -= 26;
+		//			repaint();
+				}
+	//			repaint();
+			}
+		});
 	}
 }
 

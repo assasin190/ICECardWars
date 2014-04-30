@@ -683,7 +683,9 @@ public class Card extends JPanel{
 	public boolean apply(Card c){
 		//return false;
 		//TODO: not done!
+		
 		if(c.isMonster()){
+			Battlefield.notify.append(c.title+" used special ability on "+this.title+"\n");
 			switch(c.sa_code){
 			case 1:	// increase self
 				param(c.param_type,c.param_value);
@@ -715,6 +717,7 @@ public class Card extends JPanel{
 				break;
 			}	
 		}else{
+			Battlefield.notify.append(c.title+" spell used on "+this.title+"\n");
 			switch(c.spell_code){
 			case 1: //increase
 				param(c.param_type,c.param_value);
@@ -755,9 +758,11 @@ public class Card extends JPanel{
 	public boolean attack(int DMG,boolean CAR){
 		if(Protected&&!CAR){
 			System.out.println(this.title+" is protected!");
+			Battlefield.notify.append(this.title+" is protected!\n");
 			return false;
 		}
-		System.out.println(this.title+" received "+DMG+" damage");
+		Battlefield.notify.append(this.title+" received "+DMG+" damages\n");
+	//	System.out.println(this.title+" received "+DMG+" damage");
 		this.lp -= DMG;
 		updateGUI();
 		effectRed();

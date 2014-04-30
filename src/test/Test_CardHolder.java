@@ -48,6 +48,7 @@ public class Test_CardHolder extends JFrame {
 	private JButton btnNewButton;
 	private JScrollPane scrollPane;
 	private JButton btnNewButton_1;
+	private JButton remove;
 
 	/**
 	 * Launch the application.
@@ -130,13 +131,21 @@ public class Test_CardHolder extends JFrame {
 				((Card)ch1.getComponent(0)).effectAttack();
 			}
 		});
+		
+		remove = new JButton("test remove");
+		remove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ch1.getComponents()[0].setEnabled(false);
+				
+			}
+		});
+		panel.add(remove);
 		panel.add(btnNewButton_1);
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("settext");
 				//		if(ch1.isEmpty())st1.setText("null");
 				st1.setText(ch1.getComponentCount()+":"+Arrays.toString(ch1.getComponents()));
-
 			}
 		});
 		contentPane.add(ch2);

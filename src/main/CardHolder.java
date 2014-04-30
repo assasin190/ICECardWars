@@ -107,7 +107,11 @@ public class CardHolder extends JPanel{
 		this.remove(0);
 	}
 	public Card getCard(){
-		return (Card)this.getComponent(0);
+		try{
+			return (Card)this.getComponent(0);
+		}catch(ArrayIndexOutOfBoundsException e){
+			return null;
+		}
 	}
 	/**Set the reference to CardHolder belonging to the opposing side and on same lane with this CardHolder
 	 * @param c 
