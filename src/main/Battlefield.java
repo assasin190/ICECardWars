@@ -2,6 +2,7 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -673,14 +674,14 @@ public class Battlefield extends JFrame {
 							Card co = cho.getCard();
 							if(co.attack(dmg,false)){	//if the attack kill the monster
 								o_dumpster.add(cho.getCard());
-					//			cho.repaint();
+								//			cho.repaint();
 							}else{
 								if(Math.random()<co.car){
 									System.out.println(co.title+" counterattacked!");
 									co.effectAttack();
 									if(c.attack(dmg,true)){
 										p_dumpster.add(c);
-								//		ch.repaint();
+										//		ch.repaint();
 									}
 								}
 							}
@@ -722,7 +723,6 @@ public class Battlefield extends JFrame {
 				opponent.restoreMP();
 				//AI	?PPAI
 				System.out.println("OPPONENT FP TURN");
-				//CURRENT AI: if possible, add 3 cards to lane 1,2,3
 				if(opponentDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
 					if(opponent.attack(playerDeck.size())){
 						stop();return;
@@ -732,7 +732,28 @@ public class Battlefield extends JFrame {
 					//		o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
 					//TODO: insert AI here
 
+			//		Collections.shuffle(o_hand.getComponents(), new Random(System.currentTimeMillis()));
 
+					//AI PHRASE 1: Try to summon card into nonempty lanes
+					for(CardHolder lane:Theirlane_ref){
+						if(lane.isEmpty()){
+							for(Component c:o_hand.getComponents()){
+								Card temp = (Card)c;
+								if(temp.isMonster()){
+									if(opponent.useMP(temp.mc))lane.add(c);
+								}
+							}
+						}
+					}
+					//AI PHRASE 2: If there are mp left, try to randomly use spell card in hand
+					if(opponent.MP_current>0){
+
+					}
+					//AI PHRASE 3: If there are mp left, try to randomly use SA of current cards in lane
+					if(opponent.MP_current>0){
+						
+					}
+					/*
 					Card c;
 					if(o_hand.getComponentCount()!=0){
 						c = (Card) o_hand.getComponent(0);
@@ -751,15 +772,15 @@ public class Battlefield extends JFrame {
 						if(c!=null&&Theirlane3.isEmpty()&&c.isMonster()){
 							if(opponent.useMP(c.mc))Theirlane3.add(o_hand.getComponent(0));
 						}
-						
+
 					}
 					if(o_hand.getComponentCount()!=0){
 						c = (Card) o_hand.getComponent(0);
 						if(c!=null&&Theirlane4.isEmpty()&&c.isMonster()){
 							if(opponent.useMP(c.mc))Theirlane4.add(o_hand.getComponent(0));
 						}
-							
 					}
+					 */
 				}
 
 				//END AI
@@ -789,7 +810,7 @@ public class Battlefield extends JFrame {
 							Card co = cho.getCard();
 							if(co.attack(dmg,false)){	//if the attack kill the monster
 								p_dumpster.add(cho.getCard());
-				//				cho.repaint();
+								//				cho.repaint();
 								//			cho.removeCard();
 								//			ch.repaint();
 							}else{
@@ -798,7 +819,7 @@ public class Battlefield extends JFrame {
 									co.effectAttack();
 									if(c.attack(dmg,true)){
 										o_dumpster.add(c);
-						//				ch.repaint();
+										//				ch.repaint();
 										//		ch.removeCard();
 									}
 								}
@@ -836,6 +857,116 @@ public class Battlefield extends JFrame {
 
 		});
 
+	}
+	/**Use SA/Spell for AI
+	 * @param c
+	 */
+	public void AIuseCard(Card c){
+		c.effectSpell();
+		if(c.isMonster()){
+			switch(c.sa_code){
+			case 1:
+				c.apply(c);
+				opponent.useMP(c.sa_mc);
+				break;
+			case 2:
+				((CardHolder)c.getParent()).getOpposingCardHolder().getCard().apply(c);
+				opponent.useMP(c.sa_mc);
+				break;
+			case 3:
+				Mylane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
+				opponent.useMP(c.sa_mc);
+				break;
+			case 4:
+				Theirlane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
+				opponent.useMP(c.sa_mc);
+				break;
+			case 5:
+				Mylane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
+				opponent.useMP(c.sa_mc);
+				break;
+			case 6:
+				c.apply(c);
+				opponent.useMP(c.sa_mc);
+				break;
+			case 7:
+				c.apply(c);
+				opponent.useMP(c.sa_mc);
+				break;
+			default:
+				System.err.println("error AI");
+				break;
+			}	
+		}else{
+			switch(c.spell_code){
+			case 1: 
+				Mylane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
+				opponent.useMP(caster.mc);
+				p_dumpster.add(c);
+				break;
+			case 2:
+				Theirlane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
+				opponent.useMP(caster.mc);
+				p_dumpster.add(c);
+				break;
+			case 3:		//  REMOVE CARDS FOR USED SPELLS 
+				//ALL CARDS WILL BE RESET (which is probably not a problem)
+			//	System.out.println("SPELL REDRAW USED!");
+				while(o_dumpster.getComponentCount()>0){
+					Card t = (Card) o_dumpster.getComponent(0);
+					opponentDeck.add(t.ic_id);
+				}
+				int drawAmount = (int) Math.min(c.param_value, opponentDeck.size());
+				Collections.shuffle(opponentDeck, new Random(System.currentTimeMillis()));
+				//can't draw more than deck size!!
+				for(int i = 0;i<drawAmount;i++){
+					o_hand.add(new Card(i));
+				}
+				opponent.useMP(c.sa_mc);
+				o_dumpster.add(c);
+				break;
+			case 4:
+				caster = c;
+				selected = true;cancelButton.setEnabled(true);
+				break;
+			case 5:
+				opponent.attack((int) -c.param_value);
+				opponent.useMP(c.sa_mc);
+				o_dumpster.add(c);
+				break;
+			case 6:		//WILL RETURN RANDOMLY FROM DUMPSTER
+				if(o_dumpster.getComponentCount()==0){
+				//	System.out.println("Your Dumpster is empty!");
+					return;
+				}
+				int random = 0 + (int)((Math.random() * o_dumpster.getComponentCount()));
+				Card temp = (Card) o_dumpster.getComponent(random);
+				o_dumpster.remove(random);
+				o_hand.add(new Card(temp.ic_id));//the Card should be reset to initial status
+				opponent.useMP(c.sa_mc);
+				o_dumpster.add(c);
+				break;
+			case 7:	//return all card with > param rarity to hand
+				for(int i = p_dumpster.getComponentCount()-1;i>=0;i--){
+					Card t = (Card) p_dumpster.getComponent(i);
+					if(t.rr>c.param_value){
+						p_dumpster.remove(i);
+						p_hand.add(new Card(t.ic_id));
+					}
+				}
+				for(int i = o_dumpster.getComponentCount()-1;i>=0;i--){
+					Card t = (Card) o_dumpster.getComponent(i);
+					if(t.rr>c.param_value){
+						o_dumpster.remove(i);
+						o_hand.add(new Card(t.ic_id));
+					}
+				}
+				player.useMP(c.sa_mc);
+				o_dumpster.add(c);
+				break;
+			}
+
+		}
 	}
 	/**
 	 * End the game

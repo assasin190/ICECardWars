@@ -693,39 +693,49 @@ public class Card extends JPanel{
 			switch(c.sa_code){
 			case 1:	// increase self
 				param(c.param_type,c.param_value);
+				effectColor(Color.GREEN);
 				break;
 			case 2:	// decreasing opposing
 				param(c.param_type,-c.param_value);
+				effectColor(Color.MAGENTA);
 				break;
 			case 3:	// increase team
 				param(c.param_type,c.param_value);
+				effectColor(Color.GREEN);
 				break;
 			case 4:	// decrease opponent
 				param(c.param_type,-c.param_value);
+				effectColor(Color.MAGENTA);
 				break;
 			case 5:	// increase team , sacrifice
 				param(c.param_type,c.param_value);
+				effectColor(Color.CYAN);
 				break;
 			case 6:
 				car = param_value;
+				effectColor(Color.GREEN);
 				break;
 			case 7:
 				directInw = true;
+				effectColor(Color.BLUE);
 				break;
 			}	
 		}else{
 			switch(c.spell_code){
 			case 1: //increase
 				param(c.param_type,c.param_value);
+				effectColor(Color.GREEN);
 				break;
 			case 2:	//decrease
 				param(c.param_type,-c.param_value);
+				effectColor(Color.MAGENTA);
 				break;
 			case 3:	//re shuffle deck
 				System.err.println("This should already be done in Battlefield!");
 				break;
 			case 4:
 				Protected = true;
+				effectColor(Color.GRAY);
 				break;
 			case 5:	//Heal Inw
 				System.err.println("This should already be done in Battlefield!");
@@ -783,6 +793,7 @@ public class Card extends JPanel{
 			}
 		});
 	}
+	
 	public void effectGreen(){
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
 			@Override
@@ -794,6 +805,30 @@ public class Card extends JPanel{
 				while(alpha > 0){
 					g.setColor(new Color(0,255,0,alpha));
 					g.fillRect(0, 0, getWidth(), getHeight());
+					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
+					alpha -= 26;
+		//			repaint();
+				}
+	//			repaint();
+			}
+		});
+	}
+	public void effectColor(final Color c){
+	//	Executors.newSingleThreadExecutor().execute
+	//	SwingUtilities.invokeLater
+		Executors.newSingleThreadExecutor().execute(new Runnable(){
+			@Override
+			public void run() {
+				int r = c.getRed();
+				int g = c.getGreen();
+				int b = c.getBlue();
+				int alpha = 0;
+				Graphics gr = Card.this.getGraphics();
+				if(gr==null)return;
+				alpha = 255;
+				while(alpha > 0){
+					gr.setColor(new Color(r,g,b,alpha));
+					gr.fillRect(0, 0, getWidth(), getHeight());
 					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
 					alpha -= 26;
 		//			repaint();
