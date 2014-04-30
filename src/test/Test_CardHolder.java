@@ -49,6 +49,7 @@ public class Test_CardHolder extends JFrame {
 	private JScrollPane scrollPane;
 	private JButton btnNewButton_1;
 	private JButton remove;
+	private JButton btnChSpell;
 
 	/**
 	 * Launch the application.
@@ -141,6 +142,14 @@ public class Test_CardHolder extends JFrame {
 		});
 		panel.add(remove);
 		panel.add(btnNewButton_1);
+		
+		btnChSpell = new JButton("CH2 spell");
+		btnChSpell.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		panel.add(btnChSpell);
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("settext");
