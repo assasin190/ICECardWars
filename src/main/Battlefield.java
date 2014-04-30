@@ -46,9 +46,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 public class Battlefield extends JFrame {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3457162401020244642L;
 	//WARNING!! DO NOT ADD COMPONENT TO CARDHOLDER CLASS
 	private JPanel middlePane;
@@ -88,7 +85,6 @@ public class Battlefield extends JFrame {
 	private JScrollPane p_hand_scr;
 	private JScrollPane o_hand_scr;
 	private JButton breakButton;
-	//TODO: create more efficient method converting from ArrayList to String (label)
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -371,7 +367,7 @@ public class Battlefield extends JFrame {
 
 		endButton = new JButton("End Turn");
 		endButton.setEnabled(false);
-		
+
 		endButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				playerFP();
@@ -437,21 +433,21 @@ public class Battlefield extends JFrame {
 						selected = true;cancelButton.setEnabled(true);
 						break;
 					case 3:		//TODO: TEST  ////  REMOVE CARDS FOR USED SPELLS 
-					//ALL CARDS WILL BE RESET (which is probably not a problem)
-					System.out.println("SPELL REDRAW USED!");
-					while(p_dumpster.getComponentCount()>0){
-						Card t = (Card) p_dumpster.getComponent(0);
-						playerDeck.add(t.ic_id);
-					}
-					int drawAmount = (int) Math.min(c.param_value, playerDeck.size());
-					Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
-					//can't draw more than deck size!!
-					for(int i = 0;i<drawAmount;i++){
-						p_hand.add(new Card(i));
-					}
-					player.useMP(c.sa_mc);
-					p_dumpster.add(c);
-					break;
+						//ALL CARDS WILL BE RESET (which is probably not a problem)
+						System.out.println("SPELL REDRAW USED!");
+						while(p_dumpster.getComponentCount()>0){
+							Card t = (Card) p_dumpster.getComponent(0);
+							playerDeck.add(t.ic_id);
+						}
+						int drawAmount = (int) Math.min(c.param_value, playerDeck.size());
+						Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
+						//can't draw more than deck size!!
+						for(int i = 0;i<drawAmount;i++){
+							p_hand.add(new Card(i));
+						}
+						player.useMP(c.sa_mc);
+						p_dumpster.add(c);
+						break;
 					case 4:
 						caster = c;
 						selected = true;cancelButton.setEnabled(true);
@@ -462,17 +458,17 @@ public class Battlefield extends JFrame {
 						p_dumpster.add(c);
 						break;
 					case 6:		//WILL RETURN RANDOMLY FROM DUMPSTER
-					if(p_dumpster.getComponentCount()==0){
-						System.out.println("Your Dumpster is empty!");
-						return;
-					}
-					int random = 0 + (int)((Math.random() * p_dumpster.getComponentCount()));
-					Card temp = (Card) p_dumpster.getComponent(random);
-					p_dumpster.remove(random);
-					p_hand.add(new Card(temp.ic_id));//the Card should be reset to initial status
-					player.useMP(c.sa_mc);
-					p_dumpster.add(c);
-					break;
+						if(p_dumpster.getComponentCount()==0){
+							System.out.println("Your Dumpster is empty!");
+							return;
+						}
+						int random = 0 + (int)((Math.random() * p_dumpster.getComponentCount()));
+						Card temp = (Card) p_dumpster.getComponent(random);
+						p_dumpster.remove(random);
+						p_hand.add(new Card(temp.ic_id));//the Card should be reset to initial status
+						player.useMP(c.sa_mc);
+						p_dumpster.add(c);
+						break;
 					case 7:	//return all card with > param rarity to hand
 						for(int i = p_dumpster.getComponentCount()-1;i>=0;i--){
 							Card t = (Card) p_dumpster.getComponent(i);
@@ -589,13 +585,10 @@ public class Battlefield extends JFrame {
 			public void run() {
 				System.out.println("Thread battlefield checker started");
 				while(isActive){
-					//				Battlefield.this.repaint();
 					for(CardHolder ch:Mylane_ref){
 						if(ch.getComponentCount()==2){
 							p_dumpster.add(ch.getComponent(1));
 							ch.getCard().addListeners();
-							ch.revalidate();ch.repaint();
-							//				Battlefield.this.repaint();
 						}
 					}
 					for(CardHolder ch:Theirlane_ref){
@@ -603,8 +596,6 @@ public class Battlefield extends JFrame {
 							o_dumpster.add(ch.getComponent(1));
 							ch.getCard().addListeners();
 							ch.getCard().addListeners();
-							ch.revalidate();ch.repaint();
-							//				Battlefield.this.repaint();
 						}
 					}
 					if(!lowHealthMusic&&player.LP_current<player.LP_full/10){
@@ -620,6 +611,7 @@ public class Battlefield extends JFrame {
 					if(Main.Turn&&player.MP_current==0){
 						playerFP();
 					}
+					Battlefield.this.repaint();
 				}
 				System.out.println("Thread battlefield checker ended");
 			}
@@ -644,208 +636,200 @@ public class Battlefield extends JFrame {
 		System.out.println("PLAYER TURN INITIALS DONE!");
 	}
 	public void playerFP(){
-
-		//---------------------------------- END PLAYER PP TURN ----------------------------------
-		if(firstTurn!=0){
-			firstTurn--;
-			AIturn();
-			return;
-		}
 		endButton.setEnabled(false);
-		useButton.setEnabled(false);
-		breakButton.setEnabled(false);
-		System.out.println("PLAYER FP TURN");
-		Main.Turn = false;
-		//FP of player turn ?FPPL
-		for(CardHolder ch:Mylane_ref){
-			if(ch.isEmpty())continue;
-			Card c = ch.getCard();
-			//			if(c==null)continue;
-			int dmg = c.generateNetAtk();
-			System.out.println(c.title+" generate attack with "+dmg+" damage");
-			if(c.directInw){	//attack the inw directly
-				if(opponent.attack(dmg)){
-					stop();return;
+		//---------------------------------- END PLAYER PP TURN ----------------------------------
+		Executors.newSingleThreadExecutor().execute(new Runnable(){
+			@Override
+			public void run() {
+				if(firstTurn!=0){
+					firstTurn--;
+					AIturn();
+					return;
 				}
-			}
-			else{
-				CardHolder cho = ch.getOpposingCardHolder();
-				if(!cho.isEmpty()){
-					Card co = cho.getCard();
-					if(co.attack(dmg,false)){	//if the attack kill the monster
-						o_dumpster.add(cho.getCard());
-						cho.repaint();
-						//			cho.removeCard();
-						//		ch.repaint();
-					}else{
-						if(Math.random()<co.car){
-							System.out.println(co.title+" counterattacked!");
-							if(c.attack(dmg,true)){
-								p_dumpster.add(c);
-								ch.repaint();
-								//			ch.removeCard();
+				endButton.setEnabled(false);
+				useButton.setEnabled(false);
+				breakButton.setEnabled(false);
+				System.out.println("PLAYER FP TURN");
+				Main.Turn = false;
+				//FP of player turn ?FPPL
+				for(CardHolder ch:Mylane_ref){
+					if(ch.isEmpty())continue;
+					Card c = ch.getCard();
+					int dmg = c.generateNetAtk();
+					System.out.println(c.title+" generate attack with "+dmg+" damage");
+					c.effectAttack();
+					if(c.directInw){	//attack the inw directly
+						if(opponent.attack(dmg)){
+							stop();return;
+						}
+					}
+					else{
+						CardHolder cho = ch.getOpposingCardHolder();
+						if(!cho.isEmpty()){
+							Card co = cho.getCard();
+							if(co.attack(dmg,false)){	//if the attack kill the monster
+								o_dumpster.add(cho.getCard());
+					//			cho.repaint();
+							}else{
+								if(Math.random()<co.car){
+									System.out.println(co.title+" counterattacked!");
+									co.effectAttack();
+									if(c.attack(dmg,true)){
+										p_dumpster.add(c);
+								//		ch.repaint();
+									}
+								}
+							}
+						}else{
+							if(opponent.attack(dmg)){//attack the inw directly if there's no opposing card
+								stop();return;
 							}
 						}
 					}
-					//		cho.repaint();
-				}else{
-					if(opponent.attack(dmg)){//attack the inw directly if there's no opposing card
-						stop();return;
+					try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+				}
+				//END FP of player turn		
+				for(CardHolder ch:Mylane_ref){		//kill sacrifice card, and disable directInw
+					if(!ch.isEmpty()){				//disable direct inw attack buff, SAactivated false
+						Card c = ch.getCard();
+						if(c.sacrifice){
+							System.out.println(c.title+" is killed by SA (sacrifice)");
+							p_dumpster.add(c);
+							ch.removeCard();
+						}else c.directInw = false;	c.SAactivated = false;
 					}
 				}
-			}
-			/*			else {
-		CardHolder cho = ch.getOpposingCardHolder();
-		if(!cho.isEmpty()){
-			Card co = cho.getCard();
-			if(co.attack(dmg,false)){	//if the attack kill the monster
-				p_dumpster.add(cho.getCard());
-				cho.removeCard();
-				if(Math.random()<co.car){
-					System.out.println(co.title+" counterattacked!");
-					if(c.attack(dmg,true)){
-						o_dumpster.add(c);
-						ch.removeCard();
+				for(CardHolder ch:Theirlane_ref){		//disable protection buff for opponent
+					if(!ch.isEmpty()){
+						ch.getCard().Protected = false;
 					}
 				}
-			}	
-		}
-	}
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 */
-			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-		//END FP of player turn		
-		for(CardHolder ch:Mylane_ref){		//kill sacrifice card, and disable directInw
-			if(!ch.isEmpty()){				//disable direct inw attack buff, SAactivated false
-				Card c = ch.getCard();
-				if(c.sacrifice){
-					System.out.println(c.title+" is killed by SA (sacrifice)");
-					p_dumpster.add(c);
-					ch.removeCard();
-				}else c.directInw = false;	c.SAactivated = false;
+				AIturn();		//end
 			}
-		}
-		for(CardHolder ch:Theirlane_ref){		//disable protection buff for opponent
-			if(!ch.isEmpty()){
-				ch.getCard().Protected = false;
-			}
-		}
-		AIturn();		//end
+		});
+
 	}
 	public void AIturn(){
-		System.out.println("OPPONENT PP TURN");
-		
-		opponent.restoreMP();
-		//AI	?PPAI
-		System.out.println("OPPONENT FP TURN");
-		//CURRENT AI: if possible, add 3 cards to lane 1,2,3
-		if(opponentDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
-			if(opponent.attack(playerDeck.size())){
-				stop();return;
-			}
-		}else{
-			o_hand.add(new Card(opponentDeck.get(0),opponent));	opponentDeck.remove(0);		
-			//		o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
-			//TODO: insert AI here
-			Card c;
-			if(o_hand.getComponentCount()!=0){
-				c = (Card) o_hand.getComponent(0);
-				if(Theirlane1.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster()){
-					Theirlane1.add(o_hand.getComponent(0));
+		Executors.newSingleThreadExecutor().execute(new Runnable(){
+			@Override
+			public void run() {
+				System.out.println("OPPONENT PP TURN");
 
-				}
-			}
-			//		o_hand.remove(0);
-			if(o_hand.getComponentCount()!=0){
-				c = (Card) o_hand.getComponent(0);
-				if(c!=null&&Theirlane2.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster()){
-					Theirlane2.add(o_hand.getComponent(0));
-				}
-			}
-			if(o_hand.getComponentCount()!=0){
-				c = (Card) o_hand.getComponent(0);
-				if(c!=null&&Theirlane3.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster())Theirlane3.add(o_hand.getComponent(0));
-			}
-			if(o_hand.getComponentCount()!=0){
-				c = (Card) o_hand.getComponent(0);
-				if(c!=null&&Theirlane4.isEmpty()&&opponent.useMP(c.mc)&&c.isMonster())Theirlane4.add(o_hand.getComponent(0));
-			}
-		}
+				opponent.restoreMP();
+				//AI	?PPAI
+				System.out.println("OPPONENT FP TURN");
+				//CURRENT AI: if possible, add 3 cards to lane 1,2,3
+				if(opponentDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
+					if(opponent.attack(playerDeck.size())){
+						stop();return;
+					}
+				}else{
+					o_hand.add(new Card(opponentDeck.get(0),opponent));	opponentDeck.remove(0);		
+					//		o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
+					//TODO: insert AI here
 
-		//END AI
-		if(firstTurn!=0){
-			firstTurn--;
-			//			endButton.setEnabled(true);
-			playerPP();
-			return;
-		}
-		//FP ?FPAI
-		for(CardHolder ch:Theirlane_ref){
-			if(ch.isEmpty())continue;
-			Card c = ch.getCard();
-			int dmg = c.generateNetAtk();
-			System.out.println(c.title+" generate attack with "+dmg+" damage");
-			if(c.directInw){	//attack the inw directly
-				if(player.attack(dmg)){
-					stop();return;
+
+					Card c;
+					if(o_hand.getComponentCount()!=0){
+						c = (Card) o_hand.getComponent(0);
+						if(Theirlane1.isEmpty()&&c.isMonster()){
+							if(opponent.useMP(c.mc))Theirlane1.add(o_hand.getComponent(0));
+						}
+					}
+					if(o_hand.getComponentCount()!=0){
+						c = (Card) o_hand.getComponent(0);
+						if(c!=null&&Theirlane2.isEmpty()&&c.isMonster()){
+							if(opponent.useMP(c.mc))Theirlane2.add(o_hand.getComponent(0));
+						}
+					}
+					if(o_hand.getComponentCount()!=0){
+						c = (Card) o_hand.getComponent(0);
+						if(c!=null&&Theirlane3.isEmpty()&&c.isMonster()){
+							if(opponent.useMP(c.mc))Theirlane3.add(o_hand.getComponent(0));
+						}
+						
+					}
+					if(o_hand.getComponentCount()!=0){
+						c = (Card) o_hand.getComponent(0);
+						if(c!=null&&Theirlane4.isEmpty()&&c.isMonster()){
+							if(opponent.useMP(c.mc))Theirlane4.add(o_hand.getComponent(0));
+						}
+							
+					}
 				}
-			}
-			else {
-				CardHolder cho = ch.getOpposingCardHolder();
-				if(!cho.isEmpty()){
-					Card co = cho.getCard();
-					if(co.attack(dmg,false)){	//if the attack kill the monster
-						p_dumpster.add(cho.getCard());
-						cho.repaint();
-						//			cho.removeCard();
-						//			ch.repaint();
-					}else{
-						if(Math.random()<co.car){
-							System.out.println(co.title+" counterattacked!");
-							if(c.attack(dmg,true)){
-								o_dumpster.add(c);
-								ch.repaint();
-								//		ch.removeCard();
+
+				//END AI
+				if(firstTurn!=0){
+					firstTurn--;
+					//			endButton.setEnabled(true);
+					playerPP();
+					return;
+				}
+				//FP ?FPAI
+				for(CardHolder ch:Theirlane_ref){
+					if(ch.isEmpty())continue;
+					Card c = ch.getCard();
+					int dmg = c.generateNetAtk();
+					System.out.println(c.title+" generate attack with "+dmg+" damage");
+					c.effectAttack();
+					if(c.directInw){	//attack the inw directly
+						if(player.attack(dmg)){
+							stop();return;
+						}
+					}
+					else {
+						CardHolder cho = ch.getOpposingCardHolder();
+						if(!cho.isEmpty()){
+							Card co = cho.getCard();
+							if(co.attack(dmg,false)){	//if the attack kill the monster
+								p_dumpster.add(cho.getCard());
+				//				cho.repaint();
+								//			cho.removeCard();
+								//			ch.repaint();
+							}else{
+								if(Math.random()<co.car){
+									System.out.println(co.title+" counterattacked!");
+									co.effectAttack();
+									if(c.attack(dmg,true)){
+										o_dumpster.add(c);
+						//				ch.repaint();
+										//		ch.removeCard();
+									}
+								}
+							}
+							//			cho.repaint();
+						}else{		//atk inw directly
+							if(player.attack(dmg)){
+								stop();return;
 							}
 						}
 					}
-					//			cho.repaint();
-				}else{		//atk inw directly
-					if(player.attack(dmg)){
-						stop();return;
+
+
+					try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+				}
+				//END FP
+				for(CardHolder ch:Theirlane_ref){		//kill sacrifice card, and disable direct Inw attack
+					if(!ch.isEmpty()){
+						Card c = ch.getCard();
+						if(c.sacrifice){
+							System.out.println(c.title+" is killed by SA (sacrifice)");
+							o_dumpster.add(c);
+							ch.removeCard();
+						}else c.directInw = false;	c.SAactivated = false;
 					}
 				}
+				for(CardHolder ch:Mylane_ref){		//disable protection buff for player
+					if(!ch.isEmpty()){
+						ch.getCard().Protected = false;
+					}
+				}
+				//	endButton.setEnabled(true);
+				playerPP();
 			}
 
+		});
 
-			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-		//END FP
-		for(CardHolder ch:Theirlane_ref){		//kill sacrifice card, and disable direct Inw attack
-			if(!ch.isEmpty()){
-				Card c = ch.getCard();
-				if(c.sacrifice){
-					System.out.println(c.title+" is killed by SA (sacrifice)");
-					o_dumpster.add(c);
-					ch.removeCard();
-				}else c.directInw = false;	c.SAactivated = false;
-			}
-		}
-		for(CardHolder ch:Mylane_ref){		//disable protection buff for player
-			if(!ch.isEmpty()){
-				ch.getCard().Protected = false;
-			}
-		}
-		//	endButton.setEnabled(true);
-		playerPP();
 	}
 	/**
 	 * End the game
@@ -904,19 +888,19 @@ public class Battlefield extends JFrame {
 					if(((CardHolder)c.getParent()).type==CardHolder.PLAYER){
 						c.apply(caster);c.SAactivated = true;
 						System.out.println("TEST C:"+c.lp);
-						player.useMP(caster.sa_mc);
+						player.useMP(caster.sa_mc);caster.effectSpell();
 					}else System.out.println("Invalid target type!");
 					break;
 				case 4:
 					if(((CardHolder)c.getParent()).type==CardHolder.OPPONENT){
 						c.apply(caster);c.SAactivated = true;
-						player.useMP(caster.sa_mc);
+						player.useMP(caster.sa_mc);caster.effectSpell();
 					}else System.out.println("Invalid target type!");
 					break;
 				case 5:
 					if(((CardHolder)c.getParent()).type==CardHolder.PLAYER){
 						c.apply(caster);c.SAactivated = true;
-						player.useMP(caster.sa_mc);
+						player.useMP(caster.sa_mc);caster.effectSpell();
 					}else System.out.println("Invalid target type!");
 					break;
 				default:
@@ -931,6 +915,7 @@ public class Battlefield extends JFrame {
 					if(((CardHolder)c.getParent()).type==CardHolder.PLAYER){
 						c.apply(caster);
 						player.useMP(caster.mc);
+						caster.effectSpell();
 						p_dumpster.add(caster);
 					}else System.out.println("Invalid target type!");
 					break;
@@ -938,6 +923,7 @@ public class Battlefield extends JFrame {
 					if(((CardHolder)c.getParent()).type==CardHolder.OPPONENT){
 						c.apply(caster);
 						player.useMP(caster.mc);
+						caster.effectSpell();
 						p_dumpster.add(caster);
 					}else System.out.println("Invalid target type!");
 					break;
@@ -945,6 +931,7 @@ public class Battlefield extends JFrame {
 					if(((CardHolder)c.getParent()).type==CardHolder.PLAYER){
 						c.apply(caster);
 						player.useMP(caster.mc);
+						caster.effectSpell();
 						p_dumpster.add(caster);
 					}else System.out.println("Invalid target type!");
 					break;

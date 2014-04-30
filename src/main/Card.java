@@ -756,14 +756,16 @@ public class Card extends JPanel{
 		System.out.println(this.title+" received "+DMG+" damage");
 		this.lp -= DMG;
 		updateGUI();
-		repaint();
+		effectRed();
 		return lp<=0;
 	}
 	public int generateNetAtk(){
 		return (int) Math.max(0, atk-lck + (int)(Math.random() * ((lck*2) + 1)));
 	}
 	public void effectRed(){
-		SwingUtilities.invokeLater(new Runnable(){
+	//	Executors.newSingleThreadExecutor().execute
+	//	SwingUtilities.invokeLater
+		Executors.newSingleThreadExecutor().execute(new Runnable(){
 			@Override
 			public void run() {
 				int alpha = 0;
@@ -773,11 +775,11 @@ public class Card extends JPanel{
 				while(alpha > 0){
 					g.setColor(new Color(255,0,0,alpha));
 					g.fillRect(0, 0, getWidth(), getHeight());
-					try {Thread.sleep(15);} catch (InterruptedException e) {e.printStackTrace();}
-					alpha -= 5;
-					repaint();
+					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
+					alpha -= 26;
+		//			repaint();
 				}
-				repaint();
+	//			repaint();
 			}
 		});
 	}
@@ -785,24 +787,18 @@ public class Card extends JPanel{
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
 			@Override
 			public void run() {
-				float alpha = 0.0f;
+				int alpha = 0;
 				Graphics g = Card.this.getGraphics();
 				if(g==null)return;
-				Graphics2D g2d = (Graphics2D) g;
-				g2d.setColor(Color.GREEN);
-				while(alpha <=0.16f){
-					g2d.setComposite(AlphaComposite.getInstance(
-							AlphaComposite.SRC_OVER, alpha));
-					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-					g2d.fillRect(0, 0, Card.this.getWidth(), Card.this.getHeight());
-					alpha += 0.02f;
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+				alpha = 255;
+				while(alpha > 0){
+					g.setColor(new Color(0,255,0,alpha));
+					g.fillRect(0, 0, getWidth(), getHeight());
+					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
+					alpha -= 26;
+		//			repaint();
 				}
-				repaint();
+	//			repaint();
 			}
 		});
 	}
@@ -810,25 +806,32 @@ public class Card extends JPanel{
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
 			@Override
 			public void run() {
-
 				float alpha = 0.0f;
 				Graphics g = Card.this.getGraphics();
 				if(g==null)return;
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setColor(Color.GREEN);
-				while(alpha <=0.16f){
+				Image t = null;
+				try {
+					t = ImageIO.read(new File("spell.png"));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				while(alpha <=1.0f){
 					g2d.setComposite(AlphaComposite.getInstance(
 							AlphaComposite.SRC_OVER, alpha));
 					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-					g2d.fillRect(0, 0, Card.this.getWidth(), Card.this.getHeight());
+					g2d.drawImage(t, 0, 0, Card.this.getWidth(), Card.this.getHeight(), null);
 					alpha += 0.02f;
 					try {
 						Thread.sleep(20);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+		//			repaint();
 				}
-				repaint();
+		//		repaint();
 			}
 		});
 	}
@@ -837,6 +840,10 @@ public class Card extends JPanel{
 			@Override
 			public void run() {
 				float alpha = 0.0f;
+				Graphics g = Card.this.getGraphics();
+				if(g==null)return;
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setColor(Color.GREEN);
 				Image t = null;
 				try {
 					t = ImageIO.read(new File("atk.png"));
@@ -844,15 +851,20 @@ public class Card extends JPanel{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				Graphics g = Card.this.getGraphics();
-				if(g==null)return;
-				g.drawImage(t, 0, 0, Card.this.getWidth(), Card.this.getHeight(), null);
-				try {
-					Thread.sleep(700);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				while(alpha <=1.0f){
+					g2d.setComposite(AlphaComposite.getInstance(
+							AlphaComposite.SRC_OVER, alpha));
+					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+					g2d.drawImage(t, 0, 0, Card.this.getWidth(), Card.this.getHeight(), null);
+					alpha += 0.02f;
+					try {
+						Thread.sleep(20);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+		//			repaint();
 				}
-				repaint();
+		//		repaint();
 			}
 		});
 	}

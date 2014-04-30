@@ -127,7 +127,7 @@ public class Test_CardHolder extends JFrame {
 		btnNewButton_1 = new JButton("red effect");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				((Card)ch1.getComponent(0)).effectRed();;
+				((Card)ch1.getComponent(0)).effectAttack();
 			}
 		});
 		panel.add(btnNewButton_1);
