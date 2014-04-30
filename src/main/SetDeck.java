@@ -92,7 +92,6 @@ public class SetDeck extends JPanel {
 							JsonObject job = gs.fromJson(new InputStreamReader(is), JsonObject.class);
 							System.out.println("STATUS: "+job.get("status").getAsInt());
 							System.out.println("MSG: "+job.get("msg").getAsString());
-							System.out.println("Hell");
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
