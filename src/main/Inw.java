@@ -194,6 +194,9 @@ public class Inw extends JPanel{
 	public int getID(){
 		return user_ID;
 	}
+	public String getName(){
+		return fname;
+	}
 	/**
 	 * Check if the character has enough MP to perform action, if yes then this method will automatically decrease the MP of character by that amount
 	 * @param mp_cost - the MP cost of the SA or Spell

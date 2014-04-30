@@ -972,7 +972,7 @@ public class Battlefield extends JFrame {
 	 * End the game
 	 */
 	public void stop(){
-		JOptionPane.showMessageDialog(null, "GAME ENDED!!", "",JOptionPane.DEFAULT_OPTION);
+		JOptionPane.showMessageDialog(null,player.getName()+" "+"Win Against"+" "+opponent.getName(), "",JOptionPane.DEFAULT_OPTION);
 		isActive = false;
 		this.dispose();
 		bgMusic.stop();
