@@ -47,6 +47,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextArea;
+import java.awt.Dimension;
 
 public class Battlefield extends JFrame {
 	private static final long serialVersionUID = -3457162401020244642L;
@@ -344,7 +345,7 @@ public class Battlefield extends JFrame {
 		o_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
 		o_dumpster.setBackground(Color.LIGHT_GRAY);
 		opponentPanel.add(o_dumpster);
-		o_dumpster.setLayout(new BoxLayout(o_dumpster, BoxLayout.X_AXIS));
+		o_dumpster.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 
 		p_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
@@ -355,7 +356,7 @@ public class Battlefield extends JFrame {
 		p_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
 		p_dumpster.setBackground(Color.LIGHT_GRAY);
 		playerPanel.add(p_dumpster);
-		p_dumpster.setLayout(new BoxLayout(p_dumpster, BoxLayout.X_AXIS));
+		p_dumpster.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		RcontentPane.setLayout(new GridLayout(0, 1, 0, 0));
 
 		JPanel buttonPanel = new JPanel();
@@ -527,21 +528,9 @@ public class Battlefield extends JFrame {
 		});
 		buttonPanel.add(breakButton);
 
-		selectedCard = new CardHolder(CardHolder.DISPLAY,false){
-			@Override
-			public void paintComponent(Graphics g){
-
-				super.paintComponent(g);
-
-				try {
-					//		g.drawImage(ImageIO.read(new File("CardFrame.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
-					g.drawImage(ImageIO.read(new File("null.jpg")), 0 , 0 ,this.getWidth(), this.getHeight(), this);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-			}
-		};
+		selectedCard = new CardHolder(CardHolder.DISPLAY,false);
+		FlowLayout flowLayout = (FlowLayout) selectedCard.getLayout();
+		flowLayout.setAlignment(FlowLayout.CENTER);
 		selectedCard.addContainerListener(new ContainerAdapter() {
 			@Override
 			public void componentAdded(ContainerEvent arg0) {
@@ -557,6 +546,7 @@ public class Battlefield extends JFrame {
 		RcontentPane.add(desc_area);
 		notify = new JTextArea();
 		notify_scr = new JScrollPane(notify);
+		notify_scr.setPreferredSize(new Dimension(150, 200));
 		RcontentPane.add(notify_scr);
 
 
@@ -567,9 +557,10 @@ public class Battlefield extends JFrame {
 	 */
 	public void run(){	
 		runBFchecker();
+		//TODO: WTF
 		// DO WTF ACTION
 
-		// IF PLAYER GET TO START, call PlayerTurn();
+		// IF PLAYER GET TO START, call playerPP();
 		// else call AITurn();
 
 		playerPP();
@@ -583,7 +574,7 @@ public class Battlefield extends JFrame {
 		}
 		p_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		//TEST TEST TEST
-		p_hand.add(new Card(52));
+	//	p_hand.add(new Card(52));
 	}
 	public void runBFchecker(){
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
@@ -615,6 +606,7 @@ public class Battlefield extends JFrame {
 					} catch (InterruptedException e) {e.printStackTrace();
 					}
 					if(Main.Turn&&player.MP_current==0){
+						Main.Turn = false;
 						playerFP();
 					}
 					Battlefield.this.repaint();
@@ -625,6 +617,7 @@ public class Battlefield extends JFrame {
 		});
 	}
 	public void playerPP(){
+		notify.append("Player preparation phrase\n");
 		System.out.println("PLAYER PP TURN");
 		Main.Turn = true;
 		endButton.setEnabled(true);
@@ -642,6 +635,7 @@ public class Battlefield extends JFrame {
 		System.out.println("PLAYER TURN INITIALS DONE!");
 	}
 	public void playerFP(){
+		
 		endButton.setEnabled(false);
 		//---------------------------------- END PLAYER PP TURN ----------------------------------
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
@@ -652,6 +646,7 @@ public class Battlefield extends JFrame {
 					AIturn();
 					return;
 				}
+				notify.append("Player fighting phrase\n");
 				System.out.println("PLAYER FP TURN");
 				endButton.setEnabled(false);
 				useButton.setEnabled(false);
@@ -725,7 +720,7 @@ public class Battlefield extends JFrame {
 			@Override
 			public void run() {
 				System.out.println("OPPONENT PP TURN");
-				opponent.restoreMP();
+				notify.append("Opponent preparation phrase\n");
 				//AI	?PPAI
 
 				if(opponentDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
@@ -738,7 +733,7 @@ public class Battlefield extends JFrame {
 					//TODO: insert AI here
 
 					LinkedList<Integer> ranIndex = randomIndexArray(Theirlane_ref.length);
-
+					System.out.println("AI PHRASE 1");
 					//AI PHRASE 1: Try to summon card into nonempty lanes
 					for(int index:ranIndex){
 						CardHolder lane = Theirlane_ref[index];
@@ -746,11 +741,14 @@ public class Battlefield extends JFrame {
 							for(Component c:o_hand.getComponents()){
 								Card temp = (Card)c;
 								if(temp.isMonster()){
-									if(opponent.useMP(temp.mc))lane.add(c);
+									if(opponent.useMP(temp.mc)){
+										lane.add(c);break;
+									}
 								}
 							}
 						}
 					}
+					System.out.println("AI PHRASE 2");
 					//AI PHRASE 2: If there are mp left, try to randomly use spell card in hand
 					if(opponent.MP_current>0){
 						ranIndex = randomIndexArray(o_hand.getComponentCount());
@@ -762,6 +760,7 @@ public class Battlefield extends JFrame {
 							}
 						}
 					}
+					System.out.println("AI PHRASE 3");
 					//AI PHRASE 3: If there are mp left, try to randomly use SA of current cards in lane
 					if(opponent.MP_current>0){
 						ranIndex = randomIndexArray(Theirlane_ref.length);
@@ -849,6 +848,7 @@ public class Battlefield extends JFrame {
 				}
 				//	endButton.setEnabled(true);
 				playerPP();
+				opponent.restoreMP();
 			}
 
 		});
@@ -859,12 +859,12 @@ public class Battlefield extends JFrame {
 	 */
 	public void AIuseCard(Card c){
 		randomIndexArray(4);
-		c.effectSpell();
+		//c.effectSpell();
 		if(c.isMonster()){
 			switch(c.sa_code){
 			case 1:
 				c.apply(c);
-				opponent.useMP(c.sa_mc);
+				opponent.useMP(c.sa_mc);c.effectSpell();
 				break;
 			case 2:
 				Card t = ((CardHolder)c.getParent()).getOpposingCardHolder().getCard();//.apply(c);
@@ -873,27 +873,33 @@ public class Battlefield extends JFrame {
 					return;
 				}
 				t.apply(c);
-				opponent.useMP(c.sa_mc);
+				opponent.useMP(c.sa_mc);c.effectSpell();
 				break;
 			case 3:
-				Mylane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
-				opponent.useMP(c.sa_mc);
+				Card tt = Theirlane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
+				if(tt==null)break;
+				tt.apply(c);
+					opponent.useMP(c.sa_mc);c.effectSpell();
 				break;
 			case 4:
-				Theirlane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
-				opponent.useMP(c.sa_mc);
+				Card tt2 = Mylane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
+				if(tt2==null)break;
+				tt2.apply(c);
+				opponent.useMP(c.sa_mc);c.effectSpell();
 				break;
 			case 5:
-				Mylane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
-				opponent.useMP(c.sa_mc);
+				Card tt3 = Theirlane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
+				if(tt3 == null)break;
+				tt3.apply(c);
+				opponent.useMP(c.sa_mc);c.effectSpell();
 				break;
 			case 6:
 				c.apply(c);
-				opponent.useMP(c.sa_mc);
+				opponent.useMP(c.sa_mc);c.effectSpell();
 				break;
 			case 7:
 				c.apply(c);
-				opponent.useMP(c.sa_mc);
+				opponent.useMP(c.sa_mc);c.effectSpell();
 				break;
 			default:
 				System.err.println("error AI");
@@ -902,14 +908,22 @@ public class Battlefield extends JFrame {
 		}else{
 			switch(c.spell_code){
 			case 1: 
-				Mylane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
-				opponent.useMP(c.mc);
-				p_dumpster.add(c);
+				Card temp = Mylane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
+				if(temp!=null){
+					temp.apply(c);
+					opponent.useMP(c.mc);
+					c.effectSpell();
+					o_dumpster.add(c);
+				}
 				break;
 			case 2:
-				Theirlane_ref[(int)Math.round((Math.random()*3))].getCard().apply(c);
-				opponent.useMP(c.mc);
-				p_dumpster.add(c);
+				Card temp2 = Theirlane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
+				if(temp2!=null){
+					opponent.useMP(c.mc);
+					c.effectSpell();
+					o_dumpster.add(c);
+				}
+				
 				break;
 			case 3:		//  REMOVE CARDS FOR USED SPELLS 
 				//ALL CARDS WILL BE RESET (which is probably not a problem)
@@ -928,8 +942,13 @@ public class Battlefield extends JFrame {
 				o_dumpster.add(c);
 				break;
 			case 4:
-				caster = c;
-				selected = true;cancelButton.setEnabled(true);
+				Card temp3 = Mylane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
+				if(temp3!=null){
+					temp3.apply(c);
+					opponent.useMP(c.mc);
+					c.effectSpell();
+					o_dumpster.add(c);
+				}
 				break;
 			case 5:
 				opponent.attack((int) -c.param_value);
@@ -942,9 +961,9 @@ public class Battlefield extends JFrame {
 					return;
 				}
 				int random = 0 + (int)((Math.random() * o_dumpster.getComponentCount()));
-				Card temp = (Card) o_dumpster.getComponent(random);
+				Card temp4 = (Card) o_dumpster.getComponent(random);
 				o_dumpster.remove(random);
-				o_hand.add(new Card(temp.ic_id));//the Card should be reset to initial status
+				o_hand.add(new Card(temp4.ic_id));//the Card should be reset to initial status
 				opponent.useMP(c.sa_mc);
 				o_dumpster.add(c);
 				break;

@@ -40,6 +40,7 @@ import misc.DragGestureHandler;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.awt.Rectangle;
 
 public class Card extends JPanel{
 	/**
@@ -285,6 +286,8 @@ public class Card extends JPanel{
 	 * @wbp.parser.constructor
 	 */
 	public Card(int ID) {
+		setBounds(new Rectangle(0, 0, 123, 180));
+		setSize(new Dimension(123, 180));
 		//Original card size 221x324
 		
 		
@@ -412,6 +415,7 @@ public class Card extends JPanel{
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0};
 		setLayout(gridBagLayout);
 		titleLabel = new JLabel(title);
+		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gbc_titleLabel = new GridBagConstraints();
 		gbc_titleLabel.fill = GridBagConstraints.HORIZONTAL;
@@ -469,6 +473,7 @@ public class Card extends JPanel{
 		statPanel.add(car_l);
 		car_l.setHorizontalAlignment(SwingConstants.CENTER);
 		rrLabel = new JLabel(rr(rr));
+		rrLabel.setForeground(Color.WHITE);
 		GridBagConstraints gbc_rrLabel = new GridBagConstraints();
 		gbc_rrLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_rrLabel.anchor = GridBagConstraints.NORTH;
@@ -477,6 +482,7 @@ public class Card extends JPanel{
 		gbc_rrLabel.gridy = 1;
 		this.add(rrLabel, gbc_rrLabel);
 		mc_l = new JLabel(mc+"");
+		mc_l.setForeground(Color.WHITE);
 		mc_l.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_mc_l = new GridBagConstraints();
 		gbc_mc_l.insets = new Insets(2, 2, 5, 2);

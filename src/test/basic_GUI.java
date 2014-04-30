@@ -12,11 +12,12 @@ import javax.swing.JLabel;
 
 import main.Card;
 import java.awt.GridLayout;
+import javax.swing.JScrollPane;
 
 public class basic_GUI extends JFrame {
 
 	private JPanel contentPane;
-	public JLabel cardShow;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Launch the application.
@@ -37,7 +38,7 @@ public class basic_GUI extends JFrame {
 		Image i = c.createImage(c);
 		ImageIcon ic = new ImageIcon(i);
 		System.out.println(ic);
-		frame.cardShow = new JLabel(ic);
+	//	frame.cardShow = new JLabel(ic);
 		frame.revalidate();
 	}
 
@@ -54,9 +55,9 @@ public class basic_GUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(0, 1, 0, 0));
-
-		cardShow = new JLabel();
-		contentPane.add(cardShow);
+		
+		scrollPane = new JScrollPane();
+		contentPane.add(scrollPane);
 	}
 
 }
