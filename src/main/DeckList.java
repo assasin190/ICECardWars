@@ -250,11 +250,11 @@ public class DeckList extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-/*
+
 		ImageIcon sea = new ImageIcon("sea.jpg");
 		Image seaz = sea.getImage();
 		g.drawImage(seaz, 0, 0, this.getWidth(), this.getHeight(), null);
-		*/
+		
 
 	}
 
@@ -272,6 +272,7 @@ public class DeckList extends JPanel {
 		
 		ss.setLayout(new BorderLayout());
 		ss.add(a.right, BorderLayout.EAST);
+		ss.setOpaque(false);
 		ss.add(a.left,BorderLayout.CENTER);
 		ss.add(a.go,BorderLayout.SOUTH);
 		

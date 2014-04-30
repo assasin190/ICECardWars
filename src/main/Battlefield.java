@@ -93,7 +93,7 @@ public class Battlefield extends JFrame {
 	public static JTextArea notify;
 	private JTextArea desc_area;
 	public static void main(final String[] args) {
-		final String s = args[0];
+		//final String s = args[0];
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
