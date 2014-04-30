@@ -510,7 +510,7 @@ public class Card extends JPanel{
 		
 		pic_label = new JLabel(picture);
 		pic_panel.add(pic_label);
-		this.setPreferredSize(new Dimension(123, 180));
+		this.setPreferredSize(new Dimension(164, 240));
 		updateGUI();
 	}
 	/*
