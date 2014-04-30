@@ -101,6 +101,7 @@ public class SetDeck extends JPanel {
 					
 				});
 				JPanel display = new JPanel();
+				display.setPreferredSize(new Dimension(400, 768));
 				display.add(b);
 				this.add(display);
 				
