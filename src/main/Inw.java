@@ -306,11 +306,7 @@ public class Inw extends JPanel {
 		System.out.println("Inw received "+DMG+ " damages LP is now: "+LP_current);
 		if(DMG>=0)Battlefield.notify.append("Inw received "+DMG+ " damages. LP is now: "+LP_current+"\n");
 		else Battlefield.notify.append("Inw received "+(-DMG)+ " health. LP is now: "+LP_current+"\n");
-<<<<<<< HEAD
-		return LP_current
-=======
 		return LP_current<=0;
->>>>>>> ce05ad761edfb66d811f70c134a86b78ed87d556
 	}
 
 	public void restoreMP() {
