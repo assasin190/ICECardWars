@@ -27,6 +27,8 @@ import javax.swing.border.Border;
 import javax.swing.event.MouseInputListener;
 import javax.swing.text.html.HTMLDocument.Iterator;
 
+import misc.AudioPlayer;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParser;
@@ -44,6 +46,7 @@ public class SelectOpponent extends JPanel {
 	static JButton select;
 	static JButton back;
 	static JButton random;
+	private static AudioPlayer bgMusic;
 	
 	public SelectOpponent(){
 		opponentList = new ArrayList<Inw>();
@@ -60,14 +63,11 @@ public class SelectOpponent extends JPanel {
 			e.printStackTrace();
 		}
 		
-	}
-	public static void main(String [] args) {
-		
 		determineResolution();
 		JFrame test = new JFrame();
 		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		SelectOpponent so = new SelectOpponent();
+		
 		/*
 		switch(screenResolutionString) {
 			case "1024x768":  so.createGUI1024x768();
@@ -78,13 +78,15 @@ public class SelectOpponent extends JPanel {
 							  break;
 		}
 		*/
-		if(screenResolutionString == "1024x768") so.createGUI1024x768();
-		else if(screenResolutionString == "1366x768") so.createGUI1366x768();
-		else so.createGUI1920x1080();
-		test.add(so);
+		if(screenResolutionString == "1024x768") createGUI1024x768();
+		else if(screenResolutionString == "1366x768") createGUI1366x768();
+		else createGUI1920x1080();
+		test.add(this);
 		test.setVisible(true);
 		
+		
 	}
+	
 	
 	public void createGUI1024x768(){
 		opponentPanel = new JPanel();
@@ -425,6 +427,9 @@ public class SelectOpponent extends JPanel {
 		public void mouseEntered(MouseEvent arg0) {
 			if(this == current) return;
 			this.setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));
+			bgMusic = new AudioPlayer("beep.wav");
+			bgMusic.play();
+			
 			
 		}
 
@@ -486,6 +491,8 @@ public class SelectOpponent extends JPanel {
 					back.setEnabled(false);
 					random.setEnabled(false);
 					display.validate();
+					bgMusic = new AudioPlayer("beep.wav");
+					bgMusic.play();
 					sleep(delay);
 					count++;
 					if(count == 20) delay = 250;
