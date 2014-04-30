@@ -68,7 +68,7 @@ public class SelectOpponent extends JPanel {
 		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		SelectOpponent so = new SelectOpponent();
-		
+		/*
 		switch(screenResolutionString) {
 			case "1024x768":  so.createGUI1024x768();
 							  break;
@@ -77,6 +77,10 @@ public class SelectOpponent extends JPanel {
 			case "1920x1080": so.createGUI1920x1080();
 							  break;
 		}
+		*/
+		if(screenResolutionString == "1024x768") so.createGUI1024x768();
+		else if(screenResolutionString == "1366x768") so.createGUI1366x768();
+		else so.createGUI1920x1080();
 		test.add(so);
 		test.setVisible(true);
 		
@@ -206,6 +210,10 @@ public class SelectOpponent extends JPanel {
 	}
 	
 	public static void setupDisplay(){
+		if(screenResolutionString == "1024x768") setupDisplay1024x768();
+		else if(screenResolutionString == "1366x768") setupDisplay1366x768();
+		else setupDisplay1920x1080();
+		/*
 		switch(screenResolutionString) {
 		case "1024x768":  setupDisplay1024x768();
 						  break;
@@ -213,7 +221,9 @@ public class SelectOpponent extends JPanel {
 						  break;
 		case "1920x1080": setupDisplay1920x1080();
 						  break;
+		
 		}
+		*/
 	}
 	
 	public static void setupDisplay1024x768(){
@@ -477,7 +487,7 @@ public class SelectOpponent extends JPanel {
 					random.setEnabled(false);
 					display.validate();
 					sleep(delay);
-					
+					count++;
 					if(count == 20) delay = 250;
 					if(count == 28) delay = 500;
 					if(count == 32) delay = 1000;

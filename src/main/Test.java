@@ -54,7 +54,7 @@ public class Test {
 		btnNewButton = new JButton("add");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Card c = new Card((int)(Math.random() * ((60) + 1)),true);
+				Card c = new Card((int)(Math.random() * ((60) + 1)), true);
 				cardholder1.add(c);
 				cardholder1.revalidate();
 			}
