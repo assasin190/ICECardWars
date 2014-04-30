@@ -91,14 +91,15 @@ public class Battlefield extends JFrame {
 	private JScrollPane notify_scr;
 	public static JTextArea notify;
 	private JTextArea desc_area;
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
+		final String s = args[0];
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					CardData.saveAllCardsToLocal();
 					Battlefield frame = new Battlefield(new Inw("{\"cv_uid\":\"595\",\"fb_id\":\"100003770583869\",\"firstname_en\":\"Pasin\",\"lastname_en\":\"Boonsermsuwong\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
 					//				, new Inw("{\"cv_uid\":\"584\",\"fb_id\":\"1035721781\",\"firstname_en\":\"Min\",\"lastname_en\":\"Uswachoke\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
-					, new Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
+					, new Inw(args[0]));
 					//			frame.setVisible(true);
 					//			frame.run();
 

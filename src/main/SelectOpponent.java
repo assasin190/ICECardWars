@@ -46,6 +46,7 @@ public class SelectOpponent extends JPanel {
 	static JButton select;
 	static JButton back;
 	static JButton random;
+	static WTF wtf;
 	private static AudioPlayer bgMusic;
 	
 	public SelectOpponent(){
@@ -206,7 +207,7 @@ public class SelectOpponent extends JPanel {
 			BufferedImage image = ImageIO.read(fb_url);
 			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID, image, fbname);
 			opponentList.add(inw);
-			System.out.println(i);
+			System.out.println(i + ": " + fname);
 		
 		}
 	}
@@ -244,9 +245,10 @@ public class SelectOpponent extends JPanel {
 		select = new JButton("Select");
 		select.setFont(new Font("Serif", Font.PLAIN, 16));
 		select.addActionListener(new ActionListener() {
-			
+
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
+				
 				
 			}
 			
@@ -302,6 +304,10 @@ public class SelectOpponent extends JPanel {
 		select.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				String s = "{\"cv_uid\":\"+\",\"fb_id\":\"" + current.inw.fb_id + "\",\"firstname_en\":\"" + current.inw.fname + "\",\"lastname_en\":\"" + current.inw.lname + "\",\"full_lp\":\"40\",\"full_mp\":\"" + current.inw.LP_full + "\",\"max_deck_size\":\"" + current.inw.maxDeck + "\"}";
+				String [] args = {s};
+				//Battlefield.main(args);
+				System.out.println(s);
 				
 			}
 			
@@ -357,6 +363,12 @@ public class SelectOpponent extends JPanel {
 		select.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				String s = "{\"cv_uid\":\"+\",\"fb_id\":\"" + current.inw.fb_id + "\",\"firstname_en\":\"" + current.inw.fname + "\",\"lastname_en\":\"" + SelectOpponent.current.inw.lname + "\",\"full_lp\":\"40\",\"full_mp\":\"" + SelectOpponent.current.inw.LP_full + "\",\"max_deck_size\":\"" + SelectOpponent.current.inw.maxDeck + "\"}";
+				String [] args = {s};
+				Battlefield.main(args);
+				System.out.print(s);
+				//System.out.println("fuck you");
+
 				
 			}
 			
@@ -443,9 +455,9 @@ public class SelectOpponent extends JPanel {
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			previous = current;
-			current = this;
+			current = (MyPanel) arg0.getSource();
 			previous.setBorder(BorderFactory.createEmptyBorder());
-			this.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
+			current.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
 			setupDisplay();
 			
 		}
