@@ -105,6 +105,8 @@ public class DropHandler implements DropTargetListener {
 								c_destination.repaint();
 								card.invalidate();
 								card.repaint();
+								c_original.revalidate();
+								c_original.repaint();
 							}else{		//destination cardholder is not empty
 								success = false;
 								dtde.rejectDrop();

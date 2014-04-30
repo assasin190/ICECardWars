@@ -49,6 +49,7 @@ public class Test_CardHolder extends JFrame {
 	private JScrollPane scrollPane;
 	private JButton btnNewButton_1;
 	private JButton remove;
+	private JButton btnChSpell;
 
 	/**
 	 * Launch the application.
@@ -99,7 +100,7 @@ public class Test_CardHolder extends JFrame {
 		scrollPane = new JScrollPane(ch1);
 		contentPane.add(scrollPane);
 		DropTarget dropTarget = new DropTarget(ch1, DnDConstants.ACTION_MOVE, dropHandler, true);
-		ch1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		ch1.setLayout(null);
 
 
 		st1 = new JLabel("New label");
@@ -141,6 +142,14 @@ public class Test_CardHolder extends JFrame {
 		});
 		panel.add(remove);
 		panel.add(btnNewButton_1);
+		
+		btnChSpell = new JButton("CH2 spell");
+		btnChSpell.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		panel.add(btnChSpell);
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("settext");
@@ -188,6 +197,8 @@ public class Test_CardHolder extends JFrame {
 		c.descArea.setText("555555555555555555555555555555555555534634634634634634655555555555555555555555555555555534634634634634634655555555555555555555555555555555553463463463463463465555555555555555555555555555555555555555555555555555555555555");
 		ch3.addCard(c);
 		contentPane.add(b3);
+		ch1.setOpposingCH(ch2);
+		ch2.setOpposingCH(ch1);
 	}
 
 }
