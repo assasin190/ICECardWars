@@ -75,6 +75,7 @@ public class Battlefield extends JFrame {
 	private JButton endButton;
 	private JButton quitButton;
 	private JButton useButton;
+	private JButton surrenderButton;
 	public CardHolder p_dumpster;
 	public CardHolder o_dumpster;
 	private JButton cancelButton;
@@ -93,11 +94,11 @@ public class Battlefield extends JFrame {
 	public static JTextArea notify;
 	private JTextArea desc_area;
 	public static void main(final String[] args) {
-<<<<<<< HEAD
-		//final String s = args[0];
-=======
 
->>>>>>> 49ccaaa9a547ea1276d49c0a521d91344af58c7f
+		//final String s = args[0];
+
+
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -383,6 +384,21 @@ public class Battlefield extends JFrame {
 			}
 		});
 		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		surrenderButton = new JButton("Surrender");
+		buttonPanel.add(surrenderButton);
+		surrenderButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int reply = JOptionPane.showConfirmDialog(null, "Are you Sure?", "Surrenderring", JOptionPane.YES_NO_OPTION);
+		        if (reply == JOptionPane.YES_OPTION) {
+		          JOptionPane.showMessageDialog(null, "YOU LOSE"); // GO TO MAINMENU
+		        }
+		        else {
+		          
+		        }
+				//JOptionPane.showMessageDialog(surrenderButton, "Are you sure?", "You surrender", JOptionPane.YES_NO_CANCEL_OPTION);
+			}
+		});
 
 
 
