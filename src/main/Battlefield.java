@@ -600,7 +600,7 @@ public class Battlefield extends JFrame {
 					}
 					if(!lowHealthMusic&&player.LP_current<player.LP_full/10){
 						bgMusic.stop();
-						bgMusic = new AudioPlayer("The Ground's Color is Yellow.wav");
+						bgMusic = new AudioPlayer("MahouBattleNearDead.wav");
 						bgMusic.playLoop();
 						lowHealthMusic = true;
 					}
@@ -655,12 +655,16 @@ public class Battlefield extends JFrame {
 				for(CardHolder ch:Mylane_ref){
 					if(ch.isEmpty())continue;
 					Card c = ch.getCard();
+					AudioPlayer bgMusic2 = new AudioPlayer("Attack.wav");
+					bgMusic2.play();
 					int dmg = c.generateNetAtk();
 					System.out.println(c.title+" generate attack with "+dmg+" damage");
 					c.effectAttack();
 					if(c.directInw){	//attack the inw directly
 						if(opponent.attack(dmg)){
-							stop();return;
+							stop();
+							bgMusic.stop();
+							return;
 						}
 					}
 					else{
@@ -769,6 +773,8 @@ public class Battlefield extends JFrame {
 				for(CardHolder ch:Theirlane_ref){
 					if(ch.isEmpty())continue;
 					Card c = ch.getCard();
+					AudioPlayer bgMusic3 = new AudioPlayer("HurtSoMuch.wav");
+					bgMusic3.play();
 					int dmg = c.generateNetAtk();
 					System.out.println(c.title+" generate attack with "+dmg+" damage");
 					c.effectAttack();

@@ -30,9 +30,7 @@ public class Main {
 		MainMenu main = new MainMenu(con);
 		Splash frame = new Splash();
 		frame.setSize(new Dimension(1920, 1080));
-		bgMusic = new AudioPlayer("Hishoku no sora.wav");
-		bgMusic.playLoop();
-		frame.setLocationRelativeTo(null);
+				frame.setLocationRelativeTo(null);
 		frame.setUndecorated(true);
 		frame.setVisible(true);
 		SplashPanel.setProgress("Connecting to server");
@@ -49,6 +47,9 @@ public class Main {
 			break;
 		}
 		CardData.saveAllCardsToLocal();
+		bgMusic = new AudioPlayer("Hishoku no sora.wav");
+		bgMusic.playLoop();
+
 		main.setUndecorated(true);
 		main.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		SplashPanel.setProgress("Starting game");
