@@ -1,5 +1,6 @@
 package misc;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Point;
@@ -170,6 +171,7 @@ public class DropHandler implements DropTargetListener {
 			c.getType()==1&&
 			Battlefield.player.useMP(c.getMc());
 		System.out.println("HAND TO PLAYER: "+b);
+		if(b)c.effectColor(Color.WHITE);
 		return b;
 		default: return false;
 		}

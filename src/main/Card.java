@@ -327,21 +327,15 @@ public class Card extends JPanel{
 		sa_mc = m2.get("sa_mc").getAsInt();
 		spell_code = m2.get("spell_code").getAsInt();
 		desc = null;
-		System.out.println("TYPE: "+type);
-		System.out.println("t1: "+CardData.getSpellCode(spell_code).replace("{1}", param_value+""));
-		System.out.println("t2: "+CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+""));
 		if(type==1){	// DESCRIPTION FOR MONSTER
 			if(param_type.equals("")) desc = CardData.getSaCode(sa_code).replace("{1}", param_value+"");
 			else desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
 			desc = "("+sa_mc+") "+desc;
 		}else if(type==2){	//DESCRIPTION FOR SPELL
-			System.out.println("SPELL TYPE!");
-			if(param_type.equals("")) CardData.getSpellCode(spell_code).replace("{1}", param_value+"");
+			if(param_type.equals("")) desc = CardData.getSpellCode(spell_code).replace("{1}", param_value+"");
 			else desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
 			desc = "("+mc+") "+desc;
 		}
-		//	System.out.println("DESC:"+desc);
-		System.out.println("DESC:"+desc);
 		initGUI();
 		addListeners();
 	}

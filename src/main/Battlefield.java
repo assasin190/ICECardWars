@@ -1047,21 +1047,24 @@ public class Battlefield extends JFrame {
 				c.effectSpell();
 				try {Thread.sleep(1000);} catch (InterruptedException e) {}
 				o_dumpster.add(c);
+				c.effectColor(Color.WHITE);
 				break;
 			case 7:	//return all card with > param rarity to hand
 				for(int i = p_dumpster.getComponentCount()-1;i>=0;i--){
 					Card t = (Card) p_dumpster.getComponent(i);
 					if(t.rr>c.param_value){
+						p_dumpster.remove(i);
 						p_hand.add(new Card(t.ic_id));
 					}
 				}
 				for(int i = o_dumpster.getComponentCount()-1;i>=0;i--){
 					Card t = (Card) o_dumpster.getComponent(i);
 					if(t.rr>c.param_value){
+						o_dumpster.remove(i);
 						o_hand.add(new Card(t.ic_id));
 					}
 				}
-				player.useMP(c.sa_mc);
+				opponent.useMP(c.sa_mc);
 				c.effectSpell();
 				try {Thread.sleep(1000);} catch (InterruptedException e) {}
 				o_dumpster.add(c);
