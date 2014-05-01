@@ -56,6 +56,7 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.Box;
 import javax.swing.border.LineBorder;
+import javax.swing.SwingConstants;
 
 public class Battlefield extends JFrame {
 	private static final long serialVersionUID = -3457162401020244642L;
@@ -104,6 +105,7 @@ public class Battlefield extends JFrame {
 	private JTextArea selectedCard_desc;
 	private JScrollPane p_dumpster_scr;
 	private JScrollPane o_dumpster_scr;
+	private JLabel turnLabel;
 	public static void main(final String[] args) {
 
 		//final String s = args[0];
@@ -596,14 +598,29 @@ public class Battlefield extends JFrame {
 		surrenderButton = new JButton("Surrender");
 		surrenderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
 			}
 		});
 		surrenderButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		infoPane_2.add(Box.createRigidArea(new Dimension(20, 20)));
+		turnLabel = new JLabel();
+		turnLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		turnLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		turnLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		infoPane_2.add(turnLabel);
 		infoPane_2.add(Box.createRigidArea(new Dimension(20, 20)));
 		infoPane_2.add(surrenderButton);
 		infoPane_2.add(Box.createRigidArea(new Dimension(20, 20)));
 
 		quitButton = new JButton("Quit");
+		quitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int a = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?");
+				if(a == JOptionPane.YES_OPTION){
+					stop();
+				}
+			}
+		});
 		quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		infoPane_2.add(quitButton);
 		infoPane_2.add(Box.createRigidArea(new Dimension(20, 20)));
@@ -696,6 +713,7 @@ public class Battlefield extends JFrame {
 	}
 	public void playerPP(){
 		Dialog dialog = new Dialog("PLAYER PREPARE PHRASE");
+		turnLabel.setText("PLAYER PP");
 		try {Thread.sleep(1200);} catch (InterruptedException e1) {}
 		notify.append("-----------------------------\nPlayer preparation phrase\n-----------------------------\n");
 		System.out.println("PLAYER PP TURN");
@@ -719,6 +737,7 @@ public class Battlefield extends JFrame {
 	}
 	public void playerFP(){
 		Dialog dialog = new Dialog("PLAYER FIGHT PHRASE");
+		turnLabel.setText("PLAYER FP");
 		try {Thread.sleep(1200);} catch (InterruptedException e1) {}
 		endButton.setEnabled(false);
 		//---------------------------------- END PLAYER PP TURN ----------------------------------
@@ -806,6 +825,7 @@ public class Battlefield extends JFrame {
 			public void run() {
 				System.out.println("OPPONENT PP TURN");
 				Dialog dialog = new Dialog("OPPONENT PREPARE PHRASE");
+				turnLabel.setText("OPPONENT PP");
 				try {Thread.sleep(1280);} catch (InterruptedException e1) {}
 				notify.append("-----------------------------\nOpponent prepar" +
 						"ation phrase\n-----------------------------\n");
@@ -886,6 +906,7 @@ public class Battlefield extends JFrame {
 					return;
 				}
 				System.out.println("OPPONENT FP TURN");
+				turnLabel.setText("OPPONENT FP");
 				dialog = new Dialog("OPPONENT FIGHT PHRASE");
 				try {Thread.sleep(1280);} catch (InterruptedException e1) {}
 				notify.append("-----------------------------\nOpponent fighting phrase\n-----------------------------\n");
@@ -1116,8 +1137,11 @@ public class Battlefield extends JFrame {
 	 * End the game
 	 */
 	public void stop(){
-		JOptionPane.showMessageDialog(null,player.getName()+" "+"Win Against"+" "+opponent.getName(), "",JOptionPane.DEFAULT_OPTION);
+		if(player.LP_current<=0)JOptionPane.showMessageDialog(null,player.getName()+" "+" win against "+" "+opponent.getName(), "",JOptionPane.DEFAULT_OPTION);
+		else if(opponent.LP_current<=0)JOptionPane.showMessageDialog(null,opponent.getName()+" "+" win against "+" "+player.getName(), "",JOptionPane.DEFAULT_OPTION);
+		else JOptionPane.showMessageDialog(null,"GAME ENDED", "",JOptionPane.DEFAULT_OPTION);
 		isActive = false;
+		this.setVisible(false);
 		this.dispose();
 		bgMusic.stop();
 	}
