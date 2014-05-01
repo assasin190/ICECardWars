@@ -48,12 +48,23 @@ public class Inw extends JPanel {
 	int maxDeck;
 	String fb_id;
 	ImageIcon profile;
-	BufferedImage image;
+	//BufferedImage image;
 	int user_ID;
 	public int[] all_IC;
 	public int[] deck;
 	private JLabel data;
 
+	/**@deprecated
+	 * @param fname
+	 * @param lname
+	 * @param LP
+	 * @param MP
+	 * @param maxDeck
+	 * @param fb_id
+	 * @param user_ID
+	 * @param image
+	 * @param fbname
+	 */
 	public Inw(String fname, String lname, int LP, int MP, int maxDeck,
 			String fb_id, int user_ID, BufferedImage image, String fbname) {
 
@@ -66,7 +77,7 @@ public class Inw extends JPanel {
 		this.maxDeck = maxDeck;
 		this.fb_id = fb_id;
 		this.user_ID = user_ID;
-		this.image = image;
+	//	this.image = image;
 		this.fbname = fbname;
 		// initGUI();
 	}

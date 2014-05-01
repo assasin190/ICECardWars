@@ -416,6 +416,7 @@ public class Battlefield extends JFrame {
 		useButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				useButton.setEnabled(false);
+				useButton.setBackground(new Color(240,240,240));
 				Card c = Main.getSelectedCard();
 
 				if(c.isMonster()){
@@ -527,13 +528,13 @@ public class Battlefield extends JFrame {
 				//	processNotify(Main.getSelectedCard());
 			}
 		});
-		useButton.setEnabled(false);
+		useButton.setEnabled(false);useButton.setBackground(new Color(240,240,240));
 		buttonPanel.add(useButton);
 
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener(){// CANCEL THE SPELL USAGE AFTER YOU PRESSED THE USEBUTTON
 			public void actionPerformed(ActionEvent e) {
-				useButton.setEnabled(false);
+				useButton.setEnabled(false);useButton.setBackground(new Color(240,240,240));
 				cancelButton.setEnabled(false);
 				selected = false;
 				caster = null;
@@ -605,7 +606,8 @@ public class Battlefield extends JFrame {
 		}
 		p_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		//TEST TEST TEST
-		p_hand.add(new Card(50));
+//		p_hand.add(new Card(50));
+		
 	}
 	public void runBFchecker(){
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
@@ -633,7 +635,7 @@ public class Battlefield extends JFrame {
 						lowHealthMusic = true;
 					}
 					try {
-						Thread.sleep(200);
+						Thread.sleep(80);
 					} catch (InterruptedException e) {e.printStackTrace();
 					}
 					if(Main.Turn&&player.MP_current==0){
@@ -656,11 +658,15 @@ public class Battlefield extends JFrame {
 		player.restoreMP();	
 		//PP ?PPPL
 		if(playerDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
+			notify.append("Player deck is empty, receiving"+opponentDeck.size()+" damages\n");
 			if(player.attack(opponentDeck.size())){
 				stop();return;
 			}
 		}else{
-			p_hand.add(new Card(playerDeck.get(0),player));	playerDeck.remove(0);
+		
+			Card c = new Card(playerDeck.get(0),player);
+			notify.append("Player drawn "+c.title+" from deck\n");
+			p_hand.add(c);	playerDeck.remove(0);
 			//		p_deck = new JLabel("DECK: "+Arrays.toString(playerDeck.toArray()));	
 		}
 		System.out.println("PLAYER TURN INITIALS DONE!");
@@ -680,7 +686,7 @@ public class Battlefield extends JFrame {
 				notify.append("Player fighting phrase\n");
 				System.out.println("PLAYER FP TURN");
 				endButton.setEnabled(false);
-				useButton.setEnabled(false);
+				useButton.setEnabled(false);useButton.setBackground(new Color(240,240,240));
 				breakButton.setEnabled(false);
 
 				Main.Turn = false;
@@ -755,13 +761,16 @@ public class Battlefield extends JFrame {
 				//AI	?PPAI
 
 				if(opponentDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
+					notify.append("Opponent deck is empty, receiving"+playerDeck.size()+" damages\n");
 					if(opponent.attack(playerDeck.size())){
 						stop();return;
 					}
 				}else{
-					o_hand.add(new Card(opponentDeck.get(0),opponent));	opponentDeck.remove(0);		
+					Card ct = new Card(opponentDeck.get(0),opponent);
+					notify.append("Opponent drawn "+ct.title+" from deck\n");
+					o_hand.add(ct);	opponentDeck.remove(0);		
 					//		o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
-					//TODO: insert AI here
+					//AI here
 
 					LinkedList<Integer> ranIndex = randomIndexArray(Theirlane_ref.length);
 					System.out.println("AI PHRASE 1");
@@ -773,7 +782,14 @@ public class Battlefield extends JFrame {
 								Card temp = (Card)c;
 								if(temp.isMonster()){
 									if(opponent.useMP(temp.mc)){
-										lane.add(c);break;
+										lane.add(temp);
+										notify.append("Opponent put "+temp.title+" into lane");
+										try {
+											Thread.sleep(2000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+										break;
 									}
 								}
 							}
@@ -787,6 +803,11 @@ public class Battlefield extends JFrame {
 						for(int index:ranIndex) {
 							Card t = (Card)o_hand.getComponent(index);
 							if(t!=null&&!t.isMonster()&&opponent.MP_current>=t.mc){
+								try {
+									Thread.sleep(1000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 								AIuseCard(t);
 							}
 						}
@@ -800,6 +821,11 @@ public class Battlefield extends JFrame {
 							if(!ch.isEmpty()){
 								Card t = ch.getCard();
 								if(t!=null&&opponent.MP_current>=t.mc){
+									try {
+										Thread.sleep(1000);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
 									AIuseCard(t);
 								}
 							}
@@ -807,12 +833,9 @@ public class Battlefield extends JFrame {
 						}
 					}
 				}
-
 				//END AI
-
 				if(firstTurn!=0){
 					firstTurn--;
-					//			endButton.setEnabled(true);
 					playerPP();
 					return;
 				}
@@ -1049,7 +1072,7 @@ public class Battlefield extends JFrame {
 	 */
 	public void processNotify(Card c){
 		desc_area.setText(c.desc);
-		useButton.setEnabled(false);
+		useButton.setEnabled(false);useButton.setBackground(new Color(240,240,240));
 		System.out.println("PROCESS NOTIFY");
 		if(!Main.Turn){
 			notify.append("This is not your turn!");
@@ -1063,10 +1086,10 @@ public class Battlefield extends JFrame {
 			 */
 			if(c.isMonster()){	//monster
 				if(((CardHolder)c.getParent()).type==CardHolder.PLAYER&&player.MP_current>=c.sa_mc&&!c.SAactivated){
-					useButton.setEnabled(true);
+					useButton.setEnabled(true);useButton.setBackground(Color.BLUE);
 				}	
 			}else if(((CardHolder)c.getParent()).type==CardHolder.PLAYER_HAND&&player.MP_current>=c.mc){
-				useButton.setEnabled(true);	
+				useButton.setEnabled(true);	useButton.setBackground(Color.BLUE);
 			}else {
 
 				System.out.println("USEBUTTON NOT ENABLED");
