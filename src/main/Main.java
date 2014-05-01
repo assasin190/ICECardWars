@@ -52,7 +52,7 @@ public class Main {
 			break;
 		}
 		CardData.saveAllCardsToLocal();
-		bgMusic = new AudioPlayer("Hishoku no sora.wav");
+		bgMusic = new AudioPlayer("mainmenu.wav");
 		bgMusic.playLoop();
 
 		main.setUndecorated(true);
