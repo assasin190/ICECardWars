@@ -63,7 +63,7 @@ public class Card extends JPanel{
 	int rr;
 	//for spell
 	int spell_code;
-	String spell_param;
+	private String spell_param;
 	ImageIcon picture;
 	ImageIcon background;
 	public String desc;
@@ -74,7 +74,7 @@ public class Card extends JPanel{
 	boolean SAactivated = false;		//the monster already uses the SA for its turn
 	private JLabel titleLabel;
 	private JLabel rrLabel;
-//	private JLabel descLabel;
+	//	private JLabel descLabel;
 	private JLabel car_l;
 	private JLabel lck_l;
 	private JLabel lp_l;
@@ -88,6 +88,8 @@ public class Card extends JPanel{
 	private JLabel pic_label;
 	private JPanel statPanel;
 	private JLabel mcLabel;
+	public static Image spell;
+	public static Image attack;
 	public static void main(String[] args){
 
 		EventQueue.invokeLater(new Runnable() {		//TEST GETTING DECK
@@ -288,8 +290,8 @@ public class Card extends JPanel{
 		setBounds(new Rectangle(0, 0, 123, 180));
 		setSize(new Dimension(123, 180));
 		//Original card size 221x324
-		
-		
+
+
 		JsonObject m2 = CardData.getCardData(ID);
 		car = m2.get("car").getAsDouble();
 		lp = m2.get("lp").getAsInt();
@@ -325,11 +327,15 @@ public class Card extends JPanel{
 		sa_mc = m2.get("sa_mc").getAsInt();
 		spell_code = m2.get("spell_code").getAsInt();
 		desc = null;
+		System.out.println("TYPE: "+type);
+		System.out.println("t1: "+CardData.getSpellCode(spell_code).replace("{1}", param_value+""));
+		System.out.println("t2: "+CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+""));
 		if(type==1){	// DESCRIPTION FOR MONSTER
 			if(param_type.equals("")) desc = CardData.getSaCode(sa_code).replace("{1}", param_value+"");
 			else desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
 			desc = "("+sa_mc+") "+desc;
 		}else if(type==2){	//DESCRIPTION FOR SPELL
+			System.out.println("SPELL TYPE!");
 			if(param_type.equals("")) CardData.getSpellCode(spell_code).replace("{1}", param_value+"");
 			else desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
 			desc = "("+mc+") "+desc;
@@ -343,6 +349,7 @@ public class Card extends JPanel{
 	 * @param ID
 	 * @param caster
 	 */
+	/*
 	public Card(int ID,Inw caster) {
 		this.caster = caster;
 		JsonObject m2 = CardData.getCardData(ID);
@@ -395,6 +402,7 @@ public class Card extends JPanel{
 		initGUI();
 		addListeners();
 	}
+	*/
 	public void addListeners(){
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -434,7 +442,7 @@ public class Card extends JPanel{
 		gbc_titleLabel.gridx = 0;
 		gbc_titleLabel.gridy = 0;
 		this.add(titleLabel, gbc_titleLabel);
-		
+
 		descArea = new JTextArea(desc);
 		descArea.setRows(2);
 		descArea.setWrapStyleWord(true);
@@ -451,7 +459,7 @@ public class Card extends JPanel{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		mcLabel = new JLabel("MC");
 		mcLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gbc_mcLabel = new GridBagConstraints();
@@ -459,7 +467,7 @@ public class Card extends JPanel{
 		gbc_mcLabel.gridx = 3;
 		gbc_mcLabel.gridy = 0;
 		add(mcLabel, gbc_mcLabel);
-		
+
 		statPanel = new JPanel();
 		GridBagConstraints gbc_statPanel = new GridBagConstraints();
 		gbc_statPanel.weighty = 0.1;
@@ -504,7 +512,7 @@ public class Card extends JPanel{
 		gbc_mc_l.gridx = 3;
 		gbc_mc_l.gridy = 1;
 		this.add(mc_l, gbc_mc_l);
-		
+
 		scrollPane = new JScrollPane(descArea);
 		scrollPane.setPreferredSize(new Dimension(150, 34));
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -516,7 +524,7 @@ public class Card extends JPanel{
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 4;
 		//add(scrollPane, gbc_scrollPane);
-		
+
 		pic_panel = new JPanel();
 		pic_panel.setOpaque(false);
 		GridBagConstraints gbc_pic_panel = new GridBagConstraints();
@@ -528,7 +536,7 @@ public class Card extends JPanel{
 		gbc_pic_panel.gridy = 2;
 		add(pic_panel, gbc_pic_panel);
 		pic_panel.setLayout(new BorderLayout(0, 0));
-		
+
 		pic_label = new JLabel(picture);
 		pic_panel.add(pic_label);
 		this.setPreferredSize(new Dimension(164, 240));
@@ -558,11 +566,14 @@ public class Card extends JPanel{
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(background.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+		if(isMonster())g.setColor(Color.GREEN);
+		else g.setColor(Color.BLUE);
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		//g.drawImage(background.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
 		/*
 		setBackground(Color.WHITE);
 		setLayout(null);
-		
+
 		setBorder(new LineBorder(Color.BLACK, 1));
 		if(picture==null)
 			try {
@@ -573,7 +584,7 @@ public class Card extends JPanel{
 		pictureIcon = new JLabel(new ImageIcon(picture));
 		pictureIcon.setBounds(12, 63, 176, 58);
 		add(pictureIcon);
-		 
+
 
 		g.drawImage(picture.getImage(), getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
 		g.drawImage(picture.getImage(), getWidth()/32, getHeight()/7, getWidth()-getWidth()/32, getHeight()/2, null);
@@ -582,12 +593,12 @@ public class Card extends JPanel{
 		lck_l.setBounds(getWidth()/32, 24*getHeight()/32, (int)lck_l.getPreferredSize().getWidth(), 10);
 		add(lck_l);
 
-		
+
 		if(lckLabel != null) remove(lck_l);
 		lckLabel = new JLabel(""+lck);
 		lckLabel.setBounds(80, 192, 56, 16);
 		add(lckLabel);
-		 
+
 
 
 		if(car_l != null) remove(car_l);
@@ -595,12 +606,12 @@ public class Card extends JPanel{
 		car_l.setBounds(getWidth()/32, 26*getHeight()/32, (int)car_l.getPreferredSize().getWidth(), 10);
 		add(car_l);
 
-		
+
 		if(carLabel != null) remove(carLabel);
 		carLabel = new JLabel(""+car);
 		carLabel.setBounds(80, 221, 56, 16);
 		add(carLabel);
-		 
+
 
 
 		if(descLabel != null) remove(descLabel);
@@ -620,11 +631,11 @@ public class Card extends JPanel{
 		mc_l.setBounds(getWidth() - getWidth()/32 - (int)mc_l.getPreferredSize().getWidth(), getHeight()/32, getWidth() - getWidth()/32 , getHeight()/32 + (int)mc_l.getPreferredSize().getHeight());
 		add(mc_l);
 
-		
+
 		mcLabel = new JLabel(""+mc);
 		mcLabel.setBounds(132, 13, 56, 16);
 		add(mcLabel);
-		 
+
 
 
 		if(rrLabel != null) remove(rrLabel);
@@ -637,7 +648,7 @@ public class Card extends JPanel{
 		atk_l = new JLabel("ATK: " + atk);
 		atk_l.setBounds(getWidth()/32, 20*getHeight()/32, (int)atk_l.getPreferredSize().getWidth(), 10);
 		add(atk_l);
-		
+
 		if(atkLabel != null) remove(atkLabel);
 		atkLabel = new JLabel(""+atk);
 		atkLabel.setBounds(80, 134, 56, 16);
@@ -652,7 +663,7 @@ public class Card extends JPanel{
 		lpLabel = new JLabel(""+lp);
 		lpLabel.setBounds(80, 163, 56, 16);
 		add(lpLabel);
-		*/
+		 */
 	}
 	public BufferedImage createImage(JPanel panel) {
 		int w = panel.getWidth();
@@ -704,7 +715,7 @@ public class Card extends JPanel{
 	public boolean apply(Card c){
 		//return false;
 		//TODO: not done!
-		
+
 		if(c.isMonster()){
 			Battlefield.notify.append(c.title+" used special ability on "+this.title+"\n");
 			switch(c.sa_code){
@@ -726,6 +737,7 @@ public class Card extends JPanel{
 				break;
 			case 5:	// increase team , sacrifice
 				param(c.param_type,c.param_value);
+				sacrifice = true;
 				effectColor(Color.CYAN);
 				break;
 			case 6:
@@ -783,7 +795,7 @@ public class Card extends JPanel{
 			return false;
 		}
 		Battlefield.notify.append(this.title+" received "+DMG+" damages\n");
-	//	System.out.println(this.title+" received "+DMG+" damage");
+		//	System.out.println(this.title+" received "+DMG+" damage");
 		this.lp -= DMG;
 		updateGUI();
 		effectRed();
@@ -793,8 +805,8 @@ public class Card extends JPanel{
 		return (int) Math.max(0, atk-lck + (int)(Math.random() * ((lck*2) + 1)));
 	}
 	public void effectRed(){
-	//	Executors.newSingleThreadExecutor().execute
-	//	SwingUtilities.invokeLater
+		//	Executors.newSingleThreadExecutor().execute
+		//	SwingUtilities.invokeLater
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
 			@Override
 			public void run() {
@@ -807,13 +819,13 @@ public class Card extends JPanel{
 					g.fillRect(0, 0, getWidth(), getHeight());
 					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
 					alpha -= 26;
-		//			repaint();
+					//			repaint();
 				}
-	//			repaint();
+				//			repaint();
 			}
 		});
 	}
-	
+
 	public void effectGreen(){
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
 			@Override
@@ -827,15 +839,15 @@ public class Card extends JPanel{
 					g.fillRect(0, 0, getWidth(), getHeight());
 					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
 					alpha -= 26;
-		//			repaint();
+					//			repaint();
 				}
-	//			repaint();
+				//			repaint();
 			}
 		});
 	}
 	public void effectColor(final Color c){
-	//	Executors.newSingleThreadExecutor().execute
-	//	SwingUtilities.invokeLater
+		//	Executors.newSingleThreadExecutor().execute
+		//	SwingUtilities.invokeLater
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
 			@Override
 			public void run() {
@@ -851,9 +863,9 @@ public class Card extends JPanel{
 					gr.fillRect(0, 0, getWidth(), getHeight());
 					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
 					alpha -= 26;
-		//			repaint();
+					//			repaint();
 				}
-	//			repaint();
+				//			repaint();
 			}
 		});
 	}
@@ -866,27 +878,20 @@ public class Card extends JPanel{
 				if(g==null)return;
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setColor(Color.GREEN);
-				Image t = null;
-				try {
-					t = ImageIO.read(new File("spell.png"));
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 				while(alpha <=1.0f){
 					g2d.setComposite(AlphaComposite.getInstance(
 							AlphaComposite.SRC_OVER, alpha));
 					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-					g2d.drawImage(t, 0, 0, Card.this.getWidth(), Card.this.getHeight(), null);
+					g2d.drawImage(spell, 0, 0, Card.this.getWidth(), Card.this.getHeight(), null);
 					alpha += 0.02f;
 					try {
 						Thread.sleep(20);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-		//			repaint();
+					//			repaint();
 				}
-		//		repaint();
+				//		repaint();
 			}
 		});
 	}
@@ -899,27 +904,20 @@ public class Card extends JPanel{
 				if(g==null)return;
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setColor(Color.GREEN);
-				Image t = null;
-				try {
-					t = ImageIO.read(new File("atk.png"));
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 				while(alpha <=1.0f){
 					g2d.setComposite(AlphaComposite.getInstance(
 							AlphaComposite.SRC_OVER, alpha));
 					g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-					g2d.drawImage(t, 0, 0, Card.this.getWidth(), Card.this.getHeight(), null);
+					g2d.drawImage(attack, 0, 0, Card.this.getWidth(), Card.this.getHeight(), null);
 					alpha += 0.02f;
 					try {
 						Thread.sleep(20);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-		//			repaint();
+					//			repaint();
 				}
-		//		repaint();
+				//		repaint();
 			}
 		});
 	}

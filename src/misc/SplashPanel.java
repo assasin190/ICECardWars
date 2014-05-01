@@ -37,7 +37,7 @@ public class SplashPanel extends JPanel{
 	//	progress.setBounds(0, (int) (this.getHeight()/1.3), this.getWidth(), 35);
 		progress.setFont(new Font("Courier New", Font.PLAIN, 24));
 		progress.setForeground(Color.WHITE);
-		progress.setHorizontalAlignment(SwingConstants.CENTER);
+		progress.setHorizontalAlignment(SwingConstants.LEFT);
 		ImageIcon icon = new ImageIcon("ajax-loader.gif");
 		setLayout(null);
 		progress.setIcon(icon);
@@ -82,7 +82,7 @@ public class SplashPanel extends JPanel{
 	
 	@Override
 	public void paintComponent(Graphics g){
-		progress.setBounds(0, (int) (this.getHeight()/1.3), this.getWidth(), 35);
+		progress.setBounds(this.getWidth()/3, (int) (this.getHeight()/1.3), this.getWidth()-this.getWidth()/3, 35);
 		super.paintComponent(g);
 		g.drawImage(i, 0, 0,this.getWidth(),this.getHeight(), null);
 		Color c = new Color(0, 0, 0, alpha);

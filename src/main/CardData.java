@@ -1,5 +1,6 @@
 package main;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,8 +27,12 @@ public abstract class CardData {
 	private static ArrayList<Integer> rarity = new ArrayList<Integer>();
 	private static ArrayList<JsonObject> all_card = new ArrayList<JsonObject>();
 	private static ArrayList<ImageIcon> all_image =new ArrayList<ImageIcon>();
+	
 	public static void main(String[] args){
 		CardData.saveAllCardsToLocal();
+		System.out.println(new Card(46).toString());
+		System.out.println(new Card(47).toString());
+		System.out.println(new Card(48).toString());
 	}
 	public static int getRarity(int ID){
 		return rarity.get(ID);
@@ -63,6 +68,17 @@ public abstract class CardData {
 		return all_card.size()-1;
 	}
 	public static void saveAllCardsToLocal(){
+		
+		SplashPanel.setProgress("LOADING.");
+		
+		try {
+			Card.attack = ImageIO.read(new File("atk.png"));
+			Card.spell = ImageIO.read(new File("spell.png"));
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		SplashPanel.setProgress("LOADING..");
 		all_card.clear();
 		all_image.clear();
 		all_card.add(null);
@@ -70,6 +86,7 @@ public abstract class CardData {
 		sa_code.add(null);
 		spell_code.add(null);
 		rarity.add(null);
+		SplashPanel.setProgress("LOADING...");
 		int count = 1;
 		Gson gs;
 		InputStream is;		
@@ -146,7 +163,7 @@ public abstract class CardData {
 			List<JsonObject> spell_code_json = new Gson().fromJson(job.get("data"), listType);
 			for(JsonObject js:spell_code_json){
 				spell_code.add(js.get("spell_desc").getAsString());
-				
+				System.out.println(spell_code);
 			}
 			break;
 		}
