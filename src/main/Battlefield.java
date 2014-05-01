@@ -106,6 +106,14 @@ public class Battlefield extends JFrame {
 	private JScrollPane p_dumpster_scr;
 	private JScrollPane o_dumpster_scr;
 	private JLabel turnLabel;
+	private JPanel o_hand_num;
+	private JPanel o_dumpster_num;
+	private JPanel p_hand_num;
+	private JPanel p_dumpster_num;
+	private JLabel o_hand_l;
+	private JLabel o_dumpster_l;
+	private JLabel p_dumpster_l;
+	private JLabel p_hand_l;
 	public static void main(final String[] args) {
 
 		//final String s = args[0];
@@ -240,32 +248,6 @@ public class Battlefield extends JFrame {
 		});
 
 		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		surrenderButton = new JButton("Surrender");
-		buttonPanel.add(surrenderButton);
-		surrenderButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int reply = JOptionPane.showConfirmDialog(null, "Are you Sure?", "Surrenderring", JOptionPane.YES_NO_OPTION);
-		        if (reply == JOptionPane.YES_OPTION) {
-		          JOptionPane.showMessageDialog(null, "YOU LOSE, THE GAME WILL EXIT"); // GO TO MAINMENU
-		          Battlefield.this.dispose();
-		        }
-		        else {
-		          
-		        }
-				//JOptionPane.showMessageDialog(surrenderButton, "Are you sure?", "You surrender", JOptionPane.YES_NO_CANCEL_OPTION);
-			}
-		});
-
-
-
-		quitButton = new JButton("Quit");
-		buttonPanel.add(quitButton);
-		quitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Battlefield.this.dispose();
-			}
-		});
 
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 		buttonPanel.add(Box.createVerticalGlue());
@@ -444,7 +426,25 @@ public class Battlefield extends JFrame {
 		battlePane.setLayout(new GridLayout(0, 1, 0, 0));
 		JPanel opponentPanel = new JPanel();
 		battlePane.add(opponentPanel);
-		opponentPanel.setLayout(new GridLayout(0, 1, 0, 0));
+		opponentPanel.setLayout(new BorderLayout(0, 0));
+		
+		o_hand_num = new JPanel();
+		opponentPanel.add(o_hand_num, BorderLayout.WEST);
+		o_hand_num.setLayout(new BoxLayout(o_hand_num, BoxLayout.X_AXIS));
+		
+		o_hand_l = new JLabel("");
+		o_hand_l.setAlignmentX(Component.CENTER_ALIGNMENT);
+		o_hand_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		o_hand_num.add(o_hand_l);
+		
+		o_dumpster_num = new JPanel();
+		opponentPanel.add(o_dumpster_num, BorderLayout.EAST);
+		o_dumpster_num.setLayout(new BoxLayout(o_dumpster_num, BoxLayout.X_AXIS));
+		
+		o_dumpster_l = new JLabel("");
+		o_dumpster_l.setAlignmentX(Component.CENTER_ALIGNMENT);
+		o_dumpster_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		o_dumpster_num.add(o_dumpster_l);
 
 
 
@@ -459,7 +459,7 @@ public class Battlefield extends JFrame {
 		o_dumpster.setBackground(Color.LIGHT_GRAY);
 		o_dumpster.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		o_dumpster_scr = new JScrollPane(o_dumpster);
-		opponentPanel.add(o_dumpster_scr);
+	//	opponentPanel.add(o_dumpster_scr);
 
 
 		TheirBF = new JPanel();
@@ -555,7 +555,25 @@ public class Battlefield extends JFrame {
 		Mylane4.setLayout(new GridLayout(1, 0, 0, 0));
 		JPanel playerPanel = new JPanel();
 		battlePane.add(playerPanel);
-		playerPanel.setLayout(new GridLayout(0, 1, 0, 0));
+		playerPanel.setLayout(new BorderLayout(0, 0));
+		
+		p_hand_num = new JPanel();
+		playerPanel.add(p_hand_num, BorderLayout.WEST);
+		p_hand_num.setLayout(new BoxLayout(p_hand_num, BoxLayout.X_AXIS));
+		
+		p_hand_l = new JLabel("");
+		p_hand_l.setAlignmentX(Component.CENTER_ALIGNMENT);
+		p_hand_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		p_hand_num.add(p_hand_l);
+		
+		p_dumpster_num = new JPanel();
+		playerPanel.add(p_dumpster_num, BorderLayout.EAST);
+		p_dumpster_num.setLayout(new BoxLayout(p_dumpster_num, BoxLayout.X_AXIS));
+		
+		p_dumpster_l = new JLabel("");
+		p_dumpster_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		p_dumpster_l.setAlignmentX(Component.CENTER_ALIGNMENT);
+		p_dumpster_num.add(p_dumpster_l);
 
 
 		p_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
@@ -646,7 +664,7 @@ public class Battlefield extends JFrame {
 	//	p_dumpster.add(new Card(40));
 	//	p_dumpster.add(new Card(45));
 		p_dumpster_scr = new JScrollPane(p_dumpster);
-		playerPanel.add(p_dumpster_scr);
+	//	playerPanel.add(p_dumpster_scr);
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		//		playerDeck.
 	}
