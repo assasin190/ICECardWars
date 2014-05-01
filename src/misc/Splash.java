@@ -48,6 +48,8 @@ public class Splash extends JFrame {
 		setBounds(100, 100, 300, 300);
 		contentPane = new JPanel();
 		splashPane = new SplashPanel();
+		splashPane.progress.setBounds(12, 230, 288, 35);
+		splashPane.progress.setHorizontalAlignment(SwingConstants.CENTER);
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		getContentPane().add(splashPane);

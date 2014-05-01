@@ -1,5 +1,6 @@
 package main;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import misc.DropHandler;
@@ -12,10 +13,13 @@ import com.google.gson.JsonSyntaxException;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.awt.Color;
+import java.awt.Font;
 
 public class SetDeck extends JPanel {
 	
@@ -33,7 +39,7 @@ public class SetDeck extends JPanel {
 	ArrayList<Card> deck;
 	CardHolder deckHolder;
 	CardHolder cardHolder;
-	
+	private Image wallpaper2;	
 	
 	public SetDeck() {
 		try {
@@ -42,8 +48,29 @@ public class SetDeck extends JPanel {
 			try {
 				HashMap<String, ArrayList<Double>> temp = g.fromJson(new InputStreamReader(url.openStream()), HashMap.class );
 				ArrayList<Double> cardString = temp.get("data");
-				cardHolder = new CardHolder(CardHolder.DECK, false);
-				deckHolder = new CardHolder(CardHolder.DECK, false);
+				try {
+					wallpaper2 = ImageIO.read(new File("wallpaper2.png"));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				cardHolder = new CardHolder(CardHolder.DECK, false){
+					public void paintComponent(Graphics g){
+						super.paintComponent(g);
+						g.drawImage(wallpaper2, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+
+					}
+				};
+				
+				
+				deckHolder = new CardHolder(CardHolder.DECK, false){
+					public void paintComponent(Graphics g){
+						super.paintComponent(g);
+						g.drawImage(wallpaper2, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+
+					}
+				};
+				
+				
 				for(int i = 0; i < cardString.size(); i++) {
 					cardHolder.add(new Card(cardString.get(i).intValue()));
 				}
@@ -65,6 +92,10 @@ public class SetDeck extends JPanel {
 				this.add(new JScrollPane(cardHolder));
 				this.add(new JScrollPane(deckHolder));
 				JButton b = new JButton("Submit");
+				b.setFont(new Font("Tahoma", Font.BOLD, 14));
+				b.setForeground(Color.BLACK);
+				b.setBackground(Color.PINK);
+				b.setBounds(600,200,200,200 );
 				b.addActionListener(new ActionListener() {
 
 					@Override
@@ -100,7 +131,15 @@ public class SetDeck extends JPanel {
 					}
 					
 				});
-				JPanel display = new JPanel();
+
+				JPanel display = new JPanel(){
+					public void paintComponent(Graphics g){
+						super.paintComponent(g);
+						g.drawImage(wallpaper2, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+
+					}
+				};
+				
 				display.setPreferredSize(new Dimension(400, 768));
 				display.add(b);
 				this.add(display);
@@ -120,7 +159,7 @@ public class SetDeck extends JPanel {
 	public static void main(String [] args) {
 		CardData.saveAllCardsToLocal();
 		JFrame frame = new JFrame();
-		frame.add(new SetDeck());
+		frame.getContentPane().add(new SetDeck());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setVisible(true);

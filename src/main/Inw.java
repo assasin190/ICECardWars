@@ -35,6 +35,10 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Component;
+import javax.swing.SwingConstants;
 
 public class Inw extends JPanel {
 
@@ -48,12 +52,26 @@ public class Inw extends JPanel {
 	int maxDeck;
 	String fb_id;
 	ImageIcon profile;
-	BufferedImage image;
+	//BufferedImage image;
 	int user_ID;
 	public int[] all_IC;
 	public int[] deck;
-	private JLabel data;
+	private JLabel picLabel;
+	private JLabel nameLabel;
+	private JLabel LP;
+	private JLabel MP;
 
+	/**@deprecated
+	 * @param fname
+	 * @param lname
+	 * @param LP
+	 * @param MP
+	 * @param maxDeck
+	 * @param fb_id
+	 * @param user_ID
+	 * @param image
+	 * @param fbname
+	 */
 	public Inw(String fname, String lname, int LP, int MP, int maxDeck,
 			String fb_id, int user_ID, BufferedImage image, String fbname) {
 
@@ -66,7 +84,7 @@ public class Inw extends JPanel {
 		this.maxDeck = maxDeck;
 		this.fb_id = fb_id;
 		this.user_ID = user_ID;
-		this.image = image;
+	//	this.image = image;
 		this.fbname = fbname;
 		// initGUI();
 	}
@@ -85,7 +103,7 @@ public class Inw extends JPanel {
 		System.out.println(a.useMP(3));
 		JButton j = new JButton("ADD");
 
-		frame.add(j);
+		frame.getContentPane().add(j);
 	}
 
 	public Inw(String fname, String lname, int LP, int MP, int maxDeck,
@@ -153,19 +171,35 @@ public class Inw extends JPanel {
 			// image = ImageIO.read(new
 			// URL("https://graph.facebook.com/"+fb_id+"/picture"));
 			profile = new ImageIcon(ImageIO.read(new URL(
-					"https://graph.facebook.com/" + fb_id + "/picture")));
+					"https://graph.facebook.com/" + fb_id + "/picture?width=200&height=200")));
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		setLayout(new BorderLayout(0, 0));
+				setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		data = new JLabel(profile);
-		data.setText(fname + " " + lname + " LP: " + LP_current + " MP: "
-				+ MP_current);
-		// data.setText("LP: "+LP_current+" MP: "+MP_current);
-		add(data);
-
+		
+				picLabel = new JLabel(profile);
+				picLabel.setForeground(new Color(0, 0, 0));
+				picLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+	//			picLabel.setText(fname + " " + lname + " LP: " + LP_current + " MP: "
+		//				+ MP_current);
+				add(picLabel);
+		
+		nameLabel = new JLabel(fname+" "+lname);
+		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(nameLabel);
+		
+		LP = new JLabel("LP: "+LP_current);
+		LP.setHorizontalAlignment(SwingConstants.CENTER);
+		LP.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(LP);
+		
+		MP = new JLabel("MP: "+MP_current);
+		MP.setHorizontalAlignment(SwingConstants.CENTER);
+		MP.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(MP);
 	}
 
 	/**
@@ -193,7 +227,6 @@ public class Inw extends JPanel {
 				continue;
 			}
 			opponent = new Gson().fromJson(job.get("data"), JsonArray.class);
-			// System.out.println(deck.toString());
 			break;
 		}
 		Inw[] all = new Inw[opponent.size()];
@@ -249,9 +282,9 @@ public class Inw extends JPanel {
 	}
 
 	public void updateGUI() {
-		data.setText("LP: " + LP_current + " MP: " + MP_current);
+		LP.setText("LP: "+LP_current);
+		MP.setText("MP: "+MP_current);
 		validate();
-		// data.setText(fname+" "+lname+" LP: "+LP_current+" MP: "+MP_current);
 	}
 
 	/**

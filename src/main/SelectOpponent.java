@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -48,6 +49,7 @@ public class SelectOpponent extends JPanel {
 	static JButton random;
 	static WTF wtf;
 	private static AudioPlayer bgMusic;
+	private static AudioPlayer bgMusic2;
 	static Inw player;
 	public SelectOpponent(Inw player){
 		this.player = player;
@@ -64,7 +66,8 @@ public class SelectOpponent extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		bgMusic2 = new AudioPlayer("KungFuFighting.wav");
+		bgMusic2.playLoop();
 		determineResolution();
 		JFrame test = new JFrame();
 		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -91,7 +94,16 @@ public class SelectOpponent extends JPanel {
 	
 	
 	public void createGUI1024x768(){
-		opponentPanel = new JPanel();
+		opponentPanel = new JPanel(){
+			public void paintComponent(Graphics g) {
+				try {
+					g.drawImage(ImageIO.read(new File("selectopponentbg.jpg")), 0, 0, null);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
 		opponentPanel.setLayout(new GridLayout(8, 8));
 		opponentPanel.setBackground(Color.BLACK);
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
@@ -112,7 +124,16 @@ public class SelectOpponent extends JPanel {
 		}
 		this.add(opponentPanel,BorderLayout.LINE_START);
 
-		display = new JPanel();
+		display = new JPanel(){
+			public void paintComponent(Graphics g) {
+				try {
+					g.drawImage(ImageIO.read(new File("selectopponentbg.jpg")), 0, 0, null);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
 		setupDisplay();
 		this.add(display, BorderLayout.CENTER); 
 		
@@ -168,7 +189,16 @@ public class SelectOpponent extends JPanel {
 		}
 		this.add(opponentPanel,BorderLayout.LINE_START);
 
-		display = new JPanel();
+		display = new JPanel() {
+			public void paintComponent(Graphics g) {
+				try {
+					g.drawImage(ImageIO.read(new File("selectopponentbg.jpg")), 0, 0, null);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
 		setupDisplay();
 		this.add(display, BorderLayout.CENTER); 
 		
@@ -202,11 +232,13 @@ public class SelectOpponent extends JPanel {
 							  break;
 			}
 			*/
-			fb_url = new URL("https://graph.facebook.com/" + mapList.get(i).get("fb_id") + "/picture?width=200&height=200");
+		//	fb_url = new URL("https://graph.facebook.com/" + mapList.get(i).get("fb_id") + "/picture?width=200&height=200");
 			HashMap<String, String> temp2 = new Gson().fromJson(new InputStreamReader(new URL("https://graph.facebook.com/" + mapList.get(i).get("fb_id")).openStream()), HashMap.class);
 			String fbname = temp2.get("name");
-			BufferedImage image = ImageIO.read(fb_url);
-			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID, image, fbname);
+		//	BufferedImage image = ImageIO.read(fb_url);
+			//String fname, String lname, int LP, int MP, int maxDeck,
+		//	String fb_id, int user_ID) {
+			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID);
 		//TODO: change to new constructor
 			opponentList.add(inw);
 			System.out.println(i + ": " + fname);
@@ -236,7 +268,7 @@ public class SelectOpponent extends JPanel {
 		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
 		display.add(Box.createRigidArea(new Dimension(0, 75)));
 		JLabel pic = new JLabel();
-		pic.setIcon(new ImageIcon(current.inw.image));
+		pic.setIcon(current.inw.profile);
 		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(pic);
 		JLabel fbname = new JLabel(current.inw.fbname);
@@ -301,7 +333,7 @@ public class SelectOpponent extends JPanel {
 		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
 		display.add(Box.createRigidArea(new Dimension(0, 50)));
 		JLabel pic = new JLabel();
-		pic.setIcon(new ImageIcon(current.inw.image));
+		pic.setIcon(current.inw.profile);
 		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(pic);
 		JLabel fbname = new JLabel(current.inw.fbname);
@@ -363,7 +395,7 @@ public class SelectOpponent extends JPanel {
 		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
 		display.add(Box.createRigidArea(new Dimension(0, 75)));
 		JLabel pic = new JLabel();
-		pic.setIcon(new ImageIcon(current.inw.image));
+		pic.setIcon(current.inw.profile);
 		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(pic);
 		JLabel fbname = new JLabel(current.inw.fbname);
@@ -441,7 +473,7 @@ public class SelectOpponent extends JPanel {
 		
 		public void paint(Graphics g) {
 			super.paint(g);
-			g.drawImage(inw.image, 5, 5, this.getWidth() - 10, this.getHeight() - 10, null);
+			g.drawImage(inw.profile.getImage(), 5, 5, this.getWidth() - 10, this.getHeight() - 10, null);
 		}
 
 		@Override
