@@ -32,6 +32,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import misc.AudioPlayer;
 import misc.BF_save;
@@ -126,7 +127,7 @@ public class Battlefield extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CardData.saveAllCardsToLocal();
+	//				CardData.saveAllCardsToLocal();
 					Battlefield frame = new Battlefield(new Inw("{\"cv_uid\":\"595\",\"fb_id\":\"100003770583869\",\"firstname_en\":\"Pasin\",\"lastname_en\":\"Boonsermsuwong\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
 					, new Inw("{\"cv_uid\":\"584\",\"fb_id\":\"1035721781\",\"firstname_en\":\"Min\",\"lastname_en\":\"Uswachoke\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
 
@@ -169,7 +170,7 @@ public class Battlefield extends JFrame {
 		if(savObject.th2!=null)Theirlane2.add(savObject.th2);
 		if(savObject.th3!=null)Theirlane3.add(savObject.th3);
 		if(savObject.th4!=null)Theirlane4.add(savObject.th4);
-		setVisible(true);
+		
 		runBFchecker();
 		Main.Turn = true;
 		endButton.setEnabled(true);
@@ -223,6 +224,8 @@ public class Battlefield extends JFrame {
 	 */
 	@SuppressWarnings("serial")
 	private void initGUI() {
+		setUndecorated(true);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		contentPane = new JPanel();
 		this.setContentPane(contentPane);
 		contentPane.addMouseListener(new MouseAdapter() {
@@ -710,6 +713,7 @@ public class Battlefield extends JFrame {
 				int a = JOptionPane.showConfirmDialog(null, "Are you sure you want to surrender?");
 				if(a == JOptionPane.YES_OPTION){
 					player.LP_current=0;
+					player.updateGUI();
 					stop();
 				}
 			}
@@ -768,23 +772,32 @@ public class Battlefield extends JFrame {
 	 */
 	public void run(){	
 		runBFchecker();
+
+		setVisible(true);
 		Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
 		Collections.shuffle(opponentDeck, new Random(System.currentTimeMillis()));
 		for(int i = 0;i<5;i++){
-			p_hand.add(new Card(playerDeck.get(0)));	playerDeck.remove(0);
-			o_hand.add(new Card(opponentDeck.get(0)));	opponentDeck.remove(0);
+	//		p_hand.add(new Card(playerDeck.get(0)));	playerDeck.remove(0);
+	//		o_hand.add(new Card(opponentDeck.get(0)));	opponentDeck.remove(0);
 		}
-		//TODO: WTF
-		// DO WTF ACTION
-
-		// IF PLAYER GET TO START, call playerPP();
-		// else call AITurn();
-
-		playerPP();
 		
-		//TODO: remove test
-		playerDeck = new ArrayList();
-		playerDeck.add(1);
+		WTF wtf = new WTF();
+		Executors.newSingleThreadExecutor().execute(new Runnable(){
+			@Override
+			public void run() {
+				while(true){
+					if(WTF.a!=null){
+						if(WTF.a){
+							playerPP();
+							break;
+						}else{
+							AIturn();
+							break;
+						}
+					}
+				}
+			}
+		});
 	}
 	public void runBFchecker(){
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
@@ -1260,22 +1273,15 @@ public class Battlefield extends JFrame {
 	 * End the game
 	 */
 	public void stop(){
-		if(player.LP_current<=0)JOptionPane.showMessageDialog(null,player.getName()+" "+" win against "+" "+opponent.getName(), "",JOptionPane.DEFAULT_OPTION);
-		else if(opponent.LP_current<=0)JOptionPane.showMessageDialog(null,opponent.getName()+" "+" win against "+" "+player.getName(), "",JOptionPane.DEFAULT_OPTION);
+		//(null,player.getName()+" "+" win against "+" "+opponent.getName(), "",JOptionPane.DEFAULT_OPTION);
+		if(player.LP_current<=0)JOptionPane.showMessageDialog(null,opponent.getName()+" "+" win against "+" "+player.getName(), "",JOptionPane.DEFAULT_OPTION);
+		else if(opponent.LP_current<=0)JOptionPane.showMessageDialog(null,player.getName()+" "+" win against "+" "+opponent.getName(), "",JOptionPane.DEFAULT_OPTION);
 		else JOptionPane.showMessageDialog(null,"GAME ENDED", "",JOptionPane.DEFAULT_OPTION);
 		isActive = false;
 		this.setVisible(false);
 		this.dispose();
 		bgMusic.stop();
 	}
-
-	/**only used to bypass calling method from nested class
-	 * @param DMG
-	 */
-	/*
-	public void tempOpponentAtk(int DMG){
-		opponent.attack(DMG);
-	}*/
 	/**
 	 * Card will notify this class when there is a mouse click
 	 */
