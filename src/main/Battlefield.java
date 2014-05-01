@@ -120,8 +120,7 @@ public class Battlefield extends JFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				bgMusic = new AudioPlayer("Mahou Battle.wav");
-				bgMusic.playLoop();
+			
 			}
 		});
 	}
@@ -171,6 +170,8 @@ public class Battlefield extends JFrame {
 		try {
 			lane = ImageIO.read(new File("Lane.jpg"));
 		} catch (IOException e1) {e1.printStackTrace();}
+		bgMusic = new AudioPlayer("Mahou Battle.wav");
+		bgMusic.playLoop();
 		Battlefield.player = player_;
 		Battlefield.opponent = opponent_;
 		//System.out.println("FULLMP"+opponent.MP_full);
@@ -235,7 +236,7 @@ public class Battlefield extends JFrame {
 				playerFP();
 			}
 		});
-<<<<<<< HEAD
+
 		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		surrenderButton = new JButton("Surrender");
@@ -263,12 +264,12 @@ public class Battlefield extends JFrame {
 				Battlefield.this.dispose();
 			}
 		});
-=======
+
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 		buttonPanel.add(Box.createVerticalGlue());
 		buttonPanel.add(opponent);
 		buttonPanel.add(Box.createRigidArea(new Dimension(20, 20)));
->>>>>>> 78eedc8307ae0f4cd278e63f404b8060802fd7ae
+
 		buttonPanel.add(endButton);
 		useButton = new JButton("Use SA/Spell");
 		useButton.setAlignmentX(Component.CENTER_ALIGNMENT);
