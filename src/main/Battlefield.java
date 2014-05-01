@@ -391,7 +391,8 @@ public class Battlefield extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int reply = JOptionPane.showConfirmDialog(null, "Are you Sure?", "Surrenderring", JOptionPane.YES_NO_OPTION);
 		        if (reply == JOptionPane.YES_OPTION) {
-		          JOptionPane.showMessageDialog(null, "YOU LOSE"); // GO TO MAINMENU
+		          JOptionPane.showMessageDialog(null, "YOU LOSE, THE GAME WILL EXIT"); // GO TO MAINMENU
+		          Battlefield.this.dispose();
 		        }
 		        else {
 		          
