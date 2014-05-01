@@ -202,11 +202,13 @@ public class SelectOpponent extends JPanel {
 							  break;
 			}
 			*/
-			fb_url = new URL("https://graph.facebook.com/" + mapList.get(i).get("fb_id") + "/picture?width=200&height=200");
+		//	fb_url = new URL("https://graph.facebook.com/" + mapList.get(i).get("fb_id") + "/picture?width=200&height=200");
 			HashMap<String, String> temp2 = new Gson().fromJson(new InputStreamReader(new URL("https://graph.facebook.com/" + mapList.get(i).get("fb_id")).openStream()), HashMap.class);
 			String fbname = temp2.get("name");
-			BufferedImage image = ImageIO.read(fb_url);
-			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID, image, fbname);
+		//	BufferedImage image = ImageIO.read(fb_url);
+			//String fname, String lname, int LP, int MP, int maxDeck,
+		//	String fb_id, int user_ID) {
+			Inw inw = new Inw(fname, lname, LP, MP, maxDeck, fb_id, user_ID);
 		//TODO: change to new constructor
 			opponentList.add(inw);
 			System.out.println(i + ": " + fname);
@@ -236,7 +238,7 @@ public class SelectOpponent extends JPanel {
 		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
 		display.add(Box.createRigidArea(new Dimension(0, 75)));
 		JLabel pic = new JLabel();
-		pic.setIcon(new ImageIcon(current.inw.image));
+		pic.setIcon(current.inw.profile);
 		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(pic);
 		JLabel fbname = new JLabel(current.inw.fbname);
@@ -301,7 +303,7 @@ public class SelectOpponent extends JPanel {
 		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
 		display.add(Box.createRigidArea(new Dimension(0, 50)));
 		JLabel pic = new JLabel();
-		pic.setIcon(new ImageIcon(current.inw.image));
+		pic.setIcon(current.inw.profile);
 		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(pic);
 		JLabel fbname = new JLabel(current.inw.fbname);
@@ -363,7 +365,7 @@ public class SelectOpponent extends JPanel {
 		display.setLayout(new BoxLayout(display, BoxLayout.PAGE_AXIS));
 		display.add(Box.createRigidArea(new Dimension(0, 75)));
 		JLabel pic = new JLabel();
-		pic.setIcon(new ImageIcon(current.inw.image));
+		pic.setIcon(current.inw.profile);
 		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(pic);
 		JLabel fbname = new JLabel(current.inw.fbname);
@@ -441,7 +443,7 @@ public class SelectOpponent extends JPanel {
 		
 		public void paint(Graphics g) {
 			super.paint(g);
-			g.drawImage(inw.image, 5, 5, this.getWidth() - 10, this.getHeight() - 10, null);
+			g.drawImage(inw.profile.getImage(), 5, 5, this.getWidth() - 10, this.getHeight() - 10, null);
 		}
 
 		@Override
