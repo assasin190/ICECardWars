@@ -127,7 +127,7 @@ public class Battlefield extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-	//				CardData.saveAllCardsToLocal();
+					CardData.saveAllCardsToLocal();
 					Battlefield frame = new Battlefield(new Inw("{\"cv_uid\":\"595\",\"fb_id\":\"100003770583869\",\"firstname_en\":\"Pasin\",\"lastname_en\":\"Boonsermsuwong\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
 					, new Inw("{\"cv_uid\":\"584\",\"fb_id\":\"1035721781\",\"firstname_en\":\"Min\",\"lastname_en\":\"Uswachoke\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
 
@@ -254,7 +254,6 @@ public class Battlefield extends JFrame {
 				playerFP();
 			}
 		});
-<<<<<<< HEAD
 
 		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -274,12 +273,8 @@ public class Battlefield extends JFrame {
 			}
 		});
 
-=======
->>>>>>> 29e9b55bfe243fadfbf762af222b568bbedb9483
-
 		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
 
-<<<<<<< HEAD
 		quitButton = new JButton("Quit");
 		buttonPanel.add(quitButton);
 		quitButton.addActionListener(new ActionListener() {
@@ -288,8 +283,6 @@ public class Battlefield extends JFrame {
 			}
 		});
 
-=======
->>>>>>> 29e9b55bfe243fadfbf762af222b568bbedb9483
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 		buttonPanel.add(Box.createVerticalGlue());
 		buttonPanel.add(opponent);
@@ -777,8 +770,8 @@ public class Battlefield extends JFrame {
 		Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
 		Collections.shuffle(opponentDeck, new Random(System.currentTimeMillis()));
 		for(int i = 0;i<5;i++){
-	//		p_hand.add(new Card(playerDeck.get(0)));	playerDeck.remove(0);
-	//		o_hand.add(new Card(opponentDeck.get(0)));	opponentDeck.remove(0);
+			p_hand.add(new Card(playerDeck.get(0)));	playerDeck.remove(0);
+			o_hand.add(new Card(opponentDeck.get(0)));	opponentDeck.remove(0);
 		}
 		
 		WTF wtf = new WTF();
@@ -1106,8 +1099,9 @@ public class Battlefield extends JFrame {
 					}
 				}
 				//	endButton.setEnabled(true);
-				playerPP();
 				opponent.restoreMP();
+				playerPP();
+				
 			}
 
 		});
