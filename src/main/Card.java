@@ -296,6 +296,7 @@ public class Card extends JPanel{
 		spell_param = m2.get("spell_param").getAsString();
 		sa_param = m2.get("sa_param").getAsString();
 		type = m2.get("type").getAsInt();
+		System.out.println("TYPE: "+type);
 		if(type==1){
 			if(!sa_param.equals("")){
 				if(sa_param.contains(",")){
@@ -378,11 +379,13 @@ public class Card extends JPanel{
 		sa_mc = m2.get("sa_mc").getAsInt();
 		spell_code = m2.get("spell_code").getAsInt();
 		desc = null;
+		//System.out.println();
 		if(type==1){	// DESCRIPTION FOR MONSTER
 			if(param_type.equals("")) desc = CardData.getSaCode(sa_code).replace("{1}", param_value+"");
 			else desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
 			desc = "("+sa_mc+") "+desc;
 		}else if(type==2){	//DESCRIPTION FOR SPELL
+			System.out.println(spell_code);
 			if(param_type.equals("")) CardData.getSpellCode(spell_code).replace("{1}", param_value+"");
 			else desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
 			desc = "("+mc+") "+desc;

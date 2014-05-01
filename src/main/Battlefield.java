@@ -100,12 +100,6 @@ public class Battlefield extends JFrame {
 	private JButton surrenderButton;
 	private JButton quitButton;
 	private JTextArea selectedCard_desc;
-	private Component verticalGlue;
-	private Component verticalGlue_1;
-	private Component rigidArea;
-	private Component rigidArea_1;
-	private Component rigidArea_2;
-	private Component rigidArea_3;
 	public static void main(final String[] args) {
 
 		//final String s = args[0];
@@ -307,20 +301,30 @@ public class Battlefield extends JFrame {
 						selected = true;cancelButton.setEnabled(true);
 						notify.append("Select a monster on opponent side\n");
 						break;
-					case 3:		//TODO: TEST  ////  REMOVE CARDS FOR USED SPELLS 
+					case 3:	
 						//ALL CARDS WILL BE RESET (which is probably not a problem)
+						
 						System.out.println("SPELL REDRAW USED!");
+						System.out.println("DECKBEFORE"+playerDeck);
 						while(p_hand.getComponentCount()>0){
 							Card t = (Card) p_hand.getComponent(0);
 							playerDeck.add(t.ic_id);
+							p_hand.remove(0);
 						}
+						System.out.println("DECKFITTED"+playerDeck);
 						int drawAmount = (int) Math.min(c.param_value, playerDeck.size());
+						System.out.println("DRAWAMOUNT: "+drawAmount);
 						Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
+						System.out.println("DECKSHUFFLED"+playerDeck);
 						//can't draw more than deck size!!
 						for(int i = 0;i<drawAmount;i++){
-							p_hand.add(new Card(i));
+							p_hand.add(new Card(playerDeck.get(i)));
+							playerDeck.remove(i);
 						}
+						System.out.println("DECKDRAWED"+playerDeck);
 						player.useMP(c.sa_mc);
+						c.effectSpell();
+						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 						p_dumpster.add(c);
 						break;
 					case 4:
@@ -331,6 +335,8 @@ public class Battlefield extends JFrame {
 					case 5:
 						player.attack((int) -c.param_value);
 						player.useMP(c.sa_mc);
+						c.effectSpell();
+						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 						p_dumpster.add(c);
 						break;
 					case 6:		//WILL RETURN RANDOMLY FROM DUMPSTER
@@ -343,6 +349,8 @@ public class Battlefield extends JFrame {
 						p_dumpster.remove(random);
 						p_hand.add(new Card(temp.ic_id));//the Card should be reset to initial status
 						player.useMP(c.sa_mc);
+						c.effectSpell();
+						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 						p_dumpster.add(c);
 						break;
 					case 7:	//return all card with > param rarity to hand
@@ -361,6 +369,8 @@ public class Battlefield extends JFrame {
 							}
 						}
 						player.useMP(c.sa_mc);
+						c.effectSpell();
+						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 						p_dumpster.add(c);
 						break;
 					}
@@ -580,10 +590,10 @@ public class Battlefield extends JFrame {
 		notify_scr.setPreferredSize(new Dimension(150, 200));
 		//TEST TEST TEST
 		
-		p_hand.add(new Card(18));
-		p_hand.add(new Card(32));
-		p_hand.add(new Card(49));
-		p_hand.add(new Card(50));
+	//	p_hand.add(new Card(18));
+		p_hand.add(new Card(53));
+	//	p_hand.add(new Card(49));
+	//	p_hand.add(new Card(50));
 		p_dumpster.add(new Card(40));
 		p_dumpster.add(new Card(45));
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -637,7 +647,7 @@ public class Battlefield extends JFrame {
 						lowHealthMusic = true;
 					}
 					try {
-						Thread.sleep(80);
+						Thread.sleep(177);
 					} catch (InterruptedException e) {e.printStackTrace();
 					}
 					if(Main.Turn&&player.MP_current==0){
@@ -652,7 +662,7 @@ public class Battlefield extends JFrame {
 		});
 	}
 	public void playerPP(){
-		notify.append("Player preparation phrase\n");
+		notify.append("-----------------------------\nPlayer preparation phrase\n-----------------------------\n");
 		System.out.println("PLAYER PP TURN");
 		Main.Turn = true;
 		endButton.setEnabled(true);
@@ -684,7 +694,7 @@ public class Battlefield extends JFrame {
 					AIturn();
 					return;
 				}
-				notify.append("Player fighting phrase\n");
+				notify.append("-----------------------------\nPlayer fighting phrase\n-----------------------------\n");
 				System.out.println("PLAYER FP TURN");
 				endButton.setEnabled(false);
 				useButton.setEnabled(false);useButton.setBackground(new Color(240,240,240));
@@ -739,7 +749,6 @@ public class Battlefield extends JFrame {
 						if(c.sacrifice){
 							System.out.println(c.title+" is killed by SA (sacrifice)");
 							p_dumpster.add(c);
-							ch.removeCard();
 						}else c.directInw = false;	c.SAactivated = false;
 					}
 				}
@@ -758,7 +767,7 @@ public class Battlefield extends JFrame {
 			@Override
 			public void run() {
 				System.out.println("OPPONENT PP TURN");
-				notify.append("Opponent preparation phrase\n");
+				notify.append("-----------------------------\nOpponent preparation phrase\n-----------------------------\n");
 				//AI	?PPAI
 
 				if(opponentDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
@@ -799,16 +808,11 @@ public class Battlefield extends JFrame {
 					}
 					System.out.println("AI PHRASE 2");
 					//AI PHRASE 2: If there are mp left, try to randomly use spell card in hand
-					if(opponent.MP_current>0){
+					if(opponent.MP_current>0&&o_hand.getComponentCount()>0){
 						ranIndex = randomIndexArray(o_hand.getComponentCount());
 						for(int index:ranIndex) {
 							Card t = (Card)o_hand.getComponent(index);
 							if(t!=null&&!t.isMonster()&&opponent.MP_current>=t.mc){
-								try {
-									Thread.sleep(2000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
 								AIuseCard(t);
 							}
 						}
@@ -841,7 +845,7 @@ public class Battlefield extends JFrame {
 					return;
 				}
 				System.out.println("OPPONENT FP TURN");
-				notify.append("Opponent fighting phrase\n");
+				notify.append("-----------------------------\nOpponent fighting phrase\n-----------------------------\n");
 				//FP ?FPAI
 				for(CardHolder ch:Theirlane_ref){
 					if(ch.isEmpty())continue;
@@ -892,7 +896,6 @@ public class Battlefield extends JFrame {
 							System.out.println(c.title+" is killed by SA (sacrifice)");
 							notify.append(c.title+" is killed by SA (sacrifice)\n");
 							o_dumpster.add(c);
-							ch.removeCard();
 						}else c.directInw = false;	c.SAactivated = false;
 					}
 				}
@@ -968,6 +971,7 @@ public class Battlefield extends JFrame {
 					temp.apply(c);
 					opponent.useMP(c.mc);
 					c.effectSpell();
+					try {Thread.sleep(1000);} catch (InterruptedException e) {}
 					o_dumpster.add(c);
 				}
 				break;
@@ -977,6 +981,7 @@ public class Battlefield extends JFrame {
 					if(temp2.apply(c))p_dumpster.add(temp2);
 					opponent.useMP(c.mc);
 					c.effectSpell();
+					try {Thread.sleep(1000);} catch (InterruptedException e) {}
 					o_dumpster.add(c);
 				}
 
@@ -995,6 +1000,8 @@ public class Battlefield extends JFrame {
 					o_hand.add(new Card(i));
 				}
 				opponent.useMP(c.sa_mc);
+				c.effectSpell();
+				try {Thread.sleep(1000);} catch (InterruptedException e) {}
 				o_dumpster.add(c);
 				break;
 			case 4:
@@ -1003,12 +1010,15 @@ public class Battlefield extends JFrame {
 					temp3.apply(c);
 					opponent.useMP(c.mc);
 					c.effectSpell();
+					try {Thread.sleep(1000);} catch (InterruptedException e) {}
 					o_dumpster.add(c);
 				}
 				break;
 			case 5:
 				opponent.attack((int) -c.param_value);
 				opponent.useMP(c.sa_mc);
+				c.effectSpell();
+				try {Thread.sleep(1000);} catch (InterruptedException e) {}
 				o_dumpster.add(c);
 				break;
 			case 6:		//WILL RETURN RANDOMLY FROM DUMPSTER
@@ -1021,6 +1031,8 @@ public class Battlefield extends JFrame {
 				o_dumpster.remove(random);
 				o_hand.add(new Card(temp4.ic_id));//the Card should be reset to initial status
 				opponent.useMP(c.sa_mc);
+				c.effectSpell();
+				try {Thread.sleep(1000);} catch (InterruptedException e) {}
 				o_dumpster.add(c);
 				break;
 			case 7:	//return all card with > param rarity to hand
@@ -1037,6 +1049,8 @@ public class Battlefield extends JFrame {
 					}
 				}
 				player.useMP(c.sa_mc);
+				c.effectSpell();
+				try {Thread.sleep(1000);} catch (InterruptedException e) {}
 				o_dumpster.add(c);
 				break;
 			}
@@ -1087,10 +1101,10 @@ public class Battlefield extends JFrame {
 			 */
 			if(c.isMonster()){	//monster
 				if(((CardHolder)c.getParent()).type==CardHolder.PLAYER&&player.MP_current>=c.sa_mc&&!c.SAactivated){
-					useButton.setEnabled(true);useButton.setBackground(Color.BLUE);
+					useButton.setEnabled(true);useButton.setBackground(Color.CYAN);
 				}	
 			}else if(((CardHolder)c.getParent()).type==CardHolder.PLAYER_HAND&&player.MP_current>=c.mc){
-				useButton.setEnabled(true);	useButton.setBackground(Color.BLUE);
+				useButton.setEnabled(true);	useButton.setBackground(Color.CYAN);
 			}else {
 
 				System.out.println("USEBUTTON NOT ENABLED");
@@ -1098,7 +1112,7 @@ public class Battlefield extends JFrame {
 			//Do nothing if selected card can't be casted sa/spell
 		}else if(selected){				//TARGET CARD SELECTED AND READY TO USE THE SA/SPELL
 			cancelButton.setEnabled(false);
-			System.out.println("CASTER: "+caster.title+" APPLYING SA/SPELL ON: "+c.title);
+			boolean spellSuccess = true;
 			if(caster.isMonster()){
 				switch(caster.sa_code){
 				case 3:
@@ -1106,51 +1120,53 @@ public class Battlefield extends JFrame {
 						c.apply(caster);c.SAactivated = true;
 						System.out.println("TEST C:"+c.lp);
 						player.useMP(caster.sa_mc);caster.effectSpell();
-					}else JOptionPane.showMessageDialog(this, "Invalid target!\nPlease select monster on your side", "Error",JOptionPane.ERROR_MESSAGE);
+					}else spellSuccess = false;
 					break;
 				case 4:
 					if(((CardHolder)c.getParent()).type==CardHolder.OPPONENT){
 						if(c.apply(caster))p_dumpster.add(c);c.SAactivated = true;
 						player.useMP(caster.sa_mc);caster.effectSpell();
-					}else JOptionPane.showMessageDialog(this, "Invalid target!\nPlease select monster on opponent side", "Error",JOptionPane.ERROR_MESSAGE);
+					}else spellSuccess = false;
 					break;
 				case 5:
 					if(((CardHolder)c.getParent()).type==CardHolder.PLAYER){
 						c.apply(caster);c.SAactivated = true;
 						player.useMP(caster.sa_mc);caster.effectSpell();
-					}else JOptionPane.showMessageDialog(this, "Invalid target!\nPlease select monster on your side", "Error",JOptionPane.ERROR_MESSAGE);
+					}else spellSuccess = false;
 					break;
 				default:
 					System.err.println("ERR: Card doesn't need selection!");
 					break;
 				}	
 			}else{
-				System.out.println("caster spell code: "+caster.spell_code);
 				switch(caster.spell_code){
-
 				case 1: 
 					if(((CardHolder)c.getParent()).type==CardHolder.PLAYER){
 						c.apply(caster);
 						player.useMP(caster.mc);
 						caster.effectSpell();
+						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 						p_dumpster.add(caster);
-					}else System.out.println("Invalid target type!");
+					}else spellSuccess = false;
 					break;
 				case 2:
 					if(((CardHolder)c.getParent()).type==CardHolder.OPPONENT){
 						caster.effectSpell();
 						if(c.apply(caster))o_dumpster.add(c);
 						player.useMP(caster.mc);
+						caster.effectSpell();
+						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 						p_dumpster.add(caster);
-					}else System.out.println("Invalid target type!");
+					}else spellSuccess = false;
 					break;
 				case 4:
 					if(((CardHolder)c.getParent()).type==CardHolder.PLAYER){
 						c.apply(caster);
 						player.useMP(caster.mc);
 						caster.effectSpell();
+						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 						p_dumpster.add(caster);
-					}else System.out.println("Invalid target type!");
+					}else spellSuccess = false;
 					break;
 				default:
 					System.err.println("ERR: Card doesn't need selection!");
@@ -1158,6 +1174,14 @@ public class Battlefield extends JFrame {
 				}
 
 			}
+			if(spellSuccess){
+				if(caster.isMonster()){
+					notify.append(caster.title+" spell used on "+c.title+"\n");
+				}else notify.append(caster.title+" using special ability on "+c.title+"\n");
+			}else{
+				JOptionPane.showMessageDialog(this, "Invalid target!\nPlease select monster on your side", "Error",JOptionPane.ERROR_MESSAGE);
+			}
+			
 			useButton.setEnabled(false);
 			cancelButton.setEnabled(false);
 			selected = false;
