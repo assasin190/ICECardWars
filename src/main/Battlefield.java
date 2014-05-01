@@ -65,8 +65,8 @@ public class Battlefield extends JFrame {
 	private JPanel contentPane;
 	public static Inw player;
 	public static Inw opponent;
-	public List<Integer> playerDeck ;
-	public List<Integer> opponentDeck;
+	public ArrayList<Integer> playerDeck ;
+	public ArrayList<Integer> opponentDeck;
 	CardHolder[] Mylane_ref = new CardHolder[4];
 	CardHolder[] Theirlane_ref = new CardHolder[4];
 	private CardHolder o_hand;
@@ -106,14 +106,17 @@ public class Battlefield extends JFrame {
 	private JScrollPane p_dumpster_scr;
 	private JScrollPane o_dumpster_scr;
 	private JLabel turnLabel;
-	private JPanel o_hand_num;
+	private JPanel o_deck_num;
 	private JPanel o_dumpster_num;
-	private JPanel p_hand_num;
+	private JPanel p_deck_num;
 	private JPanel p_dumpster_num;
-	private JLabel o_hand_l;
+	private JLabel o_deck_l;
 	private JLabel o_dumpster_l;
 	private JLabel p_dumpster_l;
-	private JLabel p_hand_l;
+	private JLabel p_deck_l;
+	private Image dumpsterImage = null;
+	private Image deckImage = null;
+	private JLabel lblNewLabel;
 	public static void main(final String[] args) {
 
 		//final String s = args[0];
@@ -130,7 +133,7 @@ public class Battlefield extends JFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			
+
 			}
 		});
 	}
@@ -151,8 +154,8 @@ public class Battlefield extends JFrame {
 		}
 		Battlefield.player = savObject.player;
 		Battlefield.opponent = savObject.opponent;
-		playerDeck = savObject.playerDeck;
-		opponentDeck = savObject.opponentDeck;
+	//	playerDeck = savObject.playerDeck;
+	//	opponentDeck = savObject.opponentDeck;
 		initGUI();
 		p_dumpster = savObject.pDumpster;
 		o_dumpster = savObject.oDumpster;
@@ -178,6 +181,8 @@ public class Battlefield extends JFrame {
 	 */
 	public Battlefield(Inw player_,Inw opponent_) {
 		try {
+			deckImage = ImageIO.read(new File("deck.png"));
+			dumpsterImage = ImageIO.read(new File("dumpster.gif"));
 			lane = ImageIO.read(new File("Lane.jpg"));
 		} catch (IOException e1) {e1.printStackTrace();}
 		bgMusic = new AudioPlayer("Mahou Battle.wav");
@@ -460,21 +465,47 @@ public class Battlefield extends JFrame {
 		JPanel opponentPanel = new JPanel();
 		battlePane.add(opponentPanel);
 		opponentPanel.setLayout(new BorderLayout(0, 0));
-		
-		o_hand_num = new JPanel();
-		opponentPanel.add(o_hand_num, BorderLayout.WEST);
-		o_hand_num.setLayout(new BoxLayout(o_hand_num, BoxLayout.X_AXIS));
-		
-		o_hand_l = new JLabel("");
-		o_hand_l.setAlignmentX(Component.CENTER_ALIGNMENT);
-		o_hand_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		o_hand_num.add(o_hand_l);
-		
-		o_dumpster_num = new JPanel();
+
+		o_deck_num = new JPanel(){
+			@Override
+			public void paintComponent(Graphics g){
+				super.paintComponents(g);
+				g.drawImage(deckImage, 0, 0, this.getWidth(), this.getHeight(), null);
+			}
+		};
+		opponentPanel.add(o_deck_num, BorderLayout.WEST);
+		o_deck_num.setLayout(new BoxLayout(o_deck_num, BoxLayout.Y_AXIS));
+		JLabel label = new JLabel(" DECK ");
+		label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		label.setForeground(Color.WHITE);
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setFont(new Font("Tahoma", Font.PLAIN, 23));
+		o_deck_num.add(label);
+		o_deck_l = new JLabel("");
+		o_deck_l.setForeground(Color.WHITE);
+		o_deck_l.setHorizontalAlignment(SwingConstants.CENTER);
+		o_deck_l.setAlignmentX(Component.CENTER_ALIGNMENT);
+		o_deck_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		o_deck_num.add(o_deck_l);
+
+		o_dumpster_num = new JPanel(){
+			@Override
+			public void paintComponent(Graphics g){
+				super.paintComponents(g);
+				g.drawImage(dumpsterImage, 0, 0, this.getWidth(), this.getHeight(), null);
+			}
+		};
 		opponentPanel.add(o_dumpster_num, BorderLayout.EAST);
-		o_dumpster_num.setLayout(new BoxLayout(o_dumpster_num, BoxLayout.X_AXIS));
-		
+		o_dumpster_num.setLayout(new BoxLayout(o_dumpster_num, BoxLayout.Y_AXIS));
+		JLabel label_3 = new JLabel("DUMPSTER");
+		label_3.setAlignmentX(Component.CENTER_ALIGNMENT);
+		label_3.setForeground(Color.WHITE);
+		label_3.setHorizontalAlignment(SwingConstants.CENTER);
+		label_3.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		o_dumpster_num.add(label_3);
 		o_dumpster_l = new JLabel("");
+		o_dumpster_l.setForeground(Color.WHITE);
+		o_dumpster_l.setHorizontalAlignment(SwingConstants.CENTER);
 		o_dumpster_l.setAlignmentX(Component.CENTER_ALIGNMENT);
 		o_dumpster_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		o_dumpster_num.add(o_dumpster_l);
@@ -492,7 +523,7 @@ public class Battlefield extends JFrame {
 		o_dumpster.setBackground(Color.LIGHT_GRAY);
 		o_dumpster.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		o_dumpster_scr = new JScrollPane(o_dumpster);
-	//	opponentPanel.add(o_dumpster_scr);
+		//	opponentPanel.add(o_dumpster_scr);
 
 
 		TheirBF = new JPanel();
@@ -589,21 +620,48 @@ public class Battlefield extends JFrame {
 		JPanel playerPanel = new JPanel();
 		battlePane.add(playerPanel);
 		playerPanel.setLayout(new BorderLayout(0, 0));
+
+		p_deck_num = new JPanel(){
+			@Override
+			public void paintComponent(Graphics g){
+				super.paintComponents(g);
+				g.drawImage(deckImage, 0, 0, this.getWidth(), this.getHeight(), null);
+			}
+		};
+		playerPanel.add(p_deck_num, BorderLayout.WEST);
+		p_deck_num.setLayout(new BoxLayout(p_deck_num, BoxLayout.Y_AXIS));
 		
-		p_hand_num = new JPanel();
-		playerPanel.add(p_hand_num, BorderLayout.WEST);
-		p_hand_num.setLayout(new BoxLayout(p_hand_num, BoxLayout.X_AXIS));
-		
-		p_hand_l = new JLabel("");
-		p_hand_l.setAlignmentX(Component.CENTER_ALIGNMENT);
-		p_hand_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		p_hand_num.add(p_hand_l);
-		
-		p_dumpster_num = new JPanel();
+		JLabel label_1 = new JLabel(" DECK ");
+		label_1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		label_1.setForeground(Color.WHITE);
+		label_1.setFont(new Font("Tahoma", Font.PLAIN, 23));
+		p_deck_num.add(label_1);
+
+		p_deck_l = new JLabel("");
+		p_deck_l.setForeground(Color.WHITE);
+		p_deck_l.setHorizontalAlignment(SwingConstants.CENTER);
+		p_deck_l.setAlignmentX(Component.CENTER_ALIGNMENT);
+		p_deck_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		p_deck_num.add(p_deck_l);
+
+		p_dumpster_num = new JPanel(){
+		@Override
+		public void paintComponent(Graphics g){
+			super.paintComponents(g);
+			g.drawImage(dumpsterImage, 0, 0, this.getWidth(), this.getHeight(), null);
+		}
+		};
 		playerPanel.add(p_dumpster_num, BorderLayout.EAST);
-		p_dumpster_num.setLayout(new BoxLayout(p_dumpster_num, BoxLayout.X_AXIS));
-		
+		p_dumpster_num.setLayout(new BoxLayout(p_dumpster_num, BoxLayout.Y_AXIS));
+		JLabel label_2 = new JLabel("DUMPSTER");
+		label_2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		label_2.setHorizontalAlignment(SwingConstants.CENTER);
+		label_2.setForeground(Color.WHITE);
+		label_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		p_dumpster_num.add(label_2);
 		p_dumpster_l = new JLabel("");
+		p_dumpster_l.setForeground(Color.WHITE);
+		p_dumpster_l.setHorizontalAlignment(SwingConstants.CENTER);
 		p_dumpster_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		p_dumpster_l.setAlignmentX(Component.CENTER_ALIGNMENT);
 		p_dumpster_num.add(p_dumpster_l);
@@ -649,7 +707,11 @@ public class Battlefield extends JFrame {
 		surrenderButton = new JButton("Surrender");
 		surrenderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				int a = JOptionPane.showConfirmDialog(null, "Are you sure you want to surrender?");
+				if(a == JOptionPane.YES_OPTION){
+					player.LP_current=0;
+					stop();
+				}
 			}
 		});
 		surrenderButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -686,7 +748,7 @@ public class Battlefield extends JFrame {
 		//TEST TEST TEST
 
 		//	p_hand.add(new Card(18));
-		p_hand.add(new Card(53));
+		//	p_hand.add(new Card(53));
 
 		p_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
 		p_dumpster.setBackground(Color.LIGHT_GRAY);
@@ -694,10 +756,10 @@ public class Battlefield extends JFrame {
 		p_dumpster.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		//	p_hand.add(new Card(49));
 		//	p_hand.add(new Card(50));
-	//	p_dumpster.add(new Card(40));
-	//	p_dumpster.add(new Card(45));
+		//	p_dumpster.add(new Card(40));
+		//	p_dumpster.add(new Card(45));
 		p_dumpster_scr = new JScrollPane(p_dumpster);
-	//	playerPanel.add(p_dumpster_scr);
+		//	playerPanel.add(p_dumpster_scr);
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		//		playerDeck.
 	}
@@ -706,6 +768,12 @@ public class Battlefield extends JFrame {
 	 */
 	public void run(){	
 		runBFchecker();
+		Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
+		Collections.shuffle(opponentDeck, new Random(System.currentTimeMillis()));
+		for(int i = 0;i<5;i++){
+			p_hand.add(new Card(playerDeck.get(0)));	playerDeck.remove(0);
+			o_hand.add(new Card(opponentDeck.get(0)));	opponentDeck.remove(0);
+		}
 		//TODO: WTF
 		// DO WTF ACTION
 
@@ -713,14 +781,10 @@ public class Battlefield extends JFrame {
 		// else call AITurn();
 
 		playerPP();
-		Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
-		Collections.shuffle(opponentDeck, new Random(System.currentTimeMillis()));
-		for(int i = 0;i<5;i++){
-			p_hand.add(new Card(playerDeck.get(0)));	playerDeck.remove(0);
-			o_hand.add(new Card(opponentDeck.get(0)));	opponentDeck.remove(0);
-		}
+		
 		//TODO: remove test
-		playerDeck = Arrays.asList(new Integer[]{1,1,1});
+		playerDeck = new ArrayList();
+		playerDeck.add(1);
 	}
 	public void runBFchecker(){
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
@@ -748,13 +812,17 @@ public class Battlefield extends JFrame {
 						lowHealthMusic = true;
 					}
 					try {
-						Thread.sleep(177);
+						Thread.sleep(100);
 					} catch (InterruptedException e) {e.printStackTrace();
 					}
 					if(Main.Turn&&player.MP_current==0){
 						Main.Turn = false;
 						playerFP();
 					}
+					p_deck_l.setText(playerDeck.size()+"");
+					p_dumpster_l.setText(p_dumpster.getComponentCount()+"");
+					o_deck_l.setText(opponentDeck.size()+"");
+					o_dumpster_l.setText(o_dumpster.getComponentCount()+"");
 					Battlefield.this.repaint();
 				}
 				System.out.println("Thread battlefield checker ended");
@@ -781,13 +849,14 @@ public class Battlefield extends JFrame {
 			Card c = new Card(playerDeck.get(0));
 			notify.append("Player drawn "+c.title+" from deck\n");
 			p_hand.add(c);	playerDeck.remove(0);
+			p_hand.revalidate();p_hand.repaint();
 			c.effectColor(Color.WHITE);
 			//		p_deck = new JLabel("DECK: "+Arrays.toString(playerDeck.toArray()));	
 		}
 		System.out.println("PLAYER TURN INITIALS DONE!");
 	}
 	public void playerFP(){
-		Dialog dialog = new Dialog("PLAYER FIGHT PHRASE");
+	
 		turnLabel.setText("PLAYER FP");
 		try {Thread.sleep(1200);} catch (InterruptedException e1) {}
 		endButton.setEnabled(false);
@@ -800,6 +869,7 @@ public class Battlefield extends JFrame {
 					AIturn();
 					return;
 				}
+				Dialog dialog = new Dialog("PLAYER FIGHT PHRASE");
 				notify.append("-----------------------------\nPlayer fighting phrase\n-----------------------------\n");
 				System.out.println("PLAYER FP TURN");
 				endButton.setEnabled(false);
@@ -833,6 +903,7 @@ public class Battlefield extends JFrame {
 							}else{
 								if(Math.random()<co.car){
 									System.out.println(co.title+" counterattacked!");
+									notify.append(co.title+" counterattacked!");
 									co.effectAttack();
 									if(c.attack(dmg,true)){
 										p_dumpster.add(c);
@@ -891,7 +962,8 @@ public class Battlefield extends JFrame {
 					Card ct = new Card(opponentDeck.get(0));
 					notify.append("Opponent drawn "+ct.title+" from deck\n");
 					ct.effectColor(Color.WHITE);
-					o_hand.add(ct);	opponentDeck.remove(0);		
+					o_hand.add(ct);	opponentDeck.remove(0);	
+					o_hand.revalidate();o_hand.repaint();
 					//		o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
 					//AI here
 
@@ -1300,7 +1372,7 @@ public class Battlefield extends JFrame {
 					notify.append(caster.title+" spell used on "+c.title+"\n");
 				}else notify.append(caster.title+" using special ability on "+c.title+"\n");
 			}else{
-				JOptionPane.showMessageDialog(this, "Invalid target!\nPlease select monster on your side", "Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Invalid target!", "Error",JOptionPane.ERROR_MESSAGE);
 			}
 
 			useButton.setEnabled(false);

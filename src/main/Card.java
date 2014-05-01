@@ -455,6 +455,7 @@ public class Card extends JPanel{
 		}
 
 		mcLabel = new JLabel("MC");
+		mcLabel.setForeground(Color.WHITE);
 		mcLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gbc_mcLabel = new GridBagConstraints();
 		gbc_mcLabel.insets = new Insets(0, 2, 5, 2);
@@ -560,7 +561,7 @@ public class Card extends JPanel{
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if(isMonster())g.setColor(Color.GREEN);
+		if(isMonster())g.setColor(new Color(0,150,0));
 		else g.setColor(Color.BLUE);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		//g.drawImage(background.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
