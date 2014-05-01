@@ -101,7 +101,7 @@ public class MainMenu extends JFrame {
 	private Component rigidArea;
 	private Component verticalGlue;
 	private Component verticalGlue_1;
-	private static AudioPlayer bgMusic;
+	public static AudioPlayer bgMusic;
 	Image i;
 
 	public static void main(String[] args) {
@@ -160,8 +160,8 @@ public class MainMenu extends JFrame {
 
 		usernameField = new JTextField();
 		usernameField.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 13));
-		usernameField.setForeground(Color.RED);
-		usernameField.setBackground(Color.BLACK);
+		usernameField.setForeground(new Color(0, 191, 255));
+		usernameField.setBackground(Color.WHITE);
 		usernameField.setToolTipText("Username");
 		usernameField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -173,6 +173,7 @@ public class MainMenu extends JFrame {
 		});
 
 		usernameLabel = new JLabel(" Username ");
+		usernameLabel.setForeground(new Color(0, 191, 255));
 		loginPanel.add(usernameLabel);
 		usernameField.setMaximumSize(new Dimension(5000, 2147483647));
 		usernameField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -182,8 +183,8 @@ public class MainMenu extends JFrame {
 
 		pw = new JPasswordField();
 		pw.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 13));
-		pw.setForeground(Color.RED);
-		pw.setBackground(Color.BLACK);
+		pw.setForeground(new Color(0, 191, 255));
+		pw.setBackground(Color.WHITE);
 		pw.setToolTipText("Password");
 		pw.addKeyListener(new KeyAdapter() {
 			@Override
@@ -195,6 +196,7 @@ public class MainMenu extends JFrame {
 		});
 
 		passwordLabel = new JLabel(" Password ");
+		passwordLabel.setForeground(new Color(0, 191, 255));
 		loginPanel.add(passwordLabel);
 		pw.setMaximumSize(new Dimension(5000, 2147483647));
 		pw.setHorizontalAlignment(SwingConstants.LEFT);
@@ -330,7 +332,7 @@ public class MainMenu extends JFrame {
 
 		continueButton = new JButton("Continue The Game");
 		continueButton.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
-		continueButton.setForeground(Color.RED);
+		continueButton.setForeground(new Color(0, 191, 255));
 		continueButton.setBackground(new Color(0, 0, 0));
 		continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		continueButton.setEnabled(false);

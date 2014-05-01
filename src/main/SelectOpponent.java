@@ -282,7 +282,9 @@ public class SelectOpponent extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				bgMusic2.stop();
+				Inw op = current.inw;
+				Battlefield bf = new Battlefield(player,op);
 				
 			}
 			
