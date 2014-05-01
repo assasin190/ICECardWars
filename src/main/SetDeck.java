@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.awt.Color;
+import java.awt.Font;
 
 public class SetDeck extends JPanel {
 	
@@ -37,7 +39,7 @@ public class SetDeck extends JPanel {
 	ArrayList<Card> deck;
 	CardHolder deckHolder;
 	CardHolder cardHolder;
-	
+	private Image wallpaper2;	
 	
 	public SetDeck() {
 		try {
@@ -46,8 +48,29 @@ public class SetDeck extends JPanel {
 			try {
 				HashMap<String, ArrayList<Double>> temp = g.fromJson(new InputStreamReader(url.openStream()), HashMap.class );
 				ArrayList<Double> cardString = temp.get("data");
-				cardHolder = new CardHolder(CardHolder.DECK, false);
-				deckHolder = new CardHolder(CardHolder.DECK, false);
+				try {
+					wallpaper2 = ImageIO.read(new File("wallpaper2.png"));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				cardHolder = new CardHolder(CardHolder.DECK, false){
+					public void paintComponent(Graphics g){
+						super.paintComponent(g);
+						g.drawImage(wallpaper2, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+
+					}
+				};
+				
+				
+				deckHolder = new CardHolder(CardHolder.DECK, false){
+					public void paintComponent(Graphics g){
+						super.paintComponent(g);
+						g.drawImage(wallpaper2, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+
+					}
+				};
+				
+				
 				for(int i = 0; i < cardString.size(); i++) {
 					cardHolder.add(new Card(cardString.get(i).intValue()));
 				}
@@ -69,6 +92,10 @@ public class SetDeck extends JPanel {
 				this.add(new JScrollPane(cardHolder));
 				this.add(new JScrollPane(deckHolder));
 				JButton b = new JButton("Submit");
+				b.setFont(new Font("Tahoma", Font.BOLD, 14));
+				b.setForeground(Color.BLACK);
+				b.setBackground(Color.PINK);
+				b.setBounds(600,200,200,200 );
 				b.addActionListener(new ActionListener() {
 
 					@Override
@@ -104,7 +131,18 @@ public class SetDeck extends JPanel {
 					}
 					
 				});
+<<<<<<< HEAD
 				MyPanel display = new MyPanel();
+=======
+				JPanel display = new JPanel(){
+					public void paintComponent(Graphics g){
+						super.paintComponent(g);
+						g.drawImage(wallpaper2, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+
+					}
+				};
+				
+>>>>>>> 0361b082288b5045b222049e24f9465d749cc7b6
 				display.setPreferredSize(new Dimension(400, 768));
 				display.add(b);
 				this.add(display);
@@ -124,7 +162,7 @@ public class SetDeck extends JPanel {
 	public static void main(String [] args) {
 		CardData.saveAllCardsToLocal();
 		JFrame frame = new JFrame();
-		frame.add(new SetDeck());
+		frame.getContentPane().add(new SetDeck());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setVisible(true);
