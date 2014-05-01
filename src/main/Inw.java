@@ -35,6 +35,10 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Component;
+import javax.swing.SwingConstants;
 
 public class Inw extends JPanel {
 
@@ -52,7 +56,10 @@ public class Inw extends JPanel {
 	int user_ID;
 	public int[] all_IC;
 	public int[] deck;
-	private JLabel data;
+	private JLabel picLabel;
+	private JLabel nameLabel;
+	private JLabel LP;
+	private JLabel MP;
 
 	/**@deprecated
 	 * @param fname
@@ -96,7 +103,7 @@ public class Inw extends JPanel {
 		System.out.println(a.useMP(3));
 		JButton j = new JButton("ADD");
 
-		frame.add(j);
+		frame.getContentPane().add(j);
 	}
 
 	public Inw(String fname, String lname, int LP, int MP, int maxDeck,
@@ -169,14 +176,30 @@ public class Inw extends JPanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		setLayout(new BorderLayout(0, 0));
+				setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		data = new JLabel(profile);
-		data.setText(fname + " " + lname + " LP: " + LP_current + " MP: "
-				+ MP_current);
-		// data.setText("LP: "+LP_current+" MP: "+MP_current);
-		add(data);
-
+		
+				picLabel = new JLabel(profile);
+				picLabel.setForeground(new Color(0, 0, 0));
+				picLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+	//			picLabel.setText(fname + " " + lname + " LP: " + LP_current + " MP: "
+		//				+ MP_current);
+				add(picLabel);
+		
+		nameLabel = new JLabel(fname+" "+lname);
+		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(nameLabel);
+		
+		LP = new JLabel("LP: "+LP_current);
+		LP.setHorizontalAlignment(SwingConstants.CENTER);
+		LP.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(LP);
+		
+		MP = new JLabel("MP: "+MP_current);
+		MP.setHorizontalAlignment(SwingConstants.CENTER);
+		MP.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(MP);
 	}
 
 	/**
@@ -204,7 +227,6 @@ public class Inw extends JPanel {
 				continue;
 			}
 			opponent = new Gson().fromJson(job.get("data"), JsonArray.class);
-			// System.out.println(deck.toString());
 			break;
 		}
 		Inw[] all = new Inw[opponent.size()];
@@ -260,9 +282,9 @@ public class Inw extends JPanel {
 	}
 
 	public void updateGUI() {
-		data.setText("LP: " + LP_current + " MP: " + MP_current);
+		LP.setText("LP: "+LP_current);
+		MP.setText("MP: "+MP_current);
 		validate();
-		// data.setText(fname+" "+lname+" LP: "+LP_current+" MP: "+MP_current);
 	}
 
 	/**

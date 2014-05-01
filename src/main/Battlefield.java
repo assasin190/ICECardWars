@@ -47,7 +47,10 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
+
 import java.awt.Dimension;
+import java.awt.Font;
 
 public class Battlefield extends JFrame {
 	private static final long serialVersionUID = -3457162401020244642L;
@@ -58,8 +61,8 @@ public class Battlefield extends JFrame {
 	public static Inw opponent;
 	public List<Integer> playerDeck ;
 	public List<Integer> opponentDeck;
-	CardHolder[] Mylane_ref;
-	CardHolder[] Theirlane_ref;
+	CardHolder[] Mylane_ref = new CardHolder[4];
+	CardHolder[] Theirlane_ref = new CardHolder[4];
 	private CardHolder o_hand;
 	private CardHolder p_hand;
 	private JPanel MyBF;
@@ -89,7 +92,6 @@ public class Battlefield extends JFrame {
 	private boolean isActive = true;	//battlefield is still running
 	private JScrollPane p_hand_scr;
 	private JScrollPane o_hand_scr;
-	private JButton breakButton;
 	private JScrollPane notify_scr;
 	public static JTextArea notify;
 	private JTextArea desc_area;
@@ -104,12 +106,12 @@ public class Battlefield extends JFrame {
 				try {
 					CardData.saveAllCardsToLocal();
 					Battlefield frame = new Battlefield(new Inw("{\"cv_uid\":\"595\",\"fb_id\":\"100003770583869\",\"firstname_en\":\"Pasin\",\"lastname_en\":\"Boonsermsuwong\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
-								, new Inw("{\"cv_uid\":\"584\",\"fb_id\":\"1035721781\",\"firstname_en\":\"Min\",\"lastname_en\":\"Uswachoke\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
+					, new Inw("{\"cv_uid\":\"584\",\"fb_id\":\"1035721781\",\"firstname_en\":\"Min\",\"lastname_en\":\"Uswachoke\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
 					//, new Inw();
 					//			frame.setVisible(true);
 					//			frame.run();
 
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -151,7 +153,7 @@ public class Battlefield extends JFrame {
 		runBFchecker();
 		Main.Turn = true;
 		endButton.setEnabled(true);
-		breakButton.setEnabled(true);
+		//	breakButton.setEnabled(true);
 	}
 	/**
 	 * @wbp.parser.constructor
@@ -207,10 +209,8 @@ public class Battlefield extends JFrame {
 		middlePane = new JPanel();
 
 		middlePane.setLayout(new GridLayout(4, 1, 0, 0));
-		JPanel LcontentPane = new JPanel();
 		JPanel RcontentPane = new JPanel();
 		contentPane.add(middlePane, BorderLayout.CENTER);
-		contentPane.add(LcontentPane, BorderLayout.WEST);
 		contentPane.add(RcontentPane, BorderLayout.EAST);
 
 
@@ -222,7 +222,8 @@ public class Battlefield extends JFrame {
 
 
 		TheirBF = new JPanel();
-		TheirBF.setLayout(new GridLayout(0, 5));
+		TheirBF.add(opponent);
+		TheirBF.setLayout(new GridLayout(0, 5, 0, 0));
 		Theirlane1 = new CardHolder(CardHolder.OPPONENT,false){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
@@ -233,6 +234,9 @@ public class Battlefield extends JFrame {
 				}
 			}
 		};
+		TheirBF.add(Theirlane1);
+		Theirlane_ref[0] = Theirlane1;
+		Theirlane1.setLayout(new GridLayout(1, 0, 0, 0));
 		Theirlane2 = new CardHolder(CardHolder.OPPONENT,false){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
@@ -243,6 +247,9 @@ public class Battlefield extends JFrame {
 				}
 			}
 		};
+		TheirBF.add(Theirlane2);
+		Theirlane_ref[1] = Theirlane2;
+		Theirlane2.setLayout(new GridLayout(1, 0, 0, 0));
 		Theirlane3 = new CardHolder(CardHolder.OPPONENT,false){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
@@ -253,6 +260,9 @@ public class Battlefield extends JFrame {
 				}
 			}
 		};
+		TheirBF.add(Theirlane3);
+		Theirlane_ref[2] = Theirlane3;
+		Theirlane3.setLayout(new GridLayout(1, 0, 0, 0));
 		Theirlane4 = new CardHolder(CardHolder.OPPONENT,false){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
@@ -262,21 +272,18 @@ public class Battlefield extends JFrame {
 					e.printStackTrace();
 				}
 			}
-		};		
-		TheirBF.add(opponent);
-		TheirBF.add(Theirlane1);
-		TheirBF.add(Theirlane2);
-		TheirBF.add(Theirlane3);
+		};
 		TheirBF.add(Theirlane4);
-		Theirlane_ref = new CardHolder[4];
-		Theirlane_ref[0] = Theirlane1;
-		Theirlane_ref[1] = Theirlane2;
-		Theirlane_ref[2] = Theirlane3;
 		Theirlane_ref[3] = Theirlane4;
+		Theirlane4.setLayout(new GridLayout(1, 0, 0, 0));
 		middlePane.add(TheirBF);
 
 		MyBF = new JPanel();
-		MyBF.setLayout(new GridLayout(0, 5));	
+		MyBF.add(player);
+		MyBF.setLayout(new GridLayout(0, 5, 0, 0));
+
+		
+		
 		Mylane1 = new CardHolder(CardHolder.PLAYER,false){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
@@ -287,6 +294,13 @@ public class Battlefield extends JFrame {
 				}
 			}
 		};
+		Mylane1.setOpposingCH(Theirlane1);
+		Theirlane1.setOpposingCH(Mylane1);
+		MyBF.add(Mylane1);
+		Mylane_ref[0] = Mylane1;
+		Mylane1.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		
 		Mylane2 = new CardHolder(CardHolder.PLAYER,false){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
@@ -296,7 +310,15 @@ public class Battlefield extends JFrame {
 					e.printStackTrace();
 				}
 			}
-		};		Mylane3 = new CardHolder(CardHolder.PLAYER,false){
+		};		
+		Mylane2.setOpposingCH(Theirlane2);
+		Theirlane2.setOpposingCH(Mylane2);
+		MyBF.add(Mylane2);
+		Mylane_ref[1] = Mylane2;
+		Mylane2.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		
+		Mylane3 = new CardHolder(CardHolder.PLAYER,false){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
 				try {
@@ -306,6 +328,12 @@ public class Battlefield extends JFrame {
 				}
 			}
 		};
+		Mylane3.setOpposingCH(Theirlane3);
+		Theirlane3.setOpposingCH(Mylane3);
+		MyBF.add(Mylane3);
+		Mylane_ref[2] = Mylane3;
+		Mylane3.setLayout(new GridLayout(1, 0, 0, 0));
+		middlePane.add(MyBF);
 		Mylane4 = new CardHolder(CardHolder.PLAYER,false){
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
@@ -316,37 +344,11 @@ public class Battlefield extends JFrame {
 				}
 			}
 		};
-		MyBF.add(player);
-		MyBF.add(Mylane1);
-		MyBF.add(Mylane2);
-		MyBF.add(Mylane3);
-		MyBF.add(Mylane4);
-		Mylane_ref = new CardHolder[4];
-		Mylane_ref[0] = Mylane1;
-		Mylane_ref[1] = Mylane2;
-		Mylane_ref[2] = Mylane3;
-		Mylane_ref[3] = Mylane4;
-		middlePane.add(MyBF);
-
-		Theirlane1.setOpposingCH(Mylane1);
-		Mylane1.setOpposingCH(Theirlane1);
-		Theirlane1.setLayout(new GridLayout(1, 0, 0, 0));
-		Mylane1.setLayout(new GridLayout(1, 0, 0, 0));
-		Theirlane2.setOpposingCH(Mylane2);
-		Mylane2.setOpposingCH(Theirlane2);
-		Theirlane2.setLayout(new GridLayout(1, 0, 0, 0));
-		Mylane2.setLayout(new GridLayout(1, 0, 0, 0));
-		Theirlane3.setOpposingCH(Mylane3);
-		Mylane3.setOpposingCH(Theirlane3);
-		Theirlane3.setLayout(new GridLayout(1, 0, 0, 0));
-		Mylane3.setLayout(new GridLayout(1, 0, 0, 0));
-		Theirlane4.setOpposingCH(Mylane4);
 		Mylane4.setOpposingCH(Theirlane4);
-		Theirlane4.setLayout(new GridLayout(1, 0, 0, 0));
+		Theirlane4.setOpposingCH(Mylane4);
+		MyBF.add(Mylane4);
+		Mylane_ref[3] = Mylane4;
 		Mylane4.setLayout(new GridLayout(1, 0, 0, 0));
-		JPanel playerPanel = new JPanel();
-		middlePane.add(playerPanel);
-		playerPanel.setLayout(new GridLayout(0, 1, 0, 0));
 
 
 
@@ -361,6 +363,9 @@ public class Battlefield extends JFrame {
 		o_dumpster.setBackground(Color.LIGHT_GRAY);
 		opponentPanel.add(o_dumpster);
 		o_dumpster.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		JPanel playerPanel = new JPanel();
+		middlePane.add(playerPanel);
+		playerPanel.setLayout(new GridLayout(0, 1, 0, 0));
 
 
 		p_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
@@ -372,6 +377,11 @@ public class Battlefield extends JFrame {
 		p_dumpster.setBackground(Color.LIGHT_GRAY);
 		playerPanel.add(p_dumpster);
 		p_dumpster.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		p_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		//TEST TEST TEST
+		p_hand.add(new Card(18));
+		p_hand.add(new Card(49));
+		p_hand.add(new Card(50));
 		RcontentPane.setLayout(new GridLayout(0, 1, 0, 0));
 
 		JPanel buttonPanel = new JPanel();
@@ -386,18 +396,18 @@ public class Battlefield extends JFrame {
 			}
 		});
 		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
-		
+
 		surrenderButton = new JButton("Surrender");
 		buttonPanel.add(surrenderButton);
 		surrenderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int reply = JOptionPane.showConfirmDialog(null, "Are you Sure?", "Surrenderring", JOptionPane.YES_NO_OPTION);
-		        if (reply == JOptionPane.YES_OPTION) {
-		          JOptionPane.showMessageDialog(null, "YOU LOSE"); // GO TO MAINMENU
-		        }
-		        else {
-		          
-		        }
+				if (reply == JOptionPane.YES_OPTION) {
+					JOptionPane.showMessageDialog(null, "YOU LOSE"); // GO TO MAINMENU
+				}
+				else {
+
+				}
 				//JOptionPane.showMessageDialog(surrenderButton, "Are you sure?", "You surrender", JOptionPane.YES_NO_CANCEL_OPTION);
 			}
 		});
@@ -427,7 +437,7 @@ public class Battlefield extends JFrame {
 						break;
 					case 2:
 						Card t = ((CardHolder)c.getParent()).getOpposingCardHolder().getCard();//.apply(c);
-					//	System.out.println(t.toString());
+						//	System.out.println(t.toString());
 						if(t==null){
 							JOptionPane.showMessageDialog(null, "Opposing lane is empty!", "Error",JOptionPane.ERROR_MESSAGE);
 							break;
@@ -438,14 +448,17 @@ public class Battlefield extends JFrame {
 					case 3:
 						caster = c;
 						selected = true;cancelButton.setEnabled(true);
+						notify.append("Select a monster on your side\n");
 						break;
 					case 4:
 						caster = c;
 						selected = true;cancelButton.setEnabled(true);
+						notify.append("Select a monster on opponent side\n");
 						break;
 					case 5:
 						caster = c;
 						selected = true;cancelButton.setEnabled(true);
+						notify.append("Select a monster on your side\n");
 						break;
 					case 6:
 						c.apply(c);
@@ -461,10 +474,12 @@ public class Battlefield extends JFrame {
 					case 1: 
 						caster = c;
 						selected = true;cancelButton.setEnabled(true);
+						notify.append("Select a monster on your side\n");
 						break;
 					case 2:
 						caster = c;
 						selected = true;cancelButton.setEnabled(true);
+						notify.append("Select a monster on opponent side\n");
 						break;
 					case 3:		//TODO: TEST  ////  REMOVE CARDS FOR USED SPELLS 
 						//ALL CARDS WILL BE RESET (which is probably not a problem)
@@ -485,6 +500,7 @@ public class Battlefield extends JFrame {
 					case 4:
 						caster = c;
 						selected = true;cancelButton.setEnabled(true);
+						notify.append("Select a monster on your side\n");
 						break;
 					case 5:
 						player.attack((int) -c.param_value);
@@ -544,23 +560,6 @@ public class Battlefield extends JFrame {
 		cancelButton.setEnabled(false);
 		buttonPanel.add(cancelButton);
 
-		breakButton = new JButton("Take a break");
-		breakButton.setEnabled(false);
-		breakButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				File f = new File("save.sav");
-				try {
-					FileOutputStream fos = new FileOutputStream(f);
-					ObjectOutputStream oos = new ObjectOutputStream(fos);
-					oos.writeObject(new BF_save(Battlefield.this));
-					oos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		buttonPanel.add(breakButton);
-
 		selectedCard = new CardHolder(CardHolder.DISPLAY,false);
 		selectedCard.addContainerListener(new ContainerAdapter() {
 			@Override
@@ -577,6 +576,9 @@ public class Battlefield extends JFrame {
 		desc_area.setLineWrap(true);
 		RcontentPane.add(desc_area);
 		notify = new JTextArea();
+		notify.setFont(new Font("Monospaced", Font.PLAIN, 18));
+		DefaultCaret caret = (DefaultCaret)notify.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		notify_scr = new JScrollPane(notify);
 		notify_scr.setPreferredSize(new Dimension(150, 200));
 		RcontentPane.add(notify_scr);
@@ -604,10 +606,7 @@ public class Battlefield extends JFrame {
 			o_hand.add(new Card(opponentDeck.get(0),opponent));	opponentDeck.remove(0);		
 			//	o_deck = new JLabel("DECK: "+Arrays.toString(opponentDeck.toArray()));
 		}
-		p_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		//TEST TEST TEST
-//		p_hand.add(new Card(50));
-		
+
 	}
 	public void runBFchecker(){
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
@@ -654,7 +653,6 @@ public class Battlefield extends JFrame {
 		System.out.println("PLAYER PP TURN");
 		Main.Turn = true;
 		endButton.setEnabled(true);
-		breakButton.setEnabled(true);
 		player.restoreMP();	
 		//PP ?PPPL
 		if(playerDeck.size()==0){		//DRAW 1 from deck, if cannot then receive penalty
@@ -663,7 +661,7 @@ public class Battlefield extends JFrame {
 				stop();return;
 			}
 		}else{
-		
+
 			Card c = new Card(playerDeck.get(0),player);
 			notify.append("Player drawn "+c.title+" from deck\n");
 			p_hand.add(c);	playerDeck.remove(0);
@@ -672,7 +670,7 @@ public class Battlefield extends JFrame {
 		System.out.println("PLAYER TURN INITIALS DONE!");
 	}
 	public void playerFP(){
-		
+
 		endButton.setEnabled(false);
 		//---------------------------------- END PLAYER PP TURN ----------------------------------
 		Executors.newSingleThreadExecutor().execute(new Runnable(){
@@ -687,7 +685,7 @@ public class Battlefield extends JFrame {
 				System.out.println("PLAYER FP TURN");
 				endButton.setEnabled(false);
 				useButton.setEnabled(false);useButton.setBackground(new Color(240,240,240));
-				breakButton.setEnabled(false);
+				//	breakButton.setEnabled(false);
 
 				Main.Turn = false;
 				//FP of player turn ?FPPL
@@ -783,7 +781,7 @@ public class Battlefield extends JFrame {
 								if(temp.isMonster()){
 									if(opponent.useMP(temp.mc)){
 										lane.add(temp);
-										notify.append("Opponent put "+temp.title+" into lane");
+										notify.append("Opponent put "+temp.title+" into lane\n");
 										try {
 											Thread.sleep(2000);
 										} catch (InterruptedException e) {
@@ -804,7 +802,7 @@ public class Battlefield extends JFrame {
 							Card t = (Card)o_hand.getComponent(index);
 							if(t!=null&&!t.isMonster()&&opponent.MP_current>=t.mc){
 								try {
-									Thread.sleep(1000);
+									Thread.sleep(2000);
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
@@ -822,7 +820,7 @@ public class Battlefield extends JFrame {
 								Card t = ch.getCard();
 								if(t!=null&&opponent.MP_current>=t.mc){
 									try {
-										Thread.sleep(1000);
+										Thread.sleep(2000);
 									} catch (InterruptedException e) {
 										e.printStackTrace();
 									}
@@ -923,7 +921,7 @@ public class Battlefield extends JFrame {
 			case 2:
 				Card t = ((CardHolder)c.getParent()).getOpposingCardHolder().getCard();//.apply(c);
 				if(t==null){
-			//		JOptionPane.showMessageDialog(this, "msg", "Error",JOptionPane.ERROR_MESSAGE);
+					//		JOptionPane.showMessageDialog(this, "msg", "Error",JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				if(t.apply(c));p_dumpster.add(t);
@@ -933,7 +931,7 @@ public class Battlefield extends JFrame {
 				Card tt = Theirlane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
 				if(tt==null)break;
 				tt.apply(c);
-					opponent.useMP(c.sa_mc);c.effectSpell();
+				opponent.useMP(c.sa_mc);c.effectSpell();
 				break;
 			case 4:
 				Card tt2 = Mylane_ref[(int)Math.round((Math.random()*3))].getCard();//.apply(c);
@@ -978,7 +976,7 @@ public class Battlefield extends JFrame {
 					c.effectSpell();
 					o_dumpster.add(c);
 				}
-				
+
 				break;
 			case 3:		//  REMOVE CARDS FOR USED SPELLS 
 				//ALL CARDS WILL BE RESET (which is probably not a problem)

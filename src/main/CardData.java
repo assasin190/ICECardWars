@@ -23,6 +23,7 @@ public abstract class CardData {
 	
 	private static ArrayList<String> sa_code = new ArrayList<String>();
 	private static ArrayList<String> spell_code = new ArrayList<String>();
+	private static ArrayList<Integer> rarity = new ArrayList<Integer>();
 	private static ArrayList<JsonObject> all_card = new ArrayList<JsonObject>();
 	private static ArrayList<ImageIcon> all_image =new ArrayList<ImageIcon>();
 	public static void main(String[] args){
@@ -30,6 +31,9 @@ public abstract class CardData {
 	//	while(true){
 	//		System.out.println(chance(0.15));
 	//	}
+	}
+	public static int getRarity(int ID){
+		return rarity.get(ID);
 	}
 	public static String getSaCode(int ID){
 		return sa_code.get(ID);
@@ -73,6 +77,7 @@ public abstract class CardData {
 		all_image.add(null);
 		sa_code.add(null);
 		spell_code.add(null);
+		rarity.add(null);
 		int count = 1;
 		Gson gs;
 		InputStream is;		
@@ -99,7 +104,7 @@ public abstract class CardData {
 				break;
 			}
 			JsonObject data = job.getAsJsonObject("data");
-	//		System.out.println("DATA: "+data);
+			rarity.add(data.get("rr").getAsInt());
 			ImageIcon b = null;
 			try {
 		//		System.out.println("http://128.199.235.83/icw/"+data.get("picture"))
@@ -182,6 +187,6 @@ public abstract class CardData {
 			}
 			break;
 		}
-//		System.out.println(sa_code);
+		System.out.println(rarity);
 	}
 }

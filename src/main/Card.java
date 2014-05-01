@@ -327,11 +327,11 @@ public class Card extends JPanel{
 		desc = null;
 		if(type==1){	// DESCRIPTION FOR MONSTER
 			desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
-			desc = "("+sa_mc+")"+desc;
+			desc = "("+sa_mc+") "+desc;
 		}else if(type==2){	//DESCRIPTION FOR SPELL
 			if(param_type.equals("")) CardData.getSpellCode(spell_code).replace("{1}", param_value+"");
 			else desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
-			desc = "("+mc+")"+desc;
+			desc = "("+mc+") "+desc;
 		}
 		//	System.out.println("DESC:"+desc);
 		System.out.println("DESC:"+desc);
@@ -380,11 +380,11 @@ public class Card extends JPanel{
 		desc = null;
 		if(type==1){	// DESCRIPTION FOR MONSTER
 			desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
-			desc = "("+sa_mc+")"+desc;
+			desc = "("+sa_mc+") "+desc;
 		}else if(type==2){	//DESCRIPTION FOR SPELL
 			if(param_type.equals("")) CardData.getSpellCode(spell_code).replace("{1}", param_value+"");
 			else desc = CardData.getSpellCode(spell_code).replace("{1}", param_type).replace("{2}", param_value+"");
-			desc = "("+mc+")"+desc;
+			desc = "("+mc+") "+desc;
 		}
 		//	System.out.println("DESC:"+desc);
 		//	System.out.println("DESC:"+desc);
