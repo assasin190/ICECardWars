@@ -1,5 +1,6 @@
 package main;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import misc.DropHandler;
@@ -12,10 +13,13 @@ import com.google.gson.JsonSyntaxException;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -100,7 +104,7 @@ public class SetDeck extends JPanel {
 					}
 					
 				});
-				JPanel display = new JPanel();
+				MyPanel display = new MyPanel();
 				display.setPreferredSize(new Dimension(400, 768));
 				display.add(b);
 				this.add(display);
@@ -124,6 +128,23 @@ public class SetDeck extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setVisible(true);
+		
+	}
+	
+	class MyPanel extends JPanel {
+		Image img;
+		
+		public MyPanel() {
+			super();
+		}
+		
+		public void paintComponent(Graphics g) {
+			
+			
+		}
+		
+		
+		
 		
 	}
 	
