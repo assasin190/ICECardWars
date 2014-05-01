@@ -28,9 +28,6 @@ public abstract class CardData {
 	private static ArrayList<ImageIcon> all_image =new ArrayList<ImageIcon>();
 	public static void main(String[] args){
 		CardData.saveAllCardsToLocal();
-	//	while(true){
-	//		System.out.println(chance(0.15));
-	//	}
 	}
 	public static int getRarity(int ID){
 		return rarity.get(ID);
@@ -65,11 +62,6 @@ public abstract class CardData {
 	public static int getNumberOfCards(){
 		return all_card.size()-1;
 	}
-	/*
-	public static Object[] allCardData(){
-		return all_card;
-	}
-	*/
 	public static void saveAllCardsToLocal(){
 		all_card.clear();
 		all_image.clear();

@@ -417,7 +417,7 @@ public class Card extends JPanel{
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.rowHeights = new int[] {10, 0, 0, 55};
 		gridBagLayout.columnWidths = new int[] {20, 20, 20, 20};
-		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0};
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0};
 		setLayout(gridBagLayout);
 		titleLabel = new JLabel(title);
