@@ -171,7 +171,7 @@ public class Inw extends JPanel {
 			// image = ImageIO.read(new
 			// URL("https://graph.facebook.com/"+fb_id+"/picture"));
 			profile = new ImageIcon(ImageIO.read(new URL(
-					"https://graph.facebook.com/" + fb_id + "/picture")));
+					"https://graph.facebook.com/" + fb_id + "/picture?width=200&height=200")));
 
 		} catch (IOException e) {
 			e.printStackTrace();

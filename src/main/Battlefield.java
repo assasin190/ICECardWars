@@ -52,6 +52,8 @@ import javax.swing.text.DefaultCaret;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.Box;
 
 public class Battlefield extends JFrame {
 	private static final long serialVersionUID = -3457162401020244642L;
@@ -77,9 +79,7 @@ public class Battlefield extends JFrame {
 	public CardHolder Theirlane2;
 	public CardHolder Theirlane1;
 	private JButton endButton;
-	private JButton quitButton;
 	private JButton useButton;
-	private JButton surrenderButton;
 	public CardHolder p_dumpster;
 	public CardHolder o_dumpster;
 	private JButton cancelButton;
@@ -95,9 +95,17 @@ public class Battlefield extends JFrame {
 	private JScrollPane o_hand_scr;
 	private JScrollPane notify_scr;
 	public static JTextArea notify;
-	private JTextArea desc_area;
 	private Image lane;
 	private JPanel infoPane_2;
+	private JButton surrenderButton;
+	private JButton quitButton;
+	private JTextArea selectedCard_desc;
+	private Component verticalGlue;
+	private Component verticalGlue_1;
+	private Component rigidArea;
+	private Component rigidArea_1;
+	private Component rigidArea_2;
+	private Component rigidArea_3;
 	public static void main(final String[] args) {
 
 		//final String s = args[0];
@@ -110,10 +118,6 @@ public class Battlefield extends JFrame {
 					CardData.saveAllCardsToLocal();
 					Battlefield frame = new Battlefield(new Inw("{\"cv_uid\":\"595\",\"fb_id\":\"100003770583869\",\"firstname_en\":\"Pasin\",\"lastname_en\":\"Boonsermsuwong\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}")
 					, new Inw("{\"cv_uid\":\"584\",\"fb_id\":\"1035721781\",\"firstname_en\":\"Min\",\"lastname_en\":\"Uswachoke\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
-					//, new Inw();
-					//			frame.setVisible(true);
-					//			frame.run();
-
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -128,7 +132,6 @@ public class Battlefield extends JFrame {
 		try {
 			lane = ImageIO.read(new File("Lane.jpg"));
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		BF_save savObject = null;
@@ -221,175 +224,17 @@ public class Battlefield extends JFrame {
 		});
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(0, 0, 800, 700);
-		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{371, 410, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{655, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		contentPane.setLayout(gbl_contentPane);
+		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 
-		battlePane = new JPanel();
-
-		battlePane.setLayout(new GridLayout(4, 1, 0, 0));
-		GridBagConstraints gbc_battlePane = new GridBagConstraints();
-		gbc_battlePane.fill = GridBagConstraints.BOTH;
-		gbc_battlePane.insets = new Insets(0, 0, 5, 5);
-		gbc_battlePane.gridx = 0;
-		gbc_battlePane.gridy = 0;
-		contentPane.add(battlePane, gbc_battlePane);
-
-
-		JPanel opponentPanel = new JPanel();
-		//opponent.setBackground(Color.BLACK);
-		//	contentPane.add(opponent);
-		battlePane.add(opponentPanel);
-		opponentPanel.setLayout(new GridLayout(0, 1, 0, 0));
-
-
-		TheirBF = new JPanel();
-	//	TheirBF.add(opponent);
-		TheirBF.setLayout(new GridLayout(0, 4, 0, 0));
-		Theirlane1 = new CardHolder(CardHolder.OPPONENT,false){
-			public void paintComponent(Graphics g){
-				super.paintComponent(g);
-				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
-
-			}
-		};
-		TheirBF.add(Theirlane1);
-		Theirlane_ref[0] = Theirlane1;
-		Theirlane1.setLayout(new GridLayout(1, 0, 0, 0));
-		Theirlane2 = new CardHolder(CardHolder.OPPONENT,false){
-			public void paintComponent(Graphics g){
-				super.paintComponent(g);
-				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
-			}
-		};
-		TheirBF.add(Theirlane2);
-		Theirlane_ref[1] = Theirlane2;
-		Theirlane2.setLayout(new GridLayout(1, 0, 0, 0));
-		Theirlane3 = new CardHolder(CardHolder.OPPONENT,false){
-			public void paintComponent(Graphics g){
-				super.paintComponent(g);
-				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
-			}
-		};
-		TheirBF.add(Theirlane3);
-		Theirlane_ref[2] = Theirlane3;
-		Theirlane3.setLayout(new GridLayout(1, 0, 0, 0));
-		Theirlane4 = new CardHolder(CardHolder.OPPONENT,false){
-			public void paintComponent(Graphics g){
-				super.paintComponent(g);
-				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
-			}
-		};
-		TheirBF.add(Theirlane4);
-		Theirlane_ref[3] = Theirlane4;
-		Theirlane4.setLayout(new GridLayout(1, 0, 0, 0));
-		battlePane.add(TheirBF);
-
-		MyBF = new JPanel();
-	//	MyBF.add(player);
-		MyBF.setLayout(new GridLayout(0, 4, 0, 0));
-
-
-
-		Mylane1 = new CardHolder(CardHolder.PLAYER,false){
-			public void paintComponent(Graphics g){
-				super.paintComponent(g);
-				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
-			}
-		};
-		Mylane1.setOpposingCH(Theirlane1);
-		Theirlane1.setOpposingCH(Mylane1);
-		MyBF.add(Mylane1);
-		Mylane_ref[0] = Mylane1;
-		Mylane1.setLayout(new GridLayout(1, 0, 0, 0));
-
-
-		Mylane2 = new CardHolder(CardHolder.PLAYER,false){
-			public void paintComponent(Graphics g){
-				super.paintComponent(g);
-				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
-			}
-		};		
-		Mylane2.setOpposingCH(Theirlane2);
-		Theirlane2.setOpposingCH(Mylane2);
-		MyBF.add(Mylane2);
-		Mylane_ref[1] = Mylane2;
-		Mylane2.setLayout(new GridLayout(1, 0, 0, 0));
-
-
-		Mylane3 = new CardHolder(CardHolder.PLAYER,false){
-			public void paintComponent(Graphics g){
-				super.paintComponent(g);
-				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
-			}
-		};
-		Mylane3.setOpposingCH(Theirlane3);
-		Theirlane3.setOpposingCH(Mylane3);
-		MyBF.add(Mylane3);
-		Mylane_ref[2] = Mylane3;
-		Mylane3.setLayout(new GridLayout(1, 0, 0, 0));
-		battlePane.add(MyBF);
-		Mylane4 = new CardHolder(CardHolder.PLAYER,false){
-			public void paintComponent(Graphics g){
-				super.paintComponent(g);
-				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
-			}
-		};
-		Mylane4.setOpposingCH(Theirlane4);
-		Theirlane4.setOpposingCH(Mylane4);
-		MyBF.add(Mylane4);
-		Mylane_ref[3] = Mylane4;
-		Mylane4.setLayout(new GridLayout(1, 0, 0, 0));
-
-
-
-		o_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
-		o_hand.setBackground(new Color(255, 204, 255));
-		o_hand_scr = new JScrollPane(o_hand);
-		opponentPanel.add(o_hand_scr);
-		//opponentPanel.add(o_hand);
-		o_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-		o_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
-		o_dumpster.setBackground(Color.LIGHT_GRAY);
-		opponentPanel.add(o_dumpster);
-		o_dumpster.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		JPanel playerPanel = new JPanel();
-		battlePane.add(playerPanel);
-		playerPanel.setLayout(new GridLayout(0, 1, 0, 0));
-
-
-		p_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
-		p_hand.setBackground(new Color(255, 204, 255));
-		p_hand_scr = new JScrollPane(p_hand);
-		playerPanel.add(p_hand_scr);
-
-		p_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
-		p_dumpster.setBackground(Color.LIGHT_GRAY);
-		playerPanel.add(p_dumpster);
-		p_dumpster.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		p_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		//TEST TEST TEST
-		p_hand.add(new Card(18));
-		p_hand.add(new Card(49));
-		p_hand.add(new Card(50));
-		
 		JPanel infoPane_1 = new JPanel();
-		GridBagConstraints gbc_infoPane_1 = new GridBagConstraints();
-		gbc_infoPane_1.fill = GridBagConstraints.BOTH;
-		gbc_infoPane_1.insets = new Insets(0, 0, 5, 0);
-		gbc_infoPane_1.gridx = 1;
-		gbc_infoPane_1.gridy = 0;
-		contentPane.add(infoPane_1, gbc_infoPane_1);
+		contentPane.add(infoPane_1);
 		infoPane_1.setLayout(new GridLayout(0, 1, 0, 0));
 
 		JPanel buttonPanel = new JPanel();
 		infoPane_1.add(buttonPanel);
 
 		endButton = new JButton("End Turn");
+		endButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		endButton.setEnabled(false);
 
 		endButton.addActionListener(new ActionListener() {
@@ -397,34 +242,13 @@ public class Battlefield extends JFrame {
 				playerFP();
 			}
 		});
-		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
-
-		surrenderButton = new JButton("Surrender");
-		buttonPanel.add(surrenderButton);
-		surrenderButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int reply = JOptionPane.showConfirmDialog(null, "Are you Sure?", "Surrenderring", JOptionPane.YES_NO_OPTION);
-				if (reply == JOptionPane.YES_OPTION) {
-					JOptionPane.showMessageDialog(null, "YOU LOSE"); // GO TO MAINMENU
-				}
-				else {
-
-				}
-				//JOptionPane.showMessageDialog(surrenderButton, "Are you sure?", "You surrender", JOptionPane.YES_NO_CANCEL_OPTION);
-			}
-		});
-
-
-
-		quitButton = new JButton("Quit");
-		buttonPanel.add(quitButton);
-		quitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Battlefield.this.dispose();
-			}
-		});
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+		buttonPanel.add(Box.createVerticalGlue());
+		buttonPanel.add(opponent);
+		buttonPanel.add(Box.createRigidArea(new Dimension(20, 20)));
 		buttonPanel.add(endButton);
 		useButton = new JButton("Use SA/Spell");
+		useButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		useButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				useButton.setEnabled(false);
@@ -546,11 +370,14 @@ public class Battlefield extends JFrame {
 				//	processNotify(Main.getSelectedCard());
 			}
 		});
+
+		buttonPanel.add(Box.createRigidArea(new Dimension(20, 20)));
 		useButton.setEnabled(false);
 		useButton.setBackground(new Color(240,240,240));
 		buttonPanel.add(useButton);
 
 		cancelButton = new JButton("Cancel");
+		cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		cancelButton.addActionListener(new ActionListener(){// CANCEL THE SPELL USAGE AFTER YOU PRESSED THE USEBUTTON
 			public void actionPerformed(ActionEvent e) {
 				useButton.setEnabled(false);useButton.setBackground(new Color(240,240,240));
@@ -560,10 +387,160 @@ public class Battlefield extends JFrame {
 				processNotify(Main.getSelectedCard());
 			}
 		});
+		buttonPanel.add(Box.createRigidArea(new Dimension(20, 20)));
+		
+		
 		cancelButton.setEnabled(false);
 		buttonPanel.add(cancelButton);
+		buttonPanel.add(Box.createRigidArea(new Dimension(20, 20)));
+		buttonPanel.add(player);
+		buttonPanel.add(Box.createVerticalGlue());
+		
+		battlePane = new JPanel();
+		battlePane.setPreferredSize(new Dimension(656, 768));
+		contentPane.add(battlePane);
+		battlePane.setLayout(new GridLayout(0, 1, 0, 0));
+		JPanel opponentPanel = new JPanel();
+		battlePane.add(opponentPanel);
+		opponentPanel.setLayout(new GridLayout(0, 1, 0, 0));
+
+
+
+		o_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
+		o_hand.setBackground(new Color(255, 204, 255));
+		o_hand_scr = new JScrollPane(o_hand);
+		opponentPanel.add(o_hand_scr);
+		//opponentPanel.add(o_hand);
+		o_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		o_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
+		o_dumpster.setBackground(Color.LIGHT_GRAY);
+		opponentPanel.add(o_dumpster);
+		o_dumpster.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+
+
+		TheirBF = new JPanel();
+		//	TheirBF.add(opponent);
+		TheirBF.setLayout(new GridLayout(1, 0, 0, 0));
+		Theirlane1 = new CardHolder(CardHolder.OPPONENT,false){
+			public void paintComponent(Graphics g){
+				super.paintComponent(g);
+				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+
+			}
+		};
+		TheirBF.add(Theirlane1);
+		Theirlane_ref[0] = Theirlane1;
+		Theirlane1.setLayout(new GridLayout(1, 0, 0, 0));
+		Theirlane2 = new CardHolder(CardHolder.OPPONENT,false){
+			public void paintComponent(Graphics g){
+				super.paintComponent(g);
+				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			}
+		};
+		TheirBF.add(Theirlane2);
+		Theirlane_ref[1] = Theirlane2;
+		Theirlane2.setLayout(new GridLayout(1, 0, 0, 0));
+		Theirlane3 = new CardHolder(CardHolder.OPPONENT,false){
+			public void paintComponent(Graphics g){
+				super.paintComponent(g);
+				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			}
+		};
+		TheirBF.add(Theirlane3);
+		Theirlane_ref[2] = Theirlane3;
+		Theirlane3.setLayout(new GridLayout(1, 0, 0, 0));
+		Theirlane4 = new CardHolder(CardHolder.OPPONENT,false){
+			public void paintComponent(Graphics g){
+				super.paintComponent(g);
+				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			}
+		};
+		TheirBF.add(Theirlane4);
+		Theirlane_ref[3] = Theirlane4;
+		Theirlane4.setLayout(new GridLayout(1, 0, 0, 0));
+		battlePane.add(TheirBF);
+
+		MyBF = new JPanel();
+		//	MyBF.add(player);
+		MyBF.setLayout(new GridLayout(0, 4, 0, 0));
+
+
+
+		Mylane1 = new CardHolder(CardHolder.PLAYER,false){
+			public void paintComponent(Graphics g){
+				super.paintComponent(g);
+				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			}
+		};
+		MyBF.add(Mylane1);
+		Mylane_ref[0] = Mylane1;
+		Mylane1.setLayout(new GridLayout(1, 0, 0, 0));
+
+
+		Mylane2 = new CardHolder(CardHolder.PLAYER,false){
+			public void paintComponent(Graphics g){
+				super.paintComponent(g);
+				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			}
+		};		
+		MyBF.add(Mylane2);
+		Mylane_ref[1] = Mylane2;
+		Mylane2.setLayout(new GridLayout(1, 0, 0, 0));
+		battlePane.add(MyBF);
+
+
+		Mylane3 = new CardHolder(CardHolder.PLAYER,false){
+			public void paintComponent(Graphics g){
+				super.paintComponent(g);
+				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			}
+		};
+		MyBF.add(Mylane3);
+		Mylane_ref[2] = Mylane3;
+		Mylane3.setLayout(new GridLayout(1, 0, 0, 0));
+		Mylane3.setOpposingCH(Theirlane3);
+		Theirlane3.setOpposingCH(Mylane3);
+		Mylane4 = new CardHolder(CardHolder.PLAYER,false){
+			public void paintComponent(Graphics g){
+				super.paintComponent(g);
+				g.drawImage(lane, 0 , 0 ,this.getWidth(), this.getHeight(), this);
+			}
+		};
+		MyBF.add(Mylane4);
+		Mylane_ref[3] = Mylane4;
+		Mylane4.setLayout(new GridLayout(1, 0, 0, 0));
+		JPanel playerPanel = new JPanel();
+		battlePane.add(playerPanel);
+		playerPanel.setLayout(new GridLayout(0, 1, 0, 0));
+
+
+		p_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
+		p_hand.setBackground(new Color(255, 204, 255));
+		p_hand_scr = new JScrollPane(p_hand);
+		playerPanel.add(p_hand_scr);
+
+		p_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
+		p_dumpster.setBackground(Color.LIGHT_GRAY);
+		playerPanel.add(p_dumpster);
+		p_dumpster.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		p_hand.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		Mylane1.setOpposingCH(Theirlane1);
+		Theirlane1.setOpposingCH(Mylane1);
+		Mylane2.setOpposingCH(Theirlane2);
+		Theirlane2.setOpposingCH(Mylane2);
+		Mylane4.setOpposingCH(Theirlane4);
+		Theirlane4.setOpposingCH(Mylane4);
+
+
+		infoPane_2 = new JPanel();
+		contentPane.add(infoPane_2);
+		infoPane_2.setLayout(new BoxLayout(infoPane_2, BoxLayout.Y_AXIS));
 
 		selectedCard = new CardHolder(CardHolder.DISPLAY,false);
+		infoPane_2.add(selectedCard);
 		selectedCard.addContainerListener(new ContainerAdapter() {
 			@Override
 			public void componentAdded(ContainerEvent arg0) {
@@ -571,35 +548,45 @@ public class Battlefield extends JFrame {
 					processNotify(Main.getSelectedCard());
 			}
 		});
-		infoPane_1.add(selectedCard);
 		selectedCard.setLayout(new GridLayout(1, 0, 0, 0));
 
-		desc_area = new JTextArea();
-		desc_area.setWrapStyleWord(true);
-		desc_area.setLineWrap(true);
-		infoPane_1.add(desc_area);
-	
-		
-		infoPane_2 = new JPanel();
-		GridBagConstraints gbc_intoPane_2 = new GridBagConstraints();
-		gbc_intoPane_2.weighty = 0.5;
-		gbc_intoPane_2.weightx = 1.0;
-		gbc_intoPane_2.insets = new Insets(0, 0, 0, 5);
-		gbc_intoPane_2.fill = GridBagConstraints.BOTH;
-		gbc_intoPane_2.gridx = 2;
-		gbc_intoPane_2.gridy = 0;
-		contentPane.add(infoPane_2, gbc_intoPane_2);
+		selectedCard_desc = new JTextArea();
+		selectedCard_desc.setPreferredSize(new Dimension(150,24));
+		infoPane_2.add(selectedCard_desc);
+		selectedCard_desc.setWrapStyleWord(true);
+		selectedCard_desc.setLineWrap(true);
+
+		surrenderButton = new JButton("Surrender");
+		surrenderButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		surrenderButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		infoPane_2.add(Box.createRigidArea(new Dimension(20, 20)));
+		infoPane_2.add(surrenderButton);
+		infoPane_2.add(Box.createRigidArea(new Dimension(20, 20)));
+
+		quitButton = new JButton("Quit");
+		quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		infoPane_2.add(quitButton);
+		infoPane_2.add(Box.createRigidArea(new Dimension(20, 20)));
+		//	infoPane_2.add(opponent);
+		//	infoPane_2.add(player);
 		notify = new JTextArea();
-		notify.setFont(new Font("Monospaced", Font.PLAIN, 18));
+		notify.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		DefaultCaret caret = (DefaultCaret)notify.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		infoPane_2.setLayout(new BoxLayout(infoPane_2, BoxLayout.Y_AXIS));
 		notify_scr = new JScrollPane(notify);
 		infoPane_2.add(notify_scr);
 		notify_scr.setPreferredSize(new Dimension(150, 200));
-		infoPane_2.add(opponent);
-		infoPane_2.add(player);
-
+		//TEST TEST TEST
+		
+		p_hand.add(new Card(18));
+		p_hand.add(new Card(32));
+		p_hand.add(new Card(49));
+		p_hand.add(new Card(50));
+		p_dumpster.add(new Card(40));
+		p_dumpster.add(new Card(45));
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		//		playerDeck.
 	}
 	/**
@@ -814,7 +801,6 @@ public class Battlefield extends JFrame {
 					//AI PHRASE 2: If there are mp left, try to randomly use spell card in hand
 					if(opponent.MP_current>0){
 						ranIndex = randomIndexArray(o_hand.getComponentCount());
-						//	Component[] components = o_hand.getComponents();
 						for(int index:ranIndex) {
 							Card t = (Card)o_hand.getComponent(index);
 							if(t!=null&&!t.isMonster()&&opponent.MP_current>=t.mc){
@@ -1086,7 +1072,7 @@ public class Battlefield extends JFrame {
 	 * Card will notify this class when there is a mouse click
 	 */
 	public void processNotify(Card c){
-		desc_area.setText(c.desc);
+		selectedCard_desc.setText(c.desc);
 		useButton.setEnabled(false);useButton.setBackground(new Color(240,240,240));
 		System.out.println("PROCESS NOTIFY");
 		if(!Main.Turn){

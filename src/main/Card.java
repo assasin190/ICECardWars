@@ -325,7 +325,8 @@ public class Card extends JPanel{
 		spell_code = m2.get("spell_code").getAsInt();
 		desc = null;
 		if(type==1){	// DESCRIPTION FOR MONSTER
-			desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
+			if(param_type.equals("")) desc = CardData.getSaCode(sa_code).replace("{1}", param_value+"");
+			else desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
 			desc = "("+sa_mc+") "+desc;
 		}else if(type==2){	//DESCRIPTION FOR SPELL
 			if(param_type.equals("")) CardData.getSpellCode(spell_code).replace("{1}", param_value+"");
@@ -378,7 +379,8 @@ public class Card extends JPanel{
 		spell_code = m2.get("spell_code").getAsInt();
 		desc = null;
 		if(type==1){	// DESCRIPTION FOR MONSTER
-			desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
+			if(param_type.equals("")) desc = CardData.getSaCode(sa_code).replace("{1}", param_value+"");
+			else desc = CardData.getSaCode(sa_code).replace("{1}", param_type).replace("{2}", param_value+"");
 			desc = "("+sa_mc+") "+desc;
 		}else if(type==2){	//DESCRIPTION FOR SPELL
 			if(param_type.equals("")) CardData.getSpellCode(spell_code).replace("{1}", param_value+"");
@@ -421,7 +423,7 @@ public class Card extends JPanel{
 		setLayout(gridBagLayout);
 		titleLabel = new JLabel(title);
 		titleLabel.setForeground(Color.WHITE);
-		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		titleLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_titleLabel = new GridBagConstraints();
 		gbc_titleLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_titleLabel.anchor = GridBagConstraints.NORTH;
@@ -448,6 +450,7 @@ public class Card extends JPanel{
 		}
 		
 		mcLabel = new JLabel("MC");
+		mcLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gbc_mcLabel = new GridBagConstraints();
 		gbc_mcLabel.insets = new Insets(0, 2, 5, 2);
 		gbc_mcLabel.gridx = 3;
@@ -481,7 +484,7 @@ public class Card extends JPanel{
 		statPanel.add(car_l);
 		car_l.setHorizontalAlignment(SwingConstants.CENTER);
 		rrLabel = new JLabel(rr(rr));
-		rrLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		rrLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		rrLabel.setForeground(Color.WHITE);
 		GridBagConstraints gbc_rrLabel = new GridBagConstraints();
 		gbc_rrLabel.fill = GridBagConstraints.HORIZONTAL;
@@ -492,7 +495,7 @@ public class Card extends JPanel{
 		this.add(rrLabel, gbc_rrLabel);
 		mc_l = new JLabel(mc+"");
 		mc_l.setForeground(Color.WHITE);
-		mc_l.setHorizontalAlignment(SwingConstants.RIGHT);
+		mc_l.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gbc_mc_l = new GridBagConstraints();
 		gbc_mc_l.insets = new Insets(2, 2, 5, 2);
 		gbc_mc_l.gridx = 3;
