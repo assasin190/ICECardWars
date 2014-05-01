@@ -376,6 +376,7 @@ public class MainMenu extends JFrame {
 				Main.bgMusic.close();
 				bgMusic = new AudioPlayer("Arrange the deck New.wav");
 				bgMusic.play();
+				
 
 			}
 		});

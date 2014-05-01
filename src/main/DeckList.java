@@ -29,15 +29,19 @@ import javax.swing.JScrollPane;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-public class DeckList extends JPanel {
+public class DeckList extends JPanel { //deck list 20 cards in Arraylist<Card> deck
 
 	ArrayList<Card> deck = new ArrayList<Card>();
+	ArrayList<Card> deckfin = new ArrayList<Card>();
+	ArrayList<Card> woo = new ArrayList<Card>();
 	ArrayList<JPanel> list = new ArrayList<JPanel>();
+	ArrayList<Card> finaldeck = new ArrayList<Card>();
+	
 	Card hold;
 	JScrollPane scroller = new JScrollPane(this);
 	int full = 0;
 	int count;
-	JPanel mydeck, left = new JPanel(), right = new JPanel();
+	JPanel mydeck, left = new JPanel(), right = new JPanel(),ruam = new JPanel();
 	Dimension screenSize = getToolkit().getScreenSize();
 	boolean check = true;
 	boolean holding = false;
@@ -87,13 +91,14 @@ public class DeckList extends JPanel {
 		right.setLayout(new GridLayout(40, 7));
 		left.setVisible(true);
 		left.setLayout(new GridLayout(20,7));
+		woo =deck;
 		
 		for (int i = 0; i < 40; i++) {
 			ImageIcon ee = deck.get(track).picture;
 			final Image picz3 = ee.getImage().getScaledInstance(20, 20,
 					java.awt.Image.SCALE_SMOOTH);
 
-			final JPanel temp = new JPanel();
+			final aaaa temp = new aaaa(track);
 
 			temp.setLayout(new GridLayout(1, 6));
 			JLabel title = new JLabel("" + deck.get(track).title);
@@ -207,16 +212,20 @@ public class DeckList extends JPanel {
 						temp.setVisible(true);
 						right.add(temp);
 						list.remove(temp);
+						deckfin.remove(woo.get(temp.id));
+						System.out.println(deckfin.size());
 						if(left.getComponentCount()!=20) go.setEnabled(false);
+						
 					
 
 					} else {
 						temp.setVisible(true);
 						list.add(temp);
 						left.add(temp);
+						deckfin.add(woo.get(temp.id));
 						//temp.removeAll();
 						
-						
+						System.out.println(deckfin.size());
 						
 					}
 					if(left.getComponentCount()!=20) go.setEnabled(false);
@@ -226,6 +235,7 @@ public class DeckList extends JPanel {
 						@Override
 						public void actionPerformed(ActionEvent arg0) {
 							// TODO Auto-generated method stub
+						System.exit(0);
 							
 						}
 						
@@ -242,6 +252,11 @@ public class DeckList extends JPanel {
 			count++;
 		}
 		
+		ruam.setLayout(new BorderLayout());
+		ruam.add(right, BorderLayout.EAST);
+		//ruam.setOpaque(false);
+		ruam.add(left,BorderLayout.CENTER);
+		ruam.add(go,BorderLayout.SOUTH);
 		
 		
 
@@ -268,8 +283,6 @@ public class DeckList extends JPanel {
 		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		JPanel ss = new JPanel();
-		JPanel st = new JPanel();
-		
 		ss.setLayout(new BorderLayout());
 		ss.add(a.right, BorderLayout.EAST);
 		ss.setOpaque(false);
@@ -279,6 +292,7 @@ public class DeckList extends JPanel {
 		test.add(ss);
 
 		test.setVisible(true);
+		
 
 	}
 
