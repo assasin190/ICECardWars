@@ -131,9 +131,7 @@ public class SetDeck extends JPanel {
 					}
 					
 				});
-<<<<<<< HEAD
-				MyPanel display = new MyPanel();
-=======
+
 				JPanel display = new JPanel(){
 					public void paintComponent(Graphics g){
 						super.paintComponent(g);
@@ -142,7 +140,6 @@ public class SetDeck extends JPanel {
 					}
 				};
 				
->>>>>>> 0361b082288b5045b222049e24f9465d749cc7b6
 				display.setPreferredSize(new Dimension(400, 768));
 				display.add(b);
 				this.add(display);
@@ -166,23 +163,6 @@ public class SetDeck extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setVisible(true);
-		
-	}
-	
-	class MyPanel extends JPanel {
-		Image img;
-		
-		public MyPanel() {
-			super();
-		}
-		
-		public void paintComponent(Graphics g) {
-			
-			
-		}
-		
-		
-		
 		
 	}
 	
