@@ -94,16 +94,7 @@ public class SelectOpponent extends JPanel {
 	
 	
 	public void createGUI1024x768(){
-		opponentPanel = new JPanel(){
-			public void paintComponent(Graphics g) {
-				try {
-					g.drawImage(ImageIO.read(new File("selectopponentbg.jpg")), 0, 0, null);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		};
+		opponentPanel = new JPanel();
 		opponentPanel.setLayout(new GridLayout(8, 8));
 		opponentPanel.setBackground(Color.BLACK);
 		//southPanel.setPreferredSize(new Dimension(southPanel.getPreferredSize().width, 288));
@@ -161,7 +152,16 @@ public class SelectOpponent extends JPanel {
 		}
 		this.add(opponentPanel,BorderLayout.LINE_START);
 
-		display = new JPanel();
+		display = new JPanel(){
+			public void paintComponent(Graphics g) {
+				try {
+					g.drawImage(ImageIO.read(new File("selectopponentbg.jpg")), 0, 0, null);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
 		setupDisplay();
 		this.add(display, BorderLayout.CENTER); 
 		

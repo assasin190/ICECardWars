@@ -16,6 +16,7 @@ import misc.Splash;
 import misc.SplashPanel;
 
 public class Main {
+	public static MainMenu main;
 	static Socket con;
 	static PrintWriter out;
 	static BufferedReader in;
@@ -28,7 +29,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		MainMenu main = new MainMenu(con);
+		main = new MainMenu(con);
 		Splash frame = new Splash();
 		frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 		
@@ -51,7 +52,7 @@ public class Main {
 			break;
 		}
 		CardData.saveAllCardsToLocal();
-		bgMusic = new AudioPlayer("Hishoku no sora.wav");
+		bgMusic = new AudioPlayer("mainmenu.wav");
 		bgMusic.playLoop();
 
 		main.setUndecorated(true);

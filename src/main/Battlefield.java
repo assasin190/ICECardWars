@@ -56,6 +56,7 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.Box;
 import javax.swing.border.LineBorder;
+import javax.swing.SwingConstants;
 
 public class Battlefield extends JFrame {
 	private static final long serialVersionUID = -3457162401020244642L;
@@ -104,6 +105,15 @@ public class Battlefield extends JFrame {
 	private JTextArea selectedCard_desc;
 	private JScrollPane p_dumpster_scr;
 	private JScrollPane o_dumpster_scr;
+	private JLabel turnLabel;
+	private JPanel o_hand_num;
+	private JPanel o_dumpster_num;
+	private JPanel p_hand_num;
+	private JPanel p_dumpster_num;
+	private JLabel o_hand_l;
+	private JLabel o_dumpster_l;
+	private JLabel p_dumpster_l;
+	private JLabel p_hand_l;
 	public static void main(final String[] args) {
 
 		//final String s = args[0];
@@ -120,8 +130,7 @@ public class Battlefield extends JFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				bgMusic = new AudioPlayer("Mahou Battle.wav");
-				bgMusic.playLoop();
+			
 			}
 		});
 	}
@@ -171,6 +180,8 @@ public class Battlefield extends JFrame {
 		try {
 			lane = ImageIO.read(new File("Lane.jpg"));
 		} catch (IOException e1) {e1.printStackTrace();}
+		bgMusic = new AudioPlayer("Mahou Battle.wav");
+		bgMusic.playLoop();
 		Battlefield.player = player_;
 		Battlefield.opponent = opponent_;
 		//System.out.println("FULLMP"+opponent.MP_full);
@@ -235,6 +246,7 @@ public class Battlefield extends JFrame {
 				playerFP();
 			}
 		});
+<<<<<<< HEAD
 
 		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -254,8 +266,12 @@ public class Battlefield extends JFrame {
 			}
 		});
 
+=======
+>>>>>>> 29e9b55bfe243fadfbf762af222b568bbedb9483
 
+		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
 
+<<<<<<< HEAD
 		quitButton = new JButton("Quit");
 		buttonPanel.add(quitButton);
 		quitButton.addActionListener(new ActionListener() {
@@ -264,6 +280,8 @@ public class Battlefield extends JFrame {
 			}
 		});
 
+=======
+>>>>>>> 29e9b55bfe243fadfbf762af222b568bbedb9483
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 		buttonPanel.add(Box.createVerticalGlue());
 		buttonPanel.add(opponent);
@@ -441,7 +459,25 @@ public class Battlefield extends JFrame {
 		battlePane.setLayout(new GridLayout(0, 1, 0, 0));
 		JPanel opponentPanel = new JPanel();
 		battlePane.add(opponentPanel);
-		opponentPanel.setLayout(new GridLayout(0, 1, 0, 0));
+		opponentPanel.setLayout(new BorderLayout(0, 0));
+		
+		o_hand_num = new JPanel();
+		opponentPanel.add(o_hand_num, BorderLayout.WEST);
+		o_hand_num.setLayout(new BoxLayout(o_hand_num, BoxLayout.X_AXIS));
+		
+		o_hand_l = new JLabel("");
+		o_hand_l.setAlignmentX(Component.CENTER_ALIGNMENT);
+		o_hand_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		o_hand_num.add(o_hand_l);
+		
+		o_dumpster_num = new JPanel();
+		opponentPanel.add(o_dumpster_num, BorderLayout.EAST);
+		o_dumpster_num.setLayout(new BoxLayout(o_dumpster_num, BoxLayout.X_AXIS));
+		
+		o_dumpster_l = new JLabel("");
+		o_dumpster_l.setAlignmentX(Component.CENTER_ALIGNMENT);
+		o_dumpster_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		o_dumpster_num.add(o_dumpster_l);
 
 
 
@@ -456,7 +492,7 @@ public class Battlefield extends JFrame {
 		o_dumpster.setBackground(Color.LIGHT_GRAY);
 		o_dumpster.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		o_dumpster_scr = new JScrollPane(o_dumpster);
-		opponentPanel.add(o_dumpster_scr);
+	//	opponentPanel.add(o_dumpster_scr);
 
 
 		TheirBF = new JPanel();
@@ -552,7 +588,25 @@ public class Battlefield extends JFrame {
 		Mylane4.setLayout(new GridLayout(1, 0, 0, 0));
 		JPanel playerPanel = new JPanel();
 		battlePane.add(playerPanel);
-		playerPanel.setLayout(new GridLayout(0, 1, 0, 0));
+		playerPanel.setLayout(new BorderLayout(0, 0));
+		
+		p_hand_num = new JPanel();
+		playerPanel.add(p_hand_num, BorderLayout.WEST);
+		p_hand_num.setLayout(new BoxLayout(p_hand_num, BoxLayout.X_AXIS));
+		
+		p_hand_l = new JLabel("");
+		p_hand_l.setAlignmentX(Component.CENTER_ALIGNMENT);
+		p_hand_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		p_hand_num.add(p_hand_l);
+		
+		p_dumpster_num = new JPanel();
+		playerPanel.add(p_dumpster_num, BorderLayout.EAST);
+		p_dumpster_num.setLayout(new BoxLayout(p_dumpster_num, BoxLayout.X_AXIS));
+		
+		p_dumpster_l = new JLabel("");
+		p_dumpster_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		p_dumpster_l.setAlignmentX(Component.CENTER_ALIGNMENT);
+		p_dumpster_num.add(p_dumpster_l);
 
 
 		p_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
@@ -595,14 +649,29 @@ public class Battlefield extends JFrame {
 		surrenderButton = new JButton("Surrender");
 		surrenderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
 			}
 		});
 		surrenderButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		infoPane_2.add(Box.createRigidArea(new Dimension(20, 20)));
+		turnLabel = new JLabel();
+		turnLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		turnLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		turnLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		infoPane_2.add(turnLabel);
 		infoPane_2.add(Box.createRigidArea(new Dimension(20, 20)));
 		infoPane_2.add(surrenderButton);
 		infoPane_2.add(Box.createRigidArea(new Dimension(20, 20)));
 
 		quitButton = new JButton("Quit");
+		quitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int a = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?");
+				if(a == JOptionPane.YES_OPTION){
+					stop();
+				}
+			}
+		});
 		quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		infoPane_2.add(quitButton);
 		infoPane_2.add(Box.createRigidArea(new Dimension(20, 20)));
@@ -628,7 +697,7 @@ public class Battlefield extends JFrame {
 	//	p_dumpster.add(new Card(40));
 	//	p_dumpster.add(new Card(45));
 		p_dumpster_scr = new JScrollPane(p_dumpster);
-		playerPanel.add(p_dumpster_scr);
+	//	playerPanel.add(p_dumpster_scr);
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		//		playerDeck.
 	}
@@ -695,6 +764,7 @@ public class Battlefield extends JFrame {
 	}
 	public void playerPP(){
 		Dialog dialog = new Dialog("PLAYER PREPARE PHRASE");
+		turnLabel.setText("PLAYER PP");
 		try {Thread.sleep(1200);} catch (InterruptedException e1) {}
 		notify.append("-----------------------------\nPlayer preparation phrase\n-----------------------------\n");
 		System.out.println("PLAYER PP TURN");
@@ -718,6 +788,7 @@ public class Battlefield extends JFrame {
 	}
 	public void playerFP(){
 		Dialog dialog = new Dialog("PLAYER FIGHT PHRASE");
+		turnLabel.setText("PLAYER FP");
 		try {Thread.sleep(1200);} catch (InterruptedException e1) {}
 		endButton.setEnabled(false);
 		//---------------------------------- END PLAYER PP TURN ----------------------------------
@@ -805,6 +876,7 @@ public class Battlefield extends JFrame {
 			public void run() {
 				System.out.println("OPPONENT PP TURN");
 				Dialog dialog = new Dialog("OPPONENT PREPARE PHRASE");
+				turnLabel.setText("OPPONENT PP");
 				try {Thread.sleep(1280);} catch (InterruptedException e1) {}
 				notify.append("-----------------------------\nOpponent prepar" +
 						"ation phrase\n-----------------------------\n");
@@ -885,6 +957,7 @@ public class Battlefield extends JFrame {
 					return;
 				}
 				System.out.println("OPPONENT FP TURN");
+				turnLabel.setText("OPPONENT FP");
 				dialog = new Dialog("OPPONENT FIGHT PHRASE");
 				try {Thread.sleep(1280);} catch (InterruptedException e1) {}
 				notify.append("-----------------------------\nOpponent fighting phrase\n-----------------------------\n");
@@ -1115,8 +1188,11 @@ public class Battlefield extends JFrame {
 	 * End the game
 	 */
 	public void stop(){
-		JOptionPane.showMessageDialog(null,player.getName()+" "+"Win Against"+" "+opponent.getName(), "",JOptionPane.DEFAULT_OPTION);
+		if(player.LP_current<=0)JOptionPane.showMessageDialog(null,player.getName()+" "+" win against "+" "+opponent.getName(), "",JOptionPane.DEFAULT_OPTION);
+		else if(opponent.LP_current<=0)JOptionPane.showMessageDialog(null,opponent.getName()+" "+" win against "+" "+player.getName(), "",JOptionPane.DEFAULT_OPTION);
+		else JOptionPane.showMessageDialog(null,"GAME ENDED", "",JOptionPane.DEFAULT_OPTION);
 		isActive = false;
+		this.setVisible(false);
 		this.dispose();
 		bgMusic.stop();
 	}
