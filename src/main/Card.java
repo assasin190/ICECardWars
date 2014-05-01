@@ -37,7 +37,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import misc.DragGestureHandler;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.awt.Rectangle;
