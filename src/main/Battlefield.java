@@ -113,6 +113,8 @@ public class Battlefield extends JFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				bgMusic = new AudioPlayer("Mahou Battle.wav");
+				bgMusic.playLoop();
 			}
 		});
 	}

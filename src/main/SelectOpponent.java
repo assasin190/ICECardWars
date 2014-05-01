@@ -48,6 +48,7 @@ public class SelectOpponent extends JPanel {
 	static JButton random;
 	static WTF wtf;
 	private static AudioPlayer bgMusic;
+	private static AudioPlayer bgMusic2;
 	static Inw player;
 	public SelectOpponent(Inw player){
 		this.player = player;
@@ -64,7 +65,8 @@ public class SelectOpponent extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		bgMusic2 = new AudioPlayer("KungFuFighting.wav");
+		bgMusic2.playLoop();
 		determineResolution();
 		JFrame test = new JFrame();
 		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
