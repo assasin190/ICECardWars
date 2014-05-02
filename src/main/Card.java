@@ -396,7 +396,7 @@ public class Card extends JPanel{
 		initGUI();
 		addListeners();
 	}
-	*/
+	 */
 	public void addListeners(){
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -814,9 +814,9 @@ public class Card extends JPanel{
 					g.fillRect(0, 0, getWidth(), getHeight());
 					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
 					alpha -= 26;
-					//			repaint();
+					repaint();
 				}
-				//			repaint();
+				repaint();
 			}
 		});
 	}
@@ -834,9 +834,9 @@ public class Card extends JPanel{
 					g.fillRect(0, 0, getWidth(), getHeight());
 					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
 					alpha -= 26;
-					//			repaint();
+					repaint();
 				}
-				//			repaint();
+				repaint();
 			}
 		});
 	}
@@ -858,9 +858,9 @@ public class Card extends JPanel{
 					gr.fillRect(0, 0, getWidth(), getHeight());
 					try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
 					alpha -= 26;
-					//			repaint();
+					repaint();
 				}
-				//			repaint();
+				repaint();
 			}
 		});
 	}
@@ -884,9 +884,9 @@ public class Card extends JPanel{
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					//			repaint();
+					repaint();
 				}
-				//		repaint();
+				repaint();
 			}
 		});
 	}
@@ -910,9 +910,9 @@ public class Card extends JPanel{
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					//			repaint();
+					repaint();
 				}
-				//		repaint();
+				repaint();
 			}
 		});
 	}

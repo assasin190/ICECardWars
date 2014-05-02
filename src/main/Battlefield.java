@@ -765,7 +765,8 @@ public class Battlefield extends JFrame {
 	 */
 	public void run(){	
 		runBFchecker();
-
+		bgMusic = new AudioPlayer("cgb2.wav");
+		bgMusic.playLoop();
 		setVisible(true);
 		Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
 		Collections.shuffle(opponentDeck, new Random(System.currentTimeMillis()));
@@ -813,7 +814,7 @@ public class Battlefield extends JFrame {
 					}
 					if(!lowHealthMusic&&player.LP_current<player.LP_full/10){
 						bgMusic.stop();
-						bgMusic = new AudioPlayer("MahouBattleNearDead.wav");
+						bgMusic = new AudioPlayer("cgb2.wav");
 						bgMusic.playLoop();
 						lowHealthMusic = true;
 					}
@@ -910,6 +911,7 @@ public class Battlefield extends JFrame {
 								if(Math.random()<co.car){
 									System.out.println(co.title+" counterattacked!");
 									notify.append(co.title+" counterattacked!");
+									try {Thread.sleep(1000);} catch (InterruptedException e) {}
 									co.effectAttack();
 									if(c.attack(dmg,true)){
 										p_dumpster.add(c);
@@ -1062,6 +1064,7 @@ public class Battlefield extends JFrame {
 							}else{
 								if(Math.random()<co.car){
 									System.out.println(co.title+" counterattacked!");
+									try {Thread.sleep(1000);} catch (InterruptedException e) {}
 									co.effectAttack();
 									if(c.attack(dmg,true)){
 										o_dumpster.add(c);

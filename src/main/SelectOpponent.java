@@ -51,6 +51,7 @@ public class SelectOpponent extends JPanel {
 	private static AudioPlayer bgMusic;
 	private static AudioPlayer bgMusic2;
 	static Inw player;
+	private JFrame test;
 	public SelectOpponent(Inw player){
 		this.player = player;
 		opponentList = new ArrayList<Inw>();
@@ -69,8 +70,8 @@ public class SelectOpponent extends JPanel {
 		bgMusic2 = new AudioPlayer("KungFuFighting.wav");
 		bgMusic2.playLoop();
 		determineResolution();
-		JFrame test = new JFrame();
-		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		test = new JFrame();
+		test.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		/*
@@ -294,6 +295,8 @@ public class SelectOpponent extends JPanel {
 		back.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				bgMusic2.stop();
+				
 				/*
 			//	String s = "{\"cv_uid\":\"+\",\"fb_id\":\"" + current.inw.fb_id + "\",\"firstname_en\":\"" + current.inw.fname + "\",\"lastname_en\":\"" + current.inw.lname + "\",\"full_lp\":\"40\",\"full_mp\":\"" + current.inw.LP_full + "\",\"max_deck_size\":\"" + current.inw.maxDeck + "\"}";
 				String [] args = {s};
@@ -301,8 +304,7 @@ public class SelectOpponent extends JPanel {
 				Battlefield.main(args);
 				System.out.println(s);
 				*/
-				Inw op = current.inw;
-				Battlefield bf = new Battlefield(player,op);
+				
 			}
 			
 		});
@@ -463,7 +465,11 @@ public class SelectOpponent extends JPanel {
 		else screenResolutionString = "1920x1080";
 		
 	}
-	
+	public void close(){
+		test.setVisible(false);
+		test.dispose();
+		bgMusic2.stop();
+	}
 	class MyPanel extends JPanel implements MouseInputListener{
 		Inw inw;
 		
