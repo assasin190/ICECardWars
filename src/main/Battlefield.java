@@ -118,6 +118,7 @@ public class Battlefield extends JFrame {
 	private Image dumpsterImage = null;
 	private Image deckImage = null;
 	private JLabel lblNewLabel;
+	private JPanel o_hand_cover;
 	public static void main(final String[] args) {
 
 		//final String s = args[0];
@@ -186,8 +187,8 @@ public class Battlefield extends JFrame {
 			dumpsterImage = ImageIO.read(new File("dumpster.gif"));
 			lane = ImageIO.read(new File("Lane.jpg"));
 		} catch (IOException e1) {e1.printStackTrace();}
-		bgMusic = new AudioPlayer("Mahou Battle.wav");
-		bgMusic.playLoop();
+		//bgMusic = new AudioPlayer("Mahou Battle.wav");
+		//bgMusic.playLoop();
 		Battlefield.player = player_;
 		Battlefield.opponent = opponent_;
 		//System.out.println("FULLMP"+opponent.MP_full);
@@ -256,32 +257,8 @@ public class Battlefield extends JFrame {
 		});
 
 		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		surrenderButton = new JButton("Surrender");
-		buttonPanel.add(surrenderButton);
-		surrenderButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int reply = JOptionPane.showConfirmDialog(null, "Are you Sure?", "Surrenderring", JOptionPane.YES_NO_OPTION);
-		        if (reply == JOptionPane.YES_OPTION) {
-		          JOptionPane.showMessageDialog(null, "YOU LOSE, THE GAME WILL EXIT"); // GO TO MAINMENU
-		          Battlefield.this.dispose();
-		        }
-		        else {
-		          
-		        }
-				//JOptionPane.showMessageDialog(surrenderButton, "Are you sure?", "You surrender", JOptionPane.YES_NO_CANCEL_OPTION);
-			}
-		});
 
 		buttonPanel.setLayout(new GridLayout(0, 1, 0, 0));
-
-		quitButton = new JButton("Quit");
-		buttonPanel.add(quitButton);
-		quitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Battlefield.this.dispose();
-			}
-		});
 
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 		buttonPanel.add(Box.createVerticalGlue());
@@ -505,15 +482,19 @@ public class Battlefield extends JFrame {
 		o_dumpster_l.setAlignmentX(Component.CENTER_ALIGNMENT);
 		o_dumpster_l.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		o_dumpster_num.add(o_dumpster_l);
+		
+		o_hand_cover = new JPanel();
+		o_hand_cover.setBackground(Color.PINK);
+		opponentPanel.add(o_hand_cover, BorderLayout.NORTH);
 
 
 
 		o_hand = new CardHolder(CardHolder.PLAYER_HAND,true);
 		o_hand.setBackground(new Color(255, 204, 255));
 		o_hand_scr = new JScrollPane(o_hand);
-		opponentPanel.add(o_hand_scr);
+		opponentPanel.add(o_hand_cover);
 		//opponentPanel.add(o_hand);
-		o_hand.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		o_hand.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 1));
 
 		o_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
 		o_dumpster.setBackground(Color.LIGHT_GRAY);
@@ -669,7 +650,7 @@ public class Battlefield extends JFrame {
 		playerPanel.add(p_hand_scr);
 
 
-		p_hand.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		p_hand.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 1));
 
 		Mylane1.setOpposingCH(Theirlane1);
 		Theirlane1.setOpposingCH(Mylane1);
@@ -684,6 +665,7 @@ public class Battlefield extends JFrame {
 		infoPane_2.setLayout(new BoxLayout(infoPane_2, BoxLayout.Y_AXIS));
 
 		selectedCard = new CardHolder(CardHolder.DISPLAY,false);
+		selectedCard.setPreferredSize(new Dimension(14, 350));
 		infoPane_2.add(selectedCard);
 		selectedCard.addContainerListener(new ContainerAdapter() {
 			@Override
@@ -750,7 +732,7 @@ public class Battlefield extends JFrame {
 		p_dumpster = new CardHolder(CardHolder.DUMPSTER,false);
 		p_dumpster.setBackground(Color.LIGHT_GRAY);
 
-		p_dumpster.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		p_dumpster.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		//	p_hand.add(new Card(49));
 		//	p_hand.add(new Card(50));
 		//	p_dumpster.add(new Card(40));
@@ -765,7 +747,7 @@ public class Battlefield extends JFrame {
 	 */
 	public void run(){	
 		runBFchecker();
-		bgMusic = new AudioPlayer("cgb2.wav");
+		bgMusic = new AudioPlayer("cgb1.wav");
 		bgMusic.playLoop();
 		setVisible(true);
 		Collections.shuffle(playerDeck, new Random(System.currentTimeMillis()));
@@ -812,11 +794,20 @@ public class Battlefield extends JFrame {
 							ch.getCard().addListeners();
 						}
 					}
-					if(!lowHealthMusic&&player.LP_current<player.LP_full/10){
-						bgMusic.stop();
+					if(!lowHealthMusic&&player.LP_current<10){
+						bgMusic.close();
 						bgMusic = new AudioPlayer("cgb2.wav");
 						bgMusic.playLoop();
 						lowHealthMusic = true;
+						JOptionPane.showMessageDialog(null, "Your LP is low!");
+						
+					}
+					if(!lowHealthMusic&&opponent.LP_current<10) {
+						bgMusic.close();
+						bgMusic = new AudioPlayer("cgb2.wav");
+						bgMusic.playLoop();
+						lowHealthMusic = true;
+						JOptionPane.showMessageDialog(null, "Enemy LP is low!");
 					}
 					try {
 						Thread.sleep(100);
@@ -1001,13 +992,22 @@ public class Battlefield extends JFrame {
 					System.out.println("AI PHRASE 2");
 					//AI PHRASE 2: If there are mp left, try to randomly use spell card in hand
 					if(opponent.MP_current>0&&o_hand.getComponentCount()>0){
-						ranIndex = randomIndexArray(o_hand.getComponentCount());
-						for(int index:ranIndex) {
-							Card t = (Card)o_hand.getComponent(index);
-							if(t!=null&&!t.isMonster()&&opponent.MP_current>=t.mc){
-								AIuseCard(t);
+						
+							ranIndex = randomIndexArray(o_hand.getComponentCount());
+							
+							for(int index:ranIndex) {
+								Card t = null;
+								try{
+									t = (Card)o_hand.getComponent(index);
+								}catch(ArrayIndexOutOfBoundsException e){
+									continue;
+								}
+								if(t!=null&&!t.isMonster()&&opponent.MP_current>=t.mc){
+									AIuseCard(t);
+								}
 							}
-						}
+						
+						
 					}
 					System.out.println("AI PHRASE 3");
 					//AI PHRASE 3: If there are mp left, try to randomly use SA of current cards in lane
@@ -1190,6 +1190,7 @@ public class Battlefield extends JFrame {
 				while(o_hand.getComponentCount()>0){
 					Card t = (Card) o_hand.getComponent(0);
 					opponentDeck.add(t.ic_id);
+					o_hand.getComponent(0);
 				}
 				int drawAmount = (int) Math.min(c.param_value, opponentDeck.size());
 				Collections.shuffle(opponentDeck, new Random(System.currentTimeMillis()));
@@ -1278,6 +1279,8 @@ public class Battlefield extends JFrame {
 		this.setVisible(false);
 		this.dispose();
 		bgMusic.stop();
+		Main.bgMusic.playLoop();
+		Main.main.setVisible(true);
 	}
 	/**
 	 * Card will notify this class when there is a mouse click

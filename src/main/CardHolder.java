@@ -122,6 +122,8 @@ public class CardHolder extends JPanel{
 	public CardHolder getOpposingCardHolder(){
 		return opposingCH;
 	}
+	
+
 
 
 }

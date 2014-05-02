@@ -26,6 +26,7 @@ public class Main {
 	private static Card sc2 = null;	//Selected card 2
 	public static boolean Turn;		//Universal boolean for turn , turn = true means it's player turn
 	public static CardHolder orig;
+	public static JFrame SetDeck;
 
 	public static void main(String[] args) {
 

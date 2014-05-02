@@ -51,7 +51,7 @@ public class SelectOpponent extends JPanel {
 	private static AudioPlayer bgMusic;
 	private static AudioPlayer bgMusic2;
 	static Inw player;
-	private JFrame test;
+	public static JFrame test;
 	public SelectOpponent(Inw player){
 		this.player = player;
 		opponentList = new ArrayList<Inw>();
@@ -73,6 +73,8 @@ public class SelectOpponent extends JPanel {
 		test = new JFrame();
 		test.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		test.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		test.setUndecorated(true);
+		test.setVisible(true);
 		
 		/*
 		switch(screenResolutionString) {
@@ -116,16 +118,7 @@ public class SelectOpponent extends JPanel {
 		}
 		this.add(opponentPanel,BorderLayout.LINE_START);
 
-		display = new JPanel(){
-			public void paintComponent(Graphics g) {
-				try {
-					g.drawImage(ImageIO.read(new File("selectopponentbg.jpg")), 0, 0, null);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		};
+		display = new JPanel();
 		setupDisplay();
 		this.add(display, BorderLayout.CENTER); 
 		
@@ -153,16 +146,7 @@ public class SelectOpponent extends JPanel {
 		}
 		this.add(opponentPanel,BorderLayout.LINE_START);
 
-		display = new JPanel(){
-			public void paintComponent(Graphics g) {
-				try {
-					g.drawImage(ImageIO.read(new File("selectopponentbg.jpg")), 0, 0, null);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		};
+		display = new JPanel();
 		setupDisplay();
 		this.add(display, BorderLayout.CENTER); 
 		
@@ -272,8 +256,9 @@ public class SelectOpponent extends JPanel {
 		pic.setIcon(current.inw.profile);
 		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(pic);
-		JLabel fbname = new JLabel(current.inw.fbname);
-		fbname.setFont(new Font("Serif", Font.PLAIN, 22));
+		JLabel fbname = new JLabel(current.inw.fname + " " + current.inw.lname);
+		fbname.setFont(new Font("Serif", Font.BOLD, 22));
+		fbname.setForeground(Color.BLACK);
 		fbname.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(Box.createRigidArea(new Dimension(0, 30)));
 		display.add(fbname);
@@ -296,7 +281,8 @@ public class SelectOpponent extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				bgMusic2.stop();
-				
+				MainMenu.bgMusic.playLoop();
+				Main.main.setVisible(true);
 				/*
 			//	String s = "{\"cv_uid\":\"+\",\"fb_id\":\"" + current.inw.fb_id + "\",\"firstname_en\":\"" + current.inw.fname + "\",\"lastname_en\":\"" + current.inw.lname + "\",\"full_lp\":\"40\",\"full_mp\":\"" + current.inw.LP_full + "\",\"max_deck_size\":\"" + current.inw.maxDeck + "\"}";
 				String [] args = {s};
@@ -319,7 +305,7 @@ public class SelectOpponent extends JPanel {
 		random.setFont(new Font("Serif", Font.PLAIN, 20));
 		random.setAlignmentX(Component.CENTER_ALIGNMENT);
 		random.addActionListener(new ActionListener() {
-
+	
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Thread t = new MyThread();
@@ -340,8 +326,9 @@ public class SelectOpponent extends JPanel {
 		pic.setIcon(current.inw.profile);
 		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(pic);
-		JLabel fbname = new JLabel(current.inw.fbname);
-		fbname.setFont(new Font("Serif", Font.PLAIN, 36));
+		JLabel fbname = new JLabel(current.inw.fname + " " + current.inw.lname);
+		fbname.setFont(new Font("Serif", Font.BOLD, 36));
+		fbname.setForeground(Color.BLACK);
 		fbname.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(Box.createRigidArea(new Dimension(0, 35)));
 		display.add(fbname);
@@ -356,8 +343,10 @@ public class SelectOpponent extends JPanel {
 				Battlefield bf = new Battlefield();
 				System.out.println(s);
 				*/
+				bgMusic2.stop();
 				Inw op = current.inw;
 				Battlefield bf = new Battlefield(player,op);
+				test.dispose();
 			}
 			
 		});
@@ -367,7 +356,10 @@ public class SelectOpponent extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				bgMusic2.stop();
+				MainMenu.bgMusic.playLoop();
+				Main.main.setVisible(true);
+				test.dispose();
 			}
 			
 		});
@@ -402,7 +394,7 @@ public class SelectOpponent extends JPanel {
 		pic.setIcon(current.inw.profile);
 		pic.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(pic);
-		JLabel fbname = new JLabel(current.inw.fbname);
+		JLabel fbname = new JLabel(current.inw.fname + " " + current.inw.lname);
 		fbname.setFont(new Font("Serif", Font.PLAIN, 50));
 		fbname.setAlignmentX(Component.CENTER_ALIGNMENT);
 		display.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -418,6 +410,7 @@ public class SelectOpponent extends JPanel {
 				Battlefield.main(args);
 				System.out.print(s);
 				//System.out.println("fuck you");*/
+				bgMusic2.stop();
 				Inw op = current.inw;
 				Battlefield bf = new Battlefield(player,op);
 				
@@ -430,7 +423,8 @@ public class SelectOpponent extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				bgMusic2.stop();
+				Main.main.setVisible(true);
 			}
 			
 		});
@@ -441,6 +435,7 @@ public class SelectOpponent extends JPanel {
 		temp.add(back);
 		display.add(Box.createRigidArea(new Dimension(0, 50)));
 		display.add(temp);
+		/*
 		random = new JButton("Random");
 		random.setFont(new Font("Serif", Font.PLAIN, 20));
 		random.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -453,8 +448,9 @@ public class SelectOpponent extends JPanel {
 			}
 			
 		});
+		*/
 		display.add(Box.createRigidArea(new Dimension(0, 50)));
-		display.add(random);
+		//display.add(random);
 		display.repaint();
 	}
 	
@@ -545,7 +541,7 @@ public class SelectOpponent extends JPanel {
 		public void run() {
 			
 			int count = 0;
-			int delay = 100;
+			int delay = 2000;
 			while(true) {
 				try {
 					int r = (int) Math.round(Math.random()*59);
@@ -562,10 +558,7 @@ public class SelectOpponent extends JPanel {
 					bgMusic.play();
 					sleep(delay);
 					count++;
-					if(count == 20) delay = 250;
-					if(count == 28) delay = 500;
-					if(count == 32) delay = 1000;
-					if(count == 34) {
+					if(count == 7) {
 						current.setBorder(BorderFactory.createLineBorder(Color.GREEN, 10));
 						break;
 					}

@@ -37,7 +37,7 @@ import java.awt.GridLayout;
 
 public class WTF extends JPanel{
 
-	private static AudioPlayer bgMusic;
+	public static AudioPlayer bgMusic;
 	JButton tail;
 	JButton head;
 	JButton hide1;
@@ -54,10 +54,10 @@ public class WTF extends JPanel{
 		test.setUndecorated(true);
 		hide1 = new JButton(new ImageIcon("head1.gif"));
 		hide1.setBackground(Color.BLACK);
-		hide1.setBounds(320,100, 200, 200);
+		hide1.setBounds(220,100, 200, 200);
 		hide1.setVisible(false);
 		hide2 = new JButton(new ImageIcon("head.gif"));
-		hide2.setBounds(850,100, 200, 200);
+		hide2.setBounds(750,100, 200, 200);
 		hide2.setVisible(false);
 		hide2.setBackground(Color.BLACK);
 		tail = new JButton(new ImageIcon("head.gif"));
@@ -99,7 +99,7 @@ public class WTF extends JPanel{
 		JLabel label = new JLabel("Choose One Coin");
 		label.setForeground(new Color(216, 191, 216));
 		label.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 60));
-		label.setBounds(470,400,800,300);
+		label.setBounds(370,400,800,300);
 		add(label);
 
 		JLabel label_1 = new JLabel("");
@@ -131,8 +131,8 @@ public class WTF extends JPanel{
 			}
 		});
 		head.setOpaque(true);
-		head.setBounds(320,300, 200, 200);
-		tail.setBounds(850,300, 200, 200);
+		head.setBounds(220,300, 200, 200);
+		tail.setBounds(750,300, 200, 200);
 		//tail.setBackground(Color.TRANSLUCENT);
 		head.setForeground(null);
 		this.add(tail);
@@ -280,8 +280,8 @@ public class WTF extends JPanel{
 
 		});
 
-		bgMusic = new AudioPlayer("WTF2.wav");
-		bgMusic.playLoop();
+		//bgMusic = new AudioPlayer("WTF2.wav");
+		//bgMusic.playLoop();
 		
 		test.getContentPane().add(this);
 		test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

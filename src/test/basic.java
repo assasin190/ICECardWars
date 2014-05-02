@@ -24,7 +24,7 @@ public class basic {
 		System.out.println(param_type);
 		System.out.println(param_value);
 		*/
-		LinkedList<Integer> l = randomIndexArray(0);
+		LinkedList<Integer> l = randomIndexArray(5);
 		System.out.println(l);
 		System.out.println(l.size());
 	}

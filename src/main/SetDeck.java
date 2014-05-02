@@ -53,23 +53,20 @@ public class SetDeck extends JPanel {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				cardHolder = new CardHolder(CardHolder.DECK, false){
+				
+					cardHolder = new CardHolder(CardHolder.DECK, false);
+				
+				
+				deckHolder = new CardHolder(CardHolder.DECK, false);
+				/*
+				{
 					public void paintComponent(Graphics g){
 						super.paintComponent(g);
 						g.drawImage(wallpaper2, 0 , 0 ,this.getWidth(), this.getHeight(), this);
 
 					}
 				};
-				
-				
-				deckHolder = new CardHolder(CardHolder.DECK, false){
-					public void paintComponent(Graphics g){
-						super.paintComponent(g);
-						g.drawImage(wallpaper2, 0 , 0 ,this.getWidth(), this.getHeight(), this);
-
-					}
-				};
-				
+				*/
 				
 				for(int i = 0; i < cardString.size(); i++) {
 					cardHolder.add(new Card(cardString.get(i).intValue()));
@@ -91,12 +88,12 @@ public class SetDeck extends JPanel {
 				this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 				this.add(new JScrollPane(cardHolder));
 				this.add(new JScrollPane(deckHolder));
-				JButton b = new JButton("Submit");
-				b.setFont(new Font("Tahoma", Font.BOLD, 14));
-				b.setForeground(Color.BLACK);
-				b.setBackground(Color.PINK);
-				b.setBounds(600,200,200,200 );
-				b.addActionListener(new ActionListener() {
+				JButton submit = new JButton("Submit");
+				submit.setFont(new Font("Tahoma", Font.BOLD, 14));
+				submit.setForeground(Color.BLACK);
+				submit.setBackground(Color.PINK);
+				submit.setBounds(600,200,200,200 );
+				submit.addActionListener(new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
@@ -141,7 +138,23 @@ public class SetDeck extends JPanel {
 				};
 				
 				display.setPreferredSize(new Dimension(400, 768));
-				display.add(b);
+				display.add(submit);
+				JButton back = new JButton("Back");
+				back.setFont(new Font("Tahoma", Font.BOLD, 14));
+				back.setForeground(Color.BLACK);
+				back.setBackground(Color.PINK);
+				back.setBounds(600,450,200,200 );
+				back.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						MainMenu.setDeck.dispose();
+						Main.main.setVisible(true);
+						
+					}
+					
+				});
+				display.add(back);
 				this.add(display);
 				
 				

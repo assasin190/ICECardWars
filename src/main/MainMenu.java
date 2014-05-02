@@ -102,6 +102,7 @@ public class MainMenu extends JFrame {
 	private Component verticalGlue;
 	private Component verticalGlue_1;
 	public static AudioPlayer bgMusic;
+	public static JFrame setDeck;
 	Image i;
 
 	public static void main(String[] args) {
@@ -153,7 +154,7 @@ public class MainMenu extends JFrame {
 
 		welcome = new JLabel("");
 		welcome.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 17));
-		welcome.setForeground(Color.RED);
+		welcome.setForeground(new Color(0, 191, 255));
 		welcome.setHorizontalAlignment(SwingConstants.RIGHT);
 		welcome.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		loginPanel.add(welcome);
@@ -246,16 +247,15 @@ public class MainMenu extends JFrame {
 
 		verticalGlue_1 = Box.createVerticalGlue();
 		ButtonPanel.add(verticalGlue_1);
-		
+
 		startButton = new JButton("New Game");
 		startButton.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 20));
 		startButton.setForeground(new Color(0, 191, 255));
 		startButton.setBackground(new Color(0, 0, 0));
-		
-		
+
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Executors.newSingleThreadExecutor().execute(new Runnable(){
+				Executors.newSingleThreadExecutor().execute(new Runnable() {
 
 					@Override
 					public void run() {
@@ -263,13 +263,15 @@ public class MainMenu extends JFrame {
 						bgMusic = new AudioPlayer("DuelNew.wav");
 						bgMusic.play();
 						Splash2 frame = new Splash2();
-						AudioPlayer bgMusic2 = new AudioPlayer("LoadingPage.wav");
+						AudioPlayer bgMusic2 = new AudioPlayer(
+								"LoadingPage.wav");
 						bgMusic2.playLoop();
-						frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+						frame.setSize(Toolkit.getDefaultToolkit()
+								.getScreenSize());
 
 						frame.setUndecorated(true);
 						frame.setVisible(true);
-						//frame.pack();
+						// frame.pack();
 						frame.setLocationRelativeTo(null);
 
 						// if(bf!=null){ //TODO: proper check (not done)
@@ -288,12 +290,12 @@ public class MainMenu extends JFrame {
 						// Inw("{\"cv_uid\":\"663\",\"fb_id\":\"100003681922761\",\"firstname_en\":\"Ultra\",\"lastname_en\":\"7\",\"full_lp\":\"40\",\"full_mp\":\"5\",\"max_deck_size\":\"20\"}"));
 						// bf.setVisible(true);
 					}
-					
+
 				});
-				
+
 			}
 		});
-		
+
 		startButton.addMouseListener(new MouseListener() {
 
 			public void mouseEntered(MouseEvent arg0) {
@@ -304,7 +306,6 @@ public class MainMenu extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
 
 			}
 
@@ -378,10 +379,14 @@ public class MainMenu extends JFrame {
 		arrangeDeck.setEnabled(false);
 		arrangeDeck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Main.bgMusic.close();
-				bgMusic = new AudioPlayer("Arrange the deck New.wav");
-				bgMusic.play();
+
+				setDeck = new JFrame();
 				SetDeck sd = new SetDeck();
+				setDeck.add(sd);
+				setDeck.setUndecorated(true);
+				setDeck.setExtendedState(JFrame.MAXIMIZED_BOTH);
+				setDeck.setVisible(true);
+				Main.main.setVisible(false);
 
 			}
 		});
